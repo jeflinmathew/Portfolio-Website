@@ -9,6 +9,16 @@
 .admin-link { color: var(--muted); text-decoration: none; font-size: 12.5px; opacity: 0.5; transition: opacity .15s; align-self: center; }
 .admin-link:hover { opacity: 1; color: var(--fg); text-decoration: underline; }
 
+
+/* Chatbot 10s Disappear & Ask Next Buttons */
+.log { transition: opacity .4s ease; }
+.log.fading { opacity: 0; }
+.chat-timer-bar { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line); display: flex; align-items: center; gap: 8px; font-family: var(--font-data); font-size: 11px; color: var(--muted); }
+.chat-timer-track { flex: 1; height: 3px; background: var(--tint); border-radius: 9999px; overflow: hidden; }
+.chat-timer-fill { height: 100%; width: 100%; background: var(--accent); border-radius: 9999px; animation: shrinkTimer 10s linear forwards; }
+@keyframes shrinkTimer { from { width: 100%; } to { width: 0%; } }
+.qchips .chips-label { width: 100%; font-family: var(--font-data); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+
 </style></head><body>
 <title>Jeflin Mathew</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -992,13 +1002,12 @@ footer a { text-decoration: none; }
     L.push('Job: ' + e.title + ' at ' + e.company + ', ' + e.period + '. ' + (e.summary || '') + ' Work: ' + listJoin(e.bullets) + '.');
     L.push('Case study 1, ' + D.seo.title + ': ' + (D.seo.intro || '') + ' Workflow: ' + D.seo.steps.map(function (s) { return s.name; }).join(', ') + '. ' + (D.seo.chartTitle || '') + ': ' + metricsText() + '. ' + D.seo.metrics.map(function (m) { return m.note; }).filter(Boolean).join(' '));
     if (D.googleAds) L.push('Case study 2, ' + D.googleAds.title + ': ' + (D.googleAds.intro || '') + ' ' + (D.googleAds.text || '') + ' Results: ' + (D.googleAds.specs || '').replace(/\n/g, ', '));
-    L.push('Case study 2, ' + D.meta.title + ': ' + (D.meta.intro || '') + ' ' + campaignsText());
-    L.push('Case study 3, ' + D.social.title + ': ' + (D.social.text || ''));
+    L.push('Case study 3, ' + D.meta.title + ': ' + (D.meta.intro || '') + ' ' + campaignsText());
+    L.push('Case study 4, ' + D.social.title + ': ' + (D.social.text || ''));
     L.push(D.projects.title + ': ' + (D.projects.intro || '') + ' ' + projectsText());
     L.push('Skills: ' + skillsText() + '.');
     L.push('Certifications: ' + certsText() + '.');
     L.push('Quick facts: ' + D.facts.map(function (f) { return f.k + ': ' + f.v; }).join('; ') + '.');
-    if (D.disclosure) L.push('Disclosure: ' + D.disclosure);
     return L.join('\n');
   }
   function rules() {
@@ -1013,7 +1022,7 @@ footer a { text-decoration: none; }
       [/\b(seo|search console|ranking|rank|traffic|click|clicks|impression|impressions|position|ctr|result|results|organic|growth|performance|metric|metrics)\b/, function () { return (D.seo.chartTitle || 'Results') + ': ' + metricsText() + '. ' + (D.seo.intro || ''); }],
       [/\b(meta|facebook|instagram|ads|ad|campaign|campaigns|lead|leads|recruit|recruitment)\b/, function () { return (D.meta.intro ? D.meta.intro + ' ' : '') + campaignsText(); }],
       [/\b(social|content|posts|captions|brand)\b/, function () { return D.social.text || ''; }],
-      [/\b(project|projects|freelance|freelancing|independent|practice|personal|side)\b/, function () { return (D.projects.intro ? D.projects.intro + ' ' : '') + projectsText(); }],
+      [/\b(project|projects|freelance|freelancing|independent|practice|personal|side|mpi|meat)\b/, function () { return (D.projects.intro ? D.projects.intro + ' ' : '') + projectsText(); }],
       [/\b(skill|skills|tool|tools|good at|expertise|strength|strengths|analytics|stack|know)\b/, function () { return n + '’s skills: ' + skillsText() + '.'; }],
       [/\b(experience|worked|work|works|working|history|employer|company|job|role|years|career)\b/, function () { return e.title + ' at ' + e.company + ' (' + e.period + '). ' + (e.summary || '') + (e.bullets.length ? ' Work included: ' + e.bullets.join('; ') + '.' : ''); }],
       [/\b(who|about|summary|introduce|background|tell me)\b/, function () { return D.about.slice(0, 2).join(' '); }],
@@ -1027,24 +1036,93 @@ footer a { text-decoration: none; }
   var turns = [], busy = false, ctl = null, sample = null, claudeOn = true;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var PERMANENT = ['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed', 'session_expired'];
+  var disappearTimer = null, countdownInterval = null;
+
+  var ALL_QUESTIONS = [
+    'Where has {name} worked?',
+    'What results did {name} get in SEO?',
+    'What campaigns has {name} run in Meta Ads?',
+    'What are {name}’s core skills?',
+    'What certifications does {name} hold?',
+    'Tell me about his freelancing projects',
+    'How can I get in touch with {name}?'
+  ];
+
   function claudeUse(name) {
     try { return window.claude && window.claude.use ? Promise.resolve(window.claude.use(name)).catch(function () { return null; }) : Promise.resolve(null); }
     catch (e) { return Promise.resolve(null); }
   }
   var ready = claudeUse('sample').then(function (s) { sample = s; });
 
-  function refreshChat() {
+  function renderChips(lastQ) {
     var n = first();
-    var g = $('greet'); if (g && !turns.length) g.textContent = 'Hi, I can answer questions about ' + n + '’s experience, results, campaigns, skills and certifications. What would you like to know?';
-    if (!qchips.hidden && !turns.length) {
-      qchips.innerHTML = '';
-      ['Where has ' + n + ' worked?', 'What results did ' + n + ' get?', 'What campaigns has ' + n + ' run?', 'What are ' + n + '’s skills?', 'How can I contact ' + n + '?'].forEach(function (t) {
-        var b = document.createElement('button'); b.type = 'button'; b.textContent = t;
-        b.addEventListener('click', function () { ask(t); });
-        qchips.appendChild(b);
-      });
+    qchips.innerHTML = '';
+    qchips.hidden = false;
+
+    var filtered = ALL_QUESTIONS.map(function (q) {
+      return q.replace(/\{name\}/g, n);
+    }).filter(function (q) {
+      return !lastQ || q.toLowerCase() !== lastQ.toLowerCase();
+    });
+
+    if (lastQ) {
+      var lbl = document.createElement('div');
+      lbl.className = 'chips-label';
+      lbl.textContent = 'Ask next:';
+      qchips.appendChild(lbl);
     }
+
+    filtered.slice(0, 4).forEach(function (t) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = t;
+      b.addEventListener('click', function () {
+        clearTimeout(disappearTimer);
+        clearInterval(countdownInterval);
+        ask(t);
+      });
+      qchips.appendChild(b);
+    });
   }
+
+  function resetChatToGreet() {
+    var n = first();
+    logEl.innerHTML = '<div class="msg bot"><span class="mono" aria-hidden="true">J</span><div class="bubble" id="greet">Hi, I can answer questions about ' + n + '’s experience, results, campaigns, skills and certifications. What would you like to know?</div></div>';
+    turns = [];
+    renderChips();
+  }
+
+  function startDisappearCountdown(bubble, lastQ) {
+    clearTimeout(disappearTimer);
+    clearInterval(countdownInterval);
+
+    // Add visual countdown progress bar
+    var timerBar = document.createElement('div');
+    timerBar.className = 'chat-timer-bar';
+    timerBar.innerHTML = '<span>Answer clears in <b id="chat-sec">10</b>s</span><div class="chat-timer-track"><div class="chat-timer-fill"></div></div>';
+    bubble.appendChild(timerBar);
+
+    var secLeft = 10;
+    var secSpan = timerBar.querySelector('#chat-sec');
+    countdownInterval = setInterval(function () {
+      secLeft--;
+      if (secSpan) secSpan.textContent = Math.max(0, secLeft);
+      if (secLeft <= 0) clearInterval(countdownInterval);
+    }, 1000);
+
+    disappearTimer = setTimeout(function () {
+      logEl.classList.add('fading');
+      setTimeout(function () {
+        resetChatToGreet();
+        logEl.classList.remove('fading');
+      }, 400);
+    }, 10000);
+  }
+
+  function refreshChat() {
+    if (!turns.length) resetChatToGreet();
+  }
+
   function addMsg(role, text) {
     var row = document.createElement('div');
     row.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
@@ -1068,14 +1146,16 @@ footer a { text-decoration: none; }
         if (sig.aborted || i >= parts.length) { res(); return; }
         el.textContent += parts.slice(i, i + 4).join(''); i += 4;
         logEl.scrollTop = logEl.scrollHeight;
-        setTimeout(step, 28);
+        setTimeout(step, 24);
       })();
     });
   }
   async function ask(q) {
     q = q.trim();
     if (!q || busy) return;
-    setBusy(true); qchips.hidden = true;
+    clearTimeout(disappearTimer);
+    clearInterval(countdownInterval);
+    setBusy(true);
     addMsg('user', q); box.value = ''; grow();
     var bubble = addMsg('bot', 'Thinking…'); bubble.classList.add('thinking');
     ctl = new AbortController();
@@ -1106,8 +1186,18 @@ footer a { text-decoration: none; }
     }
     bubble.classList.remove('thinking');
     if (!answer.trim()) { bubble.textContent = 'Stopped.'; turns.pop(); }
-    else { bubble.textContent = answer; turns.push({ role: 'assistant', content: answer }); }
-    ctl = null; setBusy(false);
+    else {
+      bubble.textContent = answer;
+      turns.push({ role: 'assistant', content: answer });
+    }
+    ctl = null;
+    setBusy(false);
+
+    // 1. Give suggested buttons to ask next
+    renderChips(q);
+
+    // 2. Disappear the answer after 10 seconds
+    startDisappearCountdown(bubble, q);
   }
   form.addEventListener('submit', function (e) {
     e.preventDefault();
