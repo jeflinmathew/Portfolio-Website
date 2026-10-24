@@ -498,70 +498,244 @@ footer a { text-decoration: none; }
 .gallery-admin-item:hover .gallery-admin-actions { opacity: 1; }
 .gallery-admin-actions button { font-size: 11px; padding: 4px 8px; }
 
-/* Side-by-Side Dual-Pane CMS Drawer */
-.cms { position: fixed; z-index: 30; top: env(safe-area-inset-top, 0px); right: 0; bottom: 0; width: min(1080px, 96vw); display: flex; flex-direction: column; background: var(--bg); color: var(--fg); border-left: 1px solid var(--line); box-shadow: -24px 0 72px rgba(0,0,0,.36); }
-.cms-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, var(--bg-top), var(--tint)); }
-.cms-head-title { display: flex; align-items: center; gap: 10px; }
-.cms-head h2 { margin: 0; font-size: 18px; letter-spacing: -0.01em; }
-.cms-badge-tag { font-family: var(--font-data); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 8px; border-radius: 6px; background: var(--line); color: var(--muted); font-weight: 600; }
-.cms-split { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+/* Normal state: preview stage wrappers have no visual footprint */
+body:not(.cms-mode) .cms-stage-bar { display: none !important; }
+body:not(.cms-mode) .cms-stage { display: contents !important; }
+body:not(.cms-mode) .cms-viewport { display: contents !important; }
+body:not(.cms-mode) .cms-device-frame { display: contents !important; }
+body:not(.cms-mode) .tab-sensor { display: none !important; }
 
-/* Left Sidebar: Edit Options */
-.cms-sidebar { width: 280px; min-width: 250px; flex-shrink: 0; background: var(--tint); border-right: 1px solid var(--line); display: flex; flex-direction: column; overflow: hidden; }
-.cms-sidebar-header { padding: 14px 18px 10px; font-family: var(--font-data); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
-.cms-sidebar-header span { font-weight: 600; }
-.cms-nav-list { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 10px; display: flex; flex-direction: column; gap: 4px; }
-.cms-nav-item { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 10px 14px; text-align: left; background: transparent; border: 1px solid transparent; border-radius: 10px; font-family: var(--font-body); font-size: 14px; font-weight: 500; color: var(--fg); cursor: pointer; transition: all .15s ease; }
-.cms-nav-item:hover { background: var(--bg); border-color: var(--line); }
-.cms-nav-item.active { background: var(--fg); color: var(--bg); font-weight: 600; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
-.cms-nav-item .cms-nav-meta { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.cms-nav-item .cms-nav-idx { font-family: var(--font-data); font-size: 11px; opacity: 0.6; min-width: 18px; }
-.cms-nav-item.active .cms-nav-idx { opacity: 0.85; }
-.cms-nav-item .cms-nav-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.cms-nav-item .cms-nav-arrow { font-size: 12px; opacity: 0; transform: translateX(-4px); transition: all .15s; }
-.cms-nav-item.active .cms-nav-arrow { opacity: 1; transform: translateX(0); }
+/* Studio Side-by-Side: Left CMS Panel + Right Portfolio in Tab Mode */
+body.cms-mode {
+  display: flex !important;
+  flex-direction: row !important;
+  height: 100vh !important;
+  width: 100vw !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #0d0f12 !important;
+}
 
-/* Right Pane: Main Editor */
-.cms-main { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 0; background: var(--bg); }
-.cms-main-top { display: flex; align-items: center; justify-content: space-between; padding: 12px 22px; border-bottom: 1px solid var(--line); background: var(--bg); }
-.cms-main-title { margin: 0; font-size: 16px; font-weight: 600; }
-.cms-main-hint { font-family: var(--font-data); font-size: 11.5px; color: var(--muted); }
-.cms-tab-select { display: none; }
-.cms-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 22px; display: grid; gap: 18px; align-content: start; }
-.cms select, .cms input[type="text"], .cms textarea { width: 100%; font: inherit; font-size: 15px; line-height: 1.45; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
-.cms textarea { resize: vertical; min-height: 4.8em; display: block; }
+/* Left: CMS Editor Panel */
+body.cms-mode .cms {
+  order: 1 !important;
+  position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: auto !important;
+  bottom: 0 !important;
+  width: 440px !important;
+  min-width: 380px !important;
+  max-width: 480px !important;
+  height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: var(--bg) !important;
+  color: var(--fg) !important;
+  border-right: 1px solid var(--line) !important;
+  border-left: none !important;
+  box-shadow: 6px 0 32px rgba(0,0,0,0.3) !important;
+  z-index: 50 !important;
+  overflow: hidden !important;
+}
+
+.cms-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, var(--bg-top), var(--tint)); }
+.cms-head-title { display: flex; align-items: center; gap: 8px; }
+.cms-head h2 { margin: 0; font-size: 17px; letter-spacing: -0.01em; }
+.cms-badge-tag { font-family: var(--font-data); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 6px; background: var(--fg); color: var(--bg); font-weight: 700; }
+
+.cms-section-nav-wrap { padding: 12px 16px 10px; border-bottom: 1px solid var(--line); background: var(--tint); display: flex; flex-direction: column; gap: 10px; }
+.cms-section-select-row { display: flex; flex-direction: column; gap: 5px; }
+.cms-sec-lbl { font-family: var(--font-data); font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+.cms-tab-select { width: 100%; font: inherit; font-size: 14.5px; font-weight: 500; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+
+.cms-pills-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.cms-pill-btn { flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; font-size: 12.5px; font-family: var(--font-body); border-radius: 9999px; border: 1px solid var(--line); background: var(--bg); color: var(--muted); cursor: pointer; transition: all .15s ease; white-space: nowrap; }
+.cms-pill-btn span { font-family: var(--font-data); font-size: 10.5px; font-weight: 700; opacity: 0.7; }
+.cms-pill-btn:hover { color: var(--fg); border-color: var(--fg); }
+.cms-pill-btn.active { background: var(--fg); color: var(--bg); border-color: var(--fg); font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.18); }
+.cms-pill-btn.active span { opacity: 1; }
+
+.cms-active-section-bar { display: flex; align-items: center; gap: 10px; padding: 10px 18px; border-bottom: 1px solid var(--line); background: var(--bg); }
+.cms-active-num { font-family: var(--font-data); font-size: 11px; padding: 3px 6px; border-radius: 4px; background: var(--line); color: var(--muted); font-weight: 700; }
+.cms-active-name { margin: 0; font-size: 15px; font-weight: 600; }
+
+.cms-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 18px; display: grid; gap: 16px; align-content: start; }
+.cms select, .cms input[type="text"], .cms textarea { width: 100%; font: inherit; font-size: 14.5px; line-height: 1.45; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 9px 11px; }
+.cms textarea { resize: vertical; min-height: 4.6em; display: block; }
 .cms select:focus-visible, .cms input:focus-visible, .cms textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-.fld { display: grid; gap: 6px; min-width: 0; }
-.fld label, .fld .lbl { font-family: var(--font-data); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.fld { display: grid; gap: 5px; min-width: 0; }
+.fld label, .fld .lbl { font-family: var(--font-data); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 .fld.chk { display: flex; align-items: center; gap: 10px; }
 .fld.chk input { width: 18px; height: 18px; accent-color: var(--fg); }
-.fld.chk label { text-transform: none; letter-spacing: 0; font-family: var(--font-body); font-size: 15px; color: var(--fg); }
-.lst { display: grid; gap: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
-.lst-h { margin: 8px 0 0; font-size: 16px; }
-.li { display: grid; gap: 12px; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--tint); min-width: 0; }
-.li-h { display: flex; align-items: center; gap: 8px; }
-.li-h b { flex: 1; min-width: 0; font-weight: 600; font-size: 14.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.sm { font: inherit; font-size: 13px; line-height: 1; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); cursor: pointer; }
+.fld.chk label { text-transform: none; letter-spacing: 0; font-family: var(--font-body); font-size: 14.5px; color: var(--fg); }
+.lst { display: grid; gap: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.lst-h { margin: 6px 0 0; font-size: 15px; }
+.li { display: grid; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--tint); min-width: 0; }
+.li-h { display: flex; align-items: center; gap: 6px; }
+.li-h b { flex: 1; min-width: 0; font-weight: 600; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sm { font: inherit; font-size: 12.5px; line-height: 1; padding: 7px 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: var(--fg); cursor: pointer; }
 .sm:hover:not(:disabled) { border-color: var(--fg); }
 .sm:disabled { opacity: .35; cursor: default; }
-.sm.add { justify-self: start; padding: 10px 14px; }
-.img-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.img-prev { width: 84px; height: 60px; object-fit: cover; border: 1px solid var(--line); border-radius: 8px; }
-.cms-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 14px 22px calc(14px + env(safe-area-inset-bottom, 0px)) 22px; border-top: 1px solid var(--line); background: var(--bg); }
-.cms-msg { flex: 1 1 100%; margin: 0 0 4px; max-width: none; font-size: 13px; line-height: 1.45; color: var(--muted); }
-.cms-foot .btn { flex: 1 1 auto; padding: 11px 18px; }
+.sm.add { justify-self: start; padding: 9px 13px; }
+.img-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.img-prev { width: 76px; height: 54px; object-fit: cover; border: 1px solid var(--line); border-radius: 8px; }
+.cms-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0px)) 18px; border-top: 1px solid var(--line); background: var(--bg); }
+.cms-msg { flex: 1 1 100%; margin: 0 0 4px; max-width: none; font-size: 12.5px; line-height: 1.4; color: var(--muted); }
+.cms-foot .btn { flex: 1 1 auto; padding: 10px 14px; font-size: 14px; }
 .cms-foot .btn:disabled { opacity: .4; cursor: default; }
 
-@media (max-width: 820px) {
-  .cms { width: 100%; border-left: 0; }
-  .cms-split { flex-direction: column; }
-  .cms-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--line); }
-  .cms-sidebar-header { padding: 8px 14px; }
-  .cms-nav-list { flex-direction: row; overflow-x: auto; padding: 8px 12px; gap: 6px; }
-  .cms-nav-item { width: auto; white-space: nowrap; padding: 8px 12px; }
-  .cms-nav-item .cms-nav-arrow { display: none; }
-  .cms-body { padding: 14px; }
-  .cms-foot { padding: 12px 14px; }
+/* Right: Stage (Live Portfolio in Tab Mode) */
+body.cms-mode .cms-stage {
+  order: 2 !important;
+  display: flex !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+  height: 100vh !important;
+  flex-direction: column !important;
+  background: #111317 !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+body.cms-mode .cms-stage-bar {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #181a20;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  color: #e5e7eb;
+  font-size: 13px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+.cms-stage-left { display: flex; align-items: center; gap: 8px; font-size: 12.5px; }
+.stage-live-dot { color: #10b981; font-size: 14px; animation: pulseLive 2s infinite; }
+@keyframes pulseLive { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.stage-live-text { font-weight: 600; color: #f3f4f6; }
+.stage-mode-badge { font-family: var(--font-data); font-size: 11px; color: #9ca3af; padding: 2px 7px; border-radius: 4px; background: rgba(255,255,255,0.08); margin-left: 4px; }
+
+.cms-stage-modes { display: inline-flex; align-items: center; background: #0d0f12; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 2px; gap: 2px; }
+.stage-mode-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; font-size: 12px; font-family: var(--font-body); font-weight: 500; background: transparent; color: #9ca3af; border: none; border-radius: 6px; cursor: pointer; transition: all .15s ease; }
+.stage-mode-btn:hover { color: #fff; }
+.stage-mode-btn.active { background: #272a33; color: #fff; font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+
+.cms-stage-right { display: flex; align-items: center; gap: 8px; }
+.stage-exit-btn { font-size: 12px; padding: 6px 12px; background: #23262e; color: #f3f4f6; border-color: rgba(255,255,255,0.15); border-radius: 6px; }
+.stage-exit-btn:hover { background: #323640; border-color: #fff; }
+
+body.cms-mode .cms-viewport {
+  display: flex !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: auto !important;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 20px 60px 20px;
+  background: radial-gradient(circle at 50% 15%, #1a1c23 0%, #0d0e12 100%);
+}
+
+/* Portfolio in Tab Mode (Tablet frame) */
+body.cms-mode .cms-device-frame.tab-mode {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 780px !important;
+  max-width: 98% !important;
+  height: calc(100vh - 86px) !important;
+  max-height: 960px !important;
+  background: var(--bg) !important;
+  border: 12px solid #23272e !important;
+  border-radius: 32px !important;
+  box-shadow: 0 28px 72px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.1) !important;
+  position: relative !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  transition: width 0.25s ease, border-radius 0.25s ease;
+}
+body.cms-mode .cms-device-frame.tab-mode .wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 20px 60px 20px !important;
+  box-sizing: border-box !important;
+}
+body.cms-mode .cms-device-frame.tab-mode .tab-sensor {
+  display: block;
+  width: 7px;
+  height: 7px;
+  background: #0f1013;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 50%;
+  margin: 7px auto 6px;
+  flex-shrink: 0;
+}
+
+/* Mobile mode */
+body.cms-mode .cms-device-frame.mobile-mode {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 390px !important;
+  max-width: 98% !important;
+  height: calc(100vh - 86px) !important;
+  max-height: 840px !important;
+  background: var(--bg) !important;
+  border: 10px solid #23272e !important;
+  border-radius: 36px !important;
+  box-shadow: 0 28px 72px rgba(0,0,0,0.7) !important;
+  position: relative !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  transition: width 0.25s ease;
+}
+body.cms-mode .cms-device-frame.mobile-mode .wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 12px 40px 12px !important;
+}
+body.cms-mode .cms-device-frame.mobile-mode .tab-sensor {
+  display: block;
+  width: 44px;
+  height: 5px;
+  background: #0f1013;
+  border-radius: 4px;
+  margin: 6px auto 6px;
+  flex-shrink: 0;
+}
+
+/* Desktop mode */
+body.cms-mode .cms-device-frame.desktop-mode {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  max-width: 1200px !important;
+  height: calc(100vh - 86px) !important;
+  background: var(--bg) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5) !important;
+  position: relative !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  transition: width 0.25s ease;
+}
+body.cms-mode .cms-device-frame.desktop-mode .wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 24px 60px 24px !important;
+}
+body.cms-mode .cms-device-frame.desktop-mode .tab-sensor {
+  display: none !important;
+}
+
+@media (max-width: 920px) {
+  body.cms-mode { flex-direction: column !important; }
+  body.cms-mode .cms { width: 100% !important; max-width: 100% !important; height: 50vh !important; border-right: none !important; border-bottom: 1px solid var(--line) !important; }
+  body.cms-mode .cms-stage { width: 100% !important; height: 50vh !important; }
 }
 </style>
 
@@ -574,7 +748,70 @@ footer a { text-decoration: none; }
     <a href="/" class="admin-banner-btn">Exit to Live View ➔</a>
   </div>
 </aside>
-<div class="wrap">
+
+<!-- Studio Left: CMS Editor Panel -->
+<aside class="cms" id="cms" role="dialog" aria-label="CMS Site Editor" hidden>
+  <div class="cms-head">
+    <div class="cms-head-title">
+      <h2>CMS Editor</h2>
+      <span class="cms-badge-tag">Admin</span>
+    </div>
+    <button class="sm" id="cms-close" type="button" aria-label="Close editor">✕ Exit</button>
+  </div>
+  
+  <div class="cms-section-nav-wrap">
+    <div class="cms-section-select-row">
+      <label class="cms-sec-lbl" for="cms-tab">Section to edit:</label>
+      <select id="cms-tab" class="cms-tab-select"></select>
+    </div>
+    <div class="cms-pills-scroll" id="cms-pills" role="tablist"></div>
+  </div>
+
+  <div class="cms-active-section-bar">
+    <span class="cms-active-num" id="cms-active-idx">01</span>
+    <h3 class="cms-active-name" id="cms-active-title">Basics & Bio</h3>
+  </div>
+
+  <div class="cms-body" id="cms-body"></div>
+
+  <div class="cms-foot">
+    <p class="cms-msg" id="cms-msg" aria-live="polite">Edits live-sync to the tablet on the right. Click 'Publish changes' to save permanently.</p>
+    <button class="btn" id="cms-discard" type="button">Discard changes</button>
+    <button class="btn solid" id="cms-publish" type="button" disabled>Publish changes</button>
+  </div>
+</aside>
+
+<!-- Studio Right: Portfolio Live Viewport in Tab Mode -->
+<div class="cms-stage" id="cms-stage">
+  <div class="cms-stage-bar" id="cms-stage-bar">
+    <div class="cms-stage-left">
+      <span class="stage-live-dot">●</span>
+      <span class="stage-live-text">Live Preview</span>
+      <span class="stage-mode-badge" id="stage-mode-badge">Tab Mode (780px)</span>
+    </div>
+    <div class="cms-stage-modes" role="group" aria-label="Preview Viewport">
+      <button class="stage-mode-btn" id="mode-mobile" type="button" title="Mobile view">
+        <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="1" width="8" height="14" rx="2"/><circle cx="8" cy="12" r="0.8" fill="currentColor"/></svg>
+        <span>Mobile</span>
+      </button>
+      <button class="stage-mode-btn active" id="mode-tab" type="button" title="Tab (Tablet) view">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="1.5" width="12" height="13" rx="2.2"/><circle cx="8" cy="12" r="0.8" fill="currentColor"/></svg>
+        <span>Tab (Tablet)</span>
+      </button>
+      <button class="stage-mode-btn" id="mode-desktop" type="button" title="Full / Desktop view">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="2" width="14" height="10" rx="1.5"/><path d="M5 14h6M8 12v2"/></svg>
+        <span>Desktop</span>
+      </button>
+    </div>
+    <div class="cms-stage-right">
+      <button class="sm stage-exit-btn" id="stage-close-btn" type="button">Exit to Full Site ➔</button>
+    </div>
+  </div>
+
+  <div class="cms-viewport" id="cms-viewport">
+    <div class="cms-device-frame tab-mode" id="cms-device-frame">
+      <div class="tab-sensor" aria-hidden="true"></div>
+      <div class="wrap">
   <header class="top" id="top">
     <div class="top-in">
       <a class="mark" href="#home" aria-label="Back to top">
@@ -643,48 +880,15 @@ footer a { text-decoration: none; }
   </main>
 
   <footer id="r-footer"></footer>
+      </div>
+    </div>
+  </div>
 </div>
 
 <button class="cms-fab btn solid" id="cms-open" type="button" aria-label="Open Site Editor">
   <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 2l3 3-9 9H2v-3l9-9z"/></svg>
   <span>Edit site</span>
 </button>
-
-<aside class="cms" id="cms" role="dialog" aria-label="Edit site" hidden>
-  <div class="cms-head">
-    <div class="cms-head-title">
-      <h2>Site Editor</h2>
-      <span class="cms-badge-tag">Admin Panel</span>
-    </div>
-    <button class="sm" id="cms-close" type="button" aria-label="Close editor">✕ Close</button>
-  </div>
-  <div class="cms-split">
-    <!-- Left column: Edit Options (Sections) -->
-    <nav class="cms-sidebar" id="cms-sidebar" aria-label="Edit Options">
-      <div class="cms-sidebar-header">
-        <span>Edit Options</span>
-        <small id="cms-section-count">11 sections</small>
-      </div>
-      <div class="cms-nav-list" id="cms-nav-list" role="tablist"></div>
-    </nav>
-    <!-- Right column: Active Section Form & Actions -->
-    <div class="cms-main">
-      <div class="cms-main-top">
-        <div>
-          <h3 class="cms-main-title" id="cms-active-title">Basics & Bio</h3>
-          <span class="cms-main-hint">Editing active section</span>
-        </div>
-        <select id="cms-tab" class="cms-tab-select" aria-label="Section selector"></select>
-      </div>
-      <div class="cms-body" id="cms-body"></div>
-      <div class="cms-foot">
-        <p class="cms-msg" id="cms-msg" aria-live="polite">Changes show on the page straight away. Publish to save them for everyone.</p>
-        <button class="btn" id="cms-discard" type="button">Discard changes</button>
-        <button class="btn solid" id="cms-publish" type="button" disabled>Publish changes</button>
-      </div>
-    </div>
-  </div>
-</aside>
 
 <script type="application/json" id="site-data">{"name":"Jeflin Mathew","role":"Digital Marketing · SEO · Meta Ads · Lead Generation","lede":"Digital marketer who grows organic search traffic and runs lead generation campaigns.","location":"Kerala, India","email":"jeflinmathew@gmail.com","linkedin":"https://www.linkedin.com/in/jeflinmathew/","facts":[{"k":"Based in","v":"Kerala, India"},{"k":"Experience","v":"1 year in digital marketing"},{"k":"Latest role","v":"MyMathews Educare, Mar 2025 – Feb 2026"},{"k":"Focus","v":"SEO, Meta Ads, lead generation"}],"about":["I am a Digital Marketing Executive with one year of professional experience in SEO, Meta Ads, lead generation, social media marketing and content optimization.","My SEO work covers keyword research, on-page and technical SEO, audits, schema markup, indexing and crawl analysis, and Google Search Console monitoring.","Before marketing I worked in media operations, social media management, audience analysis, quality control and team coordination."],"experience":{"title":"Digital Marketing Executive","company":"MyMathews Educare Pvt. Ltd.","period":"March 2025 – February 2026","summary":"SEO, technical SEO, Meta lead generation campaigns, social media and content for an education business.","bullets":["Keyword research and on-page SEO optimization","Indexing and crawl issue investigation, with fixes","Schema markup implementation","SEO audits and corrective actions","Google Search Console performance monitoring","Meta lead generation campaign execution and optimization","Multi-platform social media content management"]},"seo":{"title":"SEO and organic search","intro":"At MyMathews Educare I worked on organic search across keyword research, on-page and technical SEO, audits, indexing and crawl analysis, schema markup, internal linking and Search Console monitoring.","chartTitle":"Search Console · first month vs final month","labelA":"First month","labelB":"Final month","source":"Compared using the first and last month of my employment.","image":"gsc-performance.png","steps":[{"name":"Keyword research","desc":"Find the terms the audience searches for and group them by intent."},{"name":"On-page optimization","desc":"Align titles, headings and copy on each page with its target term."},{"name":"Technical audit","desc":"Check indexing, crawlability and site health for issues that hold pages back."},{"name":"Fixes","desc":"Resolve what the audit found and confirm the affected pages are indexed."},{"name":"Schema and internal linking","desc":"Add structured data and link related pages so search engines can read the site."},{"name":"Search Console monitoring","desc":"Track clicks, impressions, position and CTR to see what changed."}],"metrics":[{"name":"Total clicks","a":"3.46K","b":"7.59K","delta":"+119%","lowerBetter":false,"hint":"","note":"Monthly clicks from search more than doubled, from 3.46K to 7.59K."},{"name":"Total impressions","a":"386K","b":"1.13M","delta":"+193%","lowerBetter":false,"hint":"","note":"Impressions nearly tripled, so the pages appeared in search far more often."},{"name":"Average position","a":"17.3","b":"8.8","delta":"−8.5 places","lowerBetter":true,"hint":"Lower is better. A shorter bar is a higher ranking.","note":"Average position moved from page two to page one of results."},{"name":"Average CTR","a":"0.9%","b":"0.7%","delta":"−0.2 pts","lowerBetter":false,"hint":"","note":"CTR fell by 0.2 points while impressions nearly tripled."}]},"meta":{"title":"Meta lead generation","intro":"Campaigns for educational programs, covering execution, monitoring and optimization.","campaigns":[{"name":"Atria University","specs":"Platform: Meta Ads\nObjective: Lead generation\nIndustry: Higher education","text":"Creative built around educational opportunities and study and career pathways.","image":"meta-atria.png"},{"name":"Video Host recruitment","specs":"Platform: Meta Ads\nObjective: Recruitment / sign-up\nFormat: Short-form video reels","text":"Recruitment creative promoting a Video Host opportunity with a direct sign-up call to action across Instagram Reels and Facebook Video feeds.","image":""}]},"social":{"title":"Social media and content","text":"Managed content across several social platforms to support engagement and brand reach at MyMathews Educare.","image":"meta-videohost.png"},"projects":{"title":"Freelancing works","intro":"Client projects and freelance digital marketing campaigns.","items":[{"name":"Meat Products of India Ltd. (MPI)","tag":"Freelance","text":"Social media creatives, promotional campaign graphics, and product advertising designs for Meat Products of India Ltd. (A Govt. of Kerala Undertaking) retail outlets.","images":["mpi-beef-liver.png","mpi-chicken-pops.png","mpi-chicken-finger.jpg"]},{"name":"SEO audit and optimization","tag":"Freelance","text":"Keyword research, technical audit, on-page optimization, internal linking, schema and performance monitoring.","image":""},{"name":"Meta lead generation strategy","tag":"Practice","text":"A practice campaign covering audience research, campaign structure, creative strategy, lead generation messaging and an optimization method.","image":""}]},"certs":[{"name":"Google Ads Search Certification","issuer":"Google Digital Academy (Skillshop)"},{"name":"Fundamentals of Digital Marketing","issuer":"Google Digital Academy (Skillshop)"},{"name":"Digital Skills: Digital Marketing","issuer":"Accenture"},{"name":"Digital Marketing Guide","issuer":"Udemy"},{"name":"Internship Completion Certificate, Digital Marketing","issuer":"MyMathews Educare Pvt. Ltd."},{"name":"One Million Prompters, Certificate of Completion","issuer":"Dubai Future Foundation"}],"skills":[{"group":"Search","items":["SEO","Technical SEO","On-page SEO","Keyword research","SEO audits","Schema markup","Indexing and crawl analysis"]},{"group":"Paid advertising","items":["Google Ads","Meta Ads","Lead generation","Campaign optimization"]},{"group":"Content","items":["Content optimization","Social media marketing","AI-assisted content creation"]},{"group":"Measurement","items":["Google Search Console","Google Analytics"]}],"contact":{"heading":"Let's talk about your search and lead goals."},"googleAds":{"label":"Case study 02","title":"Google Ads and analytics","intro":"Ran search and performance campaigns for MyMathews Educare, driving high-intent educational traffic and monitoring conversion events via Google Analytics 4 (GA4).","specs":"Platform: Google Ads & GA4\nObjective: User acquisition & lead generation\nGrowth: +25.2% Views (36k) · +19.7% New users (24k) · +16.5% Events (112k)","text":"Monitored campaign performance against industry benchmarks (Colleges & Universities), achieving consistent month-over-month growth in active users and high-value event interactions.","image":"google-ads.png"}}</script>
 <script>
@@ -1299,7 +1503,10 @@ footer a { text-decoration: none; }
   ];
 
   var cms = $('cms'), cmsBody = $('cms-body'), cmsTab = $('cms-tab'), cmsMsg = $('cms-msg'), pubBtn = $('cms-publish');
-  var cmsNavList = $('cms-nav-list'), cmsActiveTitle = $('cms-active-title');
+  var cmsPills = $('cms-pills'), cmsActiveIdx = $('cms-active-idx'), cmsActiveTitle = $('cms-active-title');
+  var modeMobile = $('mode-mobile'), modeTab = $('mode-tab'), modeDesktop = $('mode-desktop');
+  var deviceFrame = $('cms-device-frame'), modeBadge = $('stage-mode-badge');
+  var stageCloseBtn = $('stage-close-btn');
   var dirty = false, timer = 0;
   var DEFAULT_MSG = 'Changes update live on the page. Click \'Publish changes\' to save permanently.';
   function note(t) { cmsMsg.textContent = t || DEFAULT_MSG; }
@@ -1470,37 +1677,36 @@ footer a { text-decoration: none; }
     return box;
   }
 
-  function renderNavList() {
-    if (!cmsNavList) return;
-    cmsNavList.innerHTML = '';
+  function renderPills() {
+    if (!cmsPills) return;
+    cmsPills.innerHTML = '';
     var activeId = cmsTab ? cmsTab.value : (SCHEMA[0] && SCHEMA[0].id);
     SCHEMA.forEach(function (s, idx) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'cms-nav-item' + (s.id === activeId ? ' active' : '');
-      btn.setAttribute('role', 'tab');
-      btn.setAttribute('aria-selected', s.id === activeId ? 'true' : 'false');
-      btn.innerHTML = '<span class="cms-nav-meta">' +
-        '<span class="cms-nav-idx">' + String(idx + 1).padStart(2, '0') + '</span>' +
-        '<span class="cms-nav-label">' + esc(s.title) + '</span>' +
-        '</span><span class="cms-nav-arrow" aria-hidden="true">➔</span>';
+      btn.className = 'cms-pill-btn' + (s.id === activeId ? ' active' : '');
+      btn.innerHTML = '<span>' + String(idx + 1).padStart(2, '0') + '</span> ' + esc(s.title.split(' (')[0]);
       btn.addEventListener('click', function () {
         setActiveSection(s.id);
       });
-      cmsNavList.appendChild(btn);
+      cmsPills.appendChild(btn);
     });
   }
 
   function setActiveSection(id) {
     var S = SCHEMA.filter(function (s) { return s.id === id; })[0] || SCHEMA[0];
+    var idx = SCHEMA.indexOf(S);
     if (cmsTab) cmsTab.value = S.id;
     if (cmsActiveTitle) cmsActiveTitle.textContent = S.title;
-    if (cmsNavList) {
-      var items = cmsNavList.querySelectorAll('.cms-nav-item');
-      items.forEach(function (el, idx) {
-        var isAct = (SCHEMA[idx] && SCHEMA[idx].id === S.id);
+    if (cmsActiveIdx) cmsActiveIdx.textContent = String(idx + 1).padStart(2, '0');
+    if (cmsPills) {
+      var btns = cmsPills.querySelectorAll('.cms-pill-btn');
+      btns.forEach(function (el, i) {
+        var isAct = (i === idx);
         el.classList.toggle('active', isAct);
-        el.setAttribute('aria-selected', isAct ? 'true' : 'false');
+        if (isAct) {
+          try { el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); } catch (e) {}
+        }
       });
     }
     cmsBody.scrollTop = 0;
@@ -1510,7 +1716,9 @@ footer a { text-decoration: none; }
   function buildTab() {
     var sc = cmsBody.scrollTop;
     var S = SCHEMA.filter(function (s) { return s.id === (cmsTab ? cmsTab.value : ''); })[0] || SCHEMA[0];
+    var idx = SCHEMA.indexOf(S);
     if (cmsActiveTitle) cmsActiveTitle.textContent = S.title;
+    if (cmsActiveIdx) cmsActiveIdx.textContent = String(idx + 1).padStart(2, '0');
     cmsBody.innerHTML = '';
     var o = S.obj ? (D[S.obj] = D[S.obj] || {}) : D;
     S.fields.forEach(function (f) { cmsBody.appendChild(field(o, f)); });
@@ -1530,15 +1738,44 @@ footer a { text-decoration: none; }
     });
   }
 
+  function setPreviewMode(mode) {
+    if (!deviceFrame) return;
+    deviceFrame.classList.remove('mobile-mode', 'tab-mode', 'desktop-mode');
+    if (modeMobile) modeMobile.classList.remove('active');
+    if (modeTab) modeTab.classList.remove('active');
+    if (modeDesktop) modeDesktop.classList.remove('active');
+
+    if (mode === 'mobile') {
+      deviceFrame.classList.add('mobile-mode');
+      if (modeMobile) modeMobile.classList.add('active');
+      if (modeBadge) modeBadge.textContent = 'Mobile Mode (390px)';
+    } else if (mode === 'desktop') {
+      deviceFrame.classList.add('desktop-mode');
+      if (modeDesktop) modeDesktop.classList.add('active');
+      if (modeBadge) modeBadge.textContent = 'Desktop Mode (Full)';
+    } else {
+      deviceFrame.classList.add('tab-mode');
+      if (modeTab) modeTab.classList.add('active');
+      if (modeBadge) modeBadge.textContent = 'Tab Mode (780px)';
+    }
+  }
+
+  if (modeMobile) modeMobile.addEventListener('click', function () { setPreviewMode('mobile'); });
+  if (modeTab) modeTab.addEventListener('click', function () { setPreviewMode('tab'); });
+  if (modeDesktop) modeDesktop.addEventListener('click', function () { setPreviewMode('desktop'); });
+  if (stageCloseBtn) stageCloseBtn.addEventListener('click', closeCms);
+
   function openCms() {
+    document.body.classList.add('cms-mode');
     cms.hidden = false;
     $('cms-open').hidden = true;
-    renderNavList();
+    renderPills();
     buildTab();
-    var firstActive = cmsNavList ? cmsNavList.querySelector('.cms-nav-item.active') : null;
-    if (firstActive) firstActive.focus();
+    setPreviewMode('tab');
+    if (cmsTab) cmsTab.focus();
   }
   function closeCms() {
+    document.body.classList.remove('cms-mode');
     cms.hidden = true;
     $('cms-open').hidden = false;
     $('cms-open').focus();
@@ -1627,6 +1864,9 @@ footer a { text-decoration: none; }
 
   // Initial check
   setAdminMode(adminActive);
+  if (adminActive) {
+    openCms();
+  }
 
   // Secret Hotkey 1: Ctrl + Shift + E or Ctrl + Shift + A
   document.addEventListener('keydown', function (e) {
