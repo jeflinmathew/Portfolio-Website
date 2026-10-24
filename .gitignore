@@ -1,0 +1,13 @@
+node_modules/
+.DS_Store
+*.log
+src/
+public/
+package.json
+vite.config.js
+server.js
+index.reverted.html
+test.pdf
+test_*.png
+chrome-profile/
+edge-profile/
