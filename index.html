@@ -439,6 +439,8 @@ p { margin: 0 0 1em; max-width: 100%; }
 .disclosure .label { position: static; }
 footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-block: 16px 40px; font-family: var(--font-data); font-size: 12px; color: var(--muted); }
 footer a { text-decoration: none; }
+.footer-copy-link { color: var(--muted); text-decoration: underline !important; text-underline-offset: 3px; text-decoration-color: var(--line) !important; cursor: pointer; transition: color .15s ease, text-decoration-color .15s ease; }
+.footer-copy-link:hover { color: var(--fg); text-decoration-color: var(--fg) !important; }
 
 @media (max-width: 860px) {
   .hero { min-height: unset; padding-block: clamp(28px, 6vw, 52px); display: block; }
@@ -1755,7 +1757,6 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
       '<h2 data-edit="contact.heading" data-edit-tag="Headline">' + esc(D.contact.heading) + '</h2>' +
       '<p class="contact-line" id="email" data-edit="email" data-edit-tag="Email">' + esc(D.email) + '</p><div class="actions">' +
       '<button class="btn solid" id="copy" type="button">Copy email</button>' +
-      '<button class="btn" id="open-contact-modal" type="button">Send a message</button>' +
       '<a class="btn" href="mailto:' + esc(D.email) + '">Open mail app</a>' +
       (li ? '<a class="btn" href="' + (li.startsWith('http') ? esc(li) : 'https://' + esc(li)) + '" target="_blank" rel="noopener noreferrer">LinkedIn</a>' : '') +
       '</div><p class="meta where" data-edit="location" data-edit-tag="Location">' + esc(D.location) + '</p></div></section>';
@@ -1814,7 +1815,7 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     }).join('') + '</dl>';
     $('r-sections').innerHTML = [secAbout(), secExperience(), secSeo(), secGoogleAds(), secMeta(), secSocial(),
       secProjects(), '<div class="contrast-band">' + secCerts() + '</div>', secSkills(), secContact()].join('');
-    $('r-footer').innerHTML = '<span id="footer-copy" style="cursor:default" title="">© ' + new Date().getFullYear() + ' ' + esc(D.name) + '</span>' +
+    $('r-footer').innerHTML = '<a href="#admin" id="footer-copy" class="footer-copy-link" title="Open Admin Panel">© ' + new Date().getFullYear() + ' ' + esc(D.name) + '</a>' +
       '<a href="#top" class="back-to-top" id="back-top" aria-label="Back to top">' +
         '<span class="btt-text">Back to top</span>' +
         '<span class="btt-short">Top</span>' +
@@ -1908,78 +1909,16 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     }
   }
 
-  /* ---------- contact interactions & message modal ---------- */
+  /* ---------- copy email ---------- */
   function wireContact() {
     var btn = $('copy'), em = $('email');
-    if (btn && em) {
-      function selectEmail() { var r = document.createRange(); r.selectNodeContents(em); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
-      btn.addEventListener('click', function () {
-        function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy email'; }, 1800); }
-        try { navigator.clipboard.writeText(em.textContent.trim()).then(done, function () { selectEmail(); btn.textContent = 'Press copy'; }); }
-        catch (e) { selectEmail(); btn.textContent = 'Press copy'; }
-      });
-    }
-
-    var openMsgBtn = $('open-contact-modal');
-    var contactModal = $('contact-modal');
-    var contactClose = $('contact-modal-close');
-    var contactCancel = $('contact-cancel-btn');
-    var contactBackdrop = $('contact-modal-backdrop');
-    var contactForm = $('contact-form');
-    var contactFeedback = $('contact-form-feedback');
-
-    function openMsgModal() {
-      if (contactModal) {
-        contactModal.hidden = false;
-        if (contactFeedback) contactFeedback.hidden = true;
-        var nInp = $('contact-name');
-        if (nInp) nInp.focus();
-      }
-    }
-    function closeMsgModal() {
-      if (contactModal) contactModal.hidden = true;
-    }
-
-    if (openMsgBtn) openMsgBtn.addEventListener('click', openMsgModal);
-    if (contactClose) contactClose.addEventListener('click', closeMsgModal);
-    if (contactCancel) contactCancel.addEventListener('click', closeMsgModal);
-    if (contactBackdrop) contactBackdrop.addEventListener('click', closeMsgModal);
-
-    if (contactForm) {
-      contactForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var name = ($('contact-name').value || '').trim();
-        var email = ($('contact-email').value || '').trim();
-        var msg = ($('contact-msg').value || '').trim();
-
-        if (!name || !email || !msg) {
-          if (contactFeedback) {
-            contactFeedback.hidden = false;
-            contactFeedback.style.color = '#DC2626';
-            contactFeedback.textContent = 'Please fill out all required fields.';
-          }
-          return;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          if (contactFeedback) {
-            contactFeedback.hidden = false;
-            contactFeedback.style.color = '#DC2626';
-            contactFeedback.textContent = 'Please enter a valid email address.';
-          }
-          return;
-        }
-
-        if (contactFeedback) {
-          contactFeedback.hidden = false;
-          contactFeedback.style.color = '#22C55E';
-          contactFeedback.textContent = '✓ Message received! Thank you, ' + name + '. I will be in touch shortly.';
-        }
-        setTimeout(function () {
-          contactForm.reset();
-          closeMsgModal();
-        }, 2000);
-      });
-    }
+    if (!btn || !em) return;
+    function selectEmail() { var r = document.createRange(); r.selectNodeContents(em); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+    btn.addEventListener('click', function () {
+      function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy email'; }, 1800); }
+      try { navigator.clipboard.writeText(em.textContent.trim()).then(done, function () { selectEmail(); btn.textContent = 'Press copy'; }); }
+      catch (e) { selectEmail(); btn.textContent = 'Press copy'; }
+    });
   }
 
   /* ---------- ask about the portfolio (chat) ---------- */
@@ -3141,19 +3080,13 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     }
   });
 
-  // Secret Trigger 2: Triple-click on Copyright line in footer
-  var copyClickCount = 0, copyClickTimer = null;
+  // Trigger: Click on Copyright hyperlink in footer to open Admin Mode
   document.addEventListener('click', function (e) {
     var copyEl = $('footer-copy');
     if (copyEl && copyEl.contains(e.target)) {
-      copyClickCount++;
-      clearTimeout(copyClickTimer);
-      copyClickTimer = setTimeout(function () { copyClickCount = 0; }, 600);
-      if (copyClickCount >= 3) {
-        copyClickCount = 0;
-        setAdminMode(!adminActive);
-        if (adminActive) openCms();
-      }
+      e.preventDefault();
+      setAdminMode(true);
+      openCms();
     }
   });
 
@@ -3197,35 +3130,6 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
       <div class="admin-auth-actions">
         <button type="button" id="admin-auth-cancel" class="btn">Cancel</button>
         <button type="submit" id="admin-auth-submit" class="btn solid">Unlock CMS</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<div class="admin-auth-modal" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" hidden>
-  <div class="admin-auth-backdrop" id="contact-modal-backdrop"></div>
-  <div class="admin-auth-card contact-modal-card">
-    <button type="button" class="contact-modal-close" id="contact-modal-close" aria-label="Close dialog">✕</button>
-    <div class="admin-auth-badge">Direct Message</div>
-    <h3 id="contact-modal-title">Send a Message</h3>
-    <p>Fill out the form below to connect directly with Jeflin Mathew.</p>
-    <form id="contact-form" autocomplete="off">
-      <div class="fld" style="margin-bottom:12px;">
-        <label for="contact-name" style="display:block;margin-bottom:4px;">Your Name</label>
-        <input type="text" id="contact-name" style="width:100%;padding:10px 12px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;" placeholder="John Doe" required maxlength="100">
-      </div>
-      <div class="fld" style="margin-bottom:12px;">
-        <label for="contact-email" style="display:block;margin-bottom:4px;">Email Address</label>
-        <input type="email" id="contact-email" style="width:100%;padding:10px 12px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;" placeholder="john@example.com" required maxlength="120">
-      </div>
-      <div class="fld" style="margin-bottom:12px;">
-        <label for="contact-msg" style="display:block;margin-bottom:4px;">Message</label>
-        <textarea id="contact-msg" rows="4" style="width:100%;padding:10px 12px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;font-family:inherit;" placeholder="Hi Jeflin, I'd like to discuss an SEO project..." required maxlength="2000"></textarea>
-      </div>
-      <div id="contact-form-feedback" class="admin-auth-error" hidden></div>
-      <div class="admin-auth-actions">
-        <button type="button" id="contact-cancel-btn" class="btn">Close</button>
-        <button type="submit" id="contact-send-btn" class="btn solid">Send Message</button>
       </div>
     </form>
   </div>
