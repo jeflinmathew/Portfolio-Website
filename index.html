@@ -737,11 +737,370 @@ body.cms-mode .cms-device-frame.desktop-mode .tab-sensor {
   display: none !important;
 }
 
+/* Prevent word breaking inside headings */
+h1, h2, h3 {
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+}
+
+/* Device frame layout fixes: Ensure hero grid & elements adapt properly inside the tablet frame */
+body.cms-mode .cms-device-frame.tab-mode .hero h1,
+body.cms-mode .cms-device-frame.mobile-mode .hero h1 {
+  font-size: 44px !important;
+  line-height: 1.15 !important;
+  word-break: normal !important;
+  white-space: normal !important;
+}
+body.cms-mode .cms-device-frame.tab-mode .hero-grid,
+body.cms-mode .cms-device-frame.mobile-mode .hero-grid {
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 28px !important;
+}
+body.cms-mode .cms-device-frame.tab-mode .facts,
+body.cms-mode .cms-device-frame.mobile-mode .facts {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+body.cms-mode .cms-device-frame.tab-mode .seo-layout,
+body.cms-mode .cms-device-frame.mobile-mode .seo-layout {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+body.cms-mode .cms-device-frame.tab-mode .list,
+body.cms-mode .cms-device-frame.mobile-mode .list {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+/* Figma / Framer Direct Canvas Editing */
+body.cms-mode [data-edit] {
+  position: relative;
+  cursor: text;
+  transition: outline 0.15s ease, background 0.15s ease;
+  border-radius: 4px;
+}
+body.cms-mode [data-edit]:hover {
+  outline: 2px dashed #3b82f6 !important;
+  outline-offset: 4px;
+}
+body.cms-mode [data-edit]:focus {
+  outline: 2px solid #2563eb !important;
+  outline-offset: 4px;
+  background: rgba(37, 99, 235, 0.08) !important;
+}
+
+/* Direct Image Replace Overlays */
+body.cms-mode [data-edit-img],
+body.cms-mode [data-edit-gallery] .shot-wrap {
+  position: relative;
+  cursor: pointer;
+}
+body.cms-mode [data-edit-img]::after,
+body.cms-mode [data-edit-gallery] .shot-wrap::after {
+  content: "📷 Click to Replace Image";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 5;
+}
+body.cms-mode [data-edit-img]:hover::after,
+body.cms-mode [data-edit-gallery] .shot-wrap:hover::after {
+  opacity: 1;
+}
+
+/* In-line Add Buttons */
+.framer-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  border: 1px dashed #3b82f6;
+  background: rgba(37, 99, 235, 0.08);
+  color: #3b82f6;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.framer-add-btn:hover {
+  background: #3b82f6;
+  color: #fff;
+  border-style: solid;
+}
+body:not(.cms-mode) .framer-add-btn {
+  display: none !important;
+}
+
+/* Theme & Text Size Customizer Controls in Stage Bar */
+.cms-customizer-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cms-dropdown-wrap {
+  position: relative;
+}
+.stage-control-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-family: var(--font-body);
+  background: #0d0f12;
+  color: #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.stage-control-btn:hover {
+  background: #252830;
+  color: #fff;
+}
+.ctrl-color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+.cms-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background: #1a1d24;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+  padding: 12px;
+  z-index: 200;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cms-dropdown-menu[hidden] {
+  display: none !important;
+}
+.dropdown-header {
+  font-family: var(--font-data);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  margin-bottom: 4px;
+}
+.theme-palette-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+.theme-color-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.theme-color-btn:hover {
+  transform: scale(1.15);
+}
+.theme-color-btn.active {
+  border-color: #fff;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+.theme-mode-switch {
+  display: flex;
+  gap: 4px;
+}
+.theme-mode-btn {
+  flex: 1;
+  padding: 6px;
+  font-size: 11.5px;
+  font-family: var(--font-body);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #0d0f12;
+  color: #d1d5db;
+  cursor: pointer;
+}
+.theme-mode-btn:hover {
+  background: #23262e;
+  color: #fff;
+}
+.theme-mode-btn.active {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+.font-scale-options {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.font-scale-btn {
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-family: var(--font-body);
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #d1d5db;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.font-scale-btn:hover {
+  background: #252830;
+  color: #fff;
+}
+.font-scale-btn.active {
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+}
+
 /* Responsive 2-Tab Switcher Bar for Tablet & Mobile */
 .cms-dual-bar { display: none; }
 body:not(.cms-mode) .cms-dual-bar { display: none !important; }
 
-@media (max-width: 1024px) {
+/* Mobile Notice: Shown on mobile (< 768px) when editor is open */
+.cms-mobile-notice { display: none; }
+body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
+
+@media (max-width: 767px) {
+  body.cms-mode {
+    display: block !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.cms-mode .cms-mobile-notice {
+    display: flex !important;
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 99999 !important;
+    background: rgba(11, 13, 16, 0.96) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 16px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+
+  .cms-mobile-notice-card {
+    background: #181b22;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 24px;
+    padding: 30px 20px;
+    text-align: center;
+    max-width: 340px;
+    width: 100%;
+    margin: 0 !important;
+    box-sizing: border-box;
+    box-shadow: 0 28px 72px rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    color: #f3f4f6;
+  }
+
+  .cms-mobile-notice-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+
+  .cms-mobile-badge {
+    font-family: var(--font-data);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 4px 11px;
+    border-radius: 9999px;
+    background: rgba(239, 68, 68, 0.16);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    font-weight: 700;
+  }
+
+  .cms-mobile-notice-card h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    line-height: 1.25;
+  }
+
+  .cms-mobile-notice-card p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #9ca3af;
+  }
+
+  .cms-mobile-notice-actions {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .cms-mobile-notice-actions .btn {
+    width: 100%;
+    padding: 13px 20px;
+    font-size: 14.5px;
+    font-weight: 600;
+    box-sizing: border-box;
+  }
+
+  /* On mobile (< 768px), hide the editor forms and dual bar so only the notice shows */
+  body.cms-mode .cms {
+    display: none !important;
+  }
+  body.cms-mode .cms-stage {
+    display: none !important;
+  }
+  body.cms-mode .cms-dual-bar {
+    display: none !important;
+  }
+}
+
+/* Tablet (768px - 1024px): 2-Tab Switcher (Edit vs Preview) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  body.cms-mode .cms-mobile-notice {
+    display: none !important;
+  }
+
   body.cms-mode {
     flex-direction: column !important;
     height: 100vh !important;
@@ -813,7 +1172,7 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     color: #fff;
   }
 
-  /* When on Tablet & Mobile: Tab 1 (Edit) */
+  /* When on Tablet: Tab 1 (Edit) */
   body.cms-mode:not([data-cms-view="preview"]) .cms {
     display: flex !important;
     width: 100% !important;
@@ -827,7 +1186,7 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     display: none !important;
   }
 
-  /* When on Tablet & Mobile: Tab 2 (Preview) */
+  /* When on Tablet: Tab 2 (Preview) */
   body.cms-mode[data-cms-view="preview"] .cms {
     display: none !important;
   }
@@ -860,7 +1219,7 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     display: none !important;
   }
   body.cms-mode[data-cms-view="preview"] .wrap {
-    padding: 0 16px 60px 16px !important;
+    padding: 0 20px 60px 20px !important;
   }
 }
 
@@ -870,6 +1229,9 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     flex-direction: row !important;
   }
   body.cms-mode .cms-dual-bar {
+    display: none !important;
+  }
+  body.cms-mode .cms-mobile-notice {
     display: none !important;
   }
   body.cms-mode .cms {
@@ -899,6 +1261,21 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     <a href="/" class="admin-banner-btn">Exit to Live View ➔</a>
   </div>
 </aside>
+
+<!-- Mobile Device Notice (< 768px) -->
+<div class="cms-mobile-notice" id="cms-mobile-notice" role="dialog" aria-modal="true" aria-labelledby="cms-mobile-title">
+  <div class="cms-mobile-notice-card">
+    <div class="cms-mobile-notice-icon">
+      <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+    </div>
+    <span class="cms-mobile-badge">Desktop / Tablet Only</span>
+    <h2 id="cms-mobile-title">Editor Unavailable on Mobile</h2>
+    <p>The Portfolio Studio CMS and canvas editor will not work in mobile UI. Please open on a desktop or tablet screen to edit copy, colors, fonts, and images.</p>
+    <div class="cms-mobile-notice-actions">
+      <button class="btn solid" id="cms-mobile-notice-exit" type="button">Continue to Website ➔</button>
+    </div>
+  </div>
+</div>
 
 <!-- Responsive 2-Tab Switcher Bar for Tablet & Mobile -->
 <div class="cms-dual-bar" id="cms-dual-bar">
@@ -969,6 +1346,43 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
         <span>Desktop</span>
       </button>
     </div>
+
+    <!-- Theme & Text Size Customizer Controls -->
+    <div class="cms-customizer-controls">
+      <div class="cms-dropdown-wrap">
+        <button class="stage-control-btn" id="ctrl-theme-btn" type="button" title="Change Color Palette">
+          <span class="ctrl-color-dot" id="ctrl-theme-dot" style="background:#0a0a0a;"></span>
+          <span>Theme</span> ▾
+        </button>
+        <div class="cms-dropdown-menu" id="theme-menu" hidden>
+          <div class="dropdown-header">Color Palette</div>
+          <div class="theme-palette-grid">
+            <button class="theme-color-btn active" data-palette="default" style="background:#0a0a0a" title="Monochrome Light"></button>
+            <button class="theme-color-btn" data-palette="dark" style="background:#58a6ff" title="Midnight Dark"></button>
+            <button class="theme-color-btn" data-palette="warm" style="background:#a05e28" title="Warm Editorial"></button>
+            <button class="theme-color-btn" data-palette="blue" style="background:#2563eb" title="Electric Blue"></button>
+            <button class="theme-color-btn" data-palette="emerald" style="background:#059669" title="Emerald Forest"></button>
+            <button class="theme-color-btn" data-palette="purple" style="background:#7c3aed" title="Studio Violet"></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cms-dropdown-wrap">
+        <button class="stage-control-btn" id="ctrl-font-btn" type="button" title="Adjust Text Size">
+          <span>Aa</span> <span>Size</span> ▾
+        </button>
+        <div class="cms-dropdown-menu" id="font-menu" hidden>
+          <div class="dropdown-header">Text Size Scale</div>
+          <div class="font-scale-options">
+            <button class="font-scale-btn" data-scale="compact">Compact (90%)</button>
+            <button class="font-scale-btn active" data-scale="standard">Standard (100%)</button>
+            <button class="font-scale-btn" data-scale="comfortable">Comfortable (110%)</button>
+            <button class="font-scale-btn" data-scale="large">Large (120%)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="cms-stage-right">
       <button class="sm stage-exit-btn" id="stage-close-btn" type="button">Exit to Full Site ➔</button>
     </div>
@@ -1073,6 +1487,7 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     D.meta = D.meta || {}; D.meta.campaigns = D.meta.campaigns || [];
     D.social = D.social || {}; D.projects = D.projects || {}; D.projects.items = D.projects.items || [];
     D.certs = D.certs || []; D.skills = D.skills || []; D.contact = D.contact || {};
+    D.theme = D.theme || { palette: 'default', fontScale: 'standard' };
   }
   norm();
   function first() { return String(D.name || 'this person').split(' ')[0]; }
@@ -1142,23 +1557,29 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     }).join('');
   }
   function entries(items, render) {
-    return items.map(function (it, i) { return '<div class="entry' + (i === 0 ? ' first-entry' : '') + '">' + render(it) + '</div>'; }).join('');
+    return items.map(function (it, i) { return '<div class="entry' + (i === 0 ? ' first-entry' : '') + '">' + render(it, i) + '</div>'; }).join('');
   }
 
   function secAbout() {
     return '<section id="about" data-nav="about"><div class="label">About</div><div class="body about">' +
       '<div class="about-grid">' +
-        '<div class="about-photo-wrap shot-wrap"><img class="about-photo" src="' + esc(D.portrait || 'profile.jpg') + '" alt="' + esc(D.name) + '" loading="lazy"></div>' +
-        '<div class="about-text">' + D.about.map(para).join('') + '</div>' +
+        '<div class="about-photo-wrap shot-wrap" data-edit-img="portrait" title="Click to replace photo"><img class="about-photo" src="' + esc(D.portrait || 'profile.jpg') + '" alt="' + esc(D.name) + '" loading="lazy"></div>' +
+        '<div class="about-text">' +
+          D.about.map(function (p, i) {
+            return '<p data-edit="about.' + i + '" data-edit-tag="Bio Paragraph ' + (i + 1) + '">' + esc(p) + '</p>';
+          }).join('') +
+          '<button class="framer-add-btn" data-canvas-add="about" type="button">+ Add Paragraph</button>' +
+        '</div>' +
       '</div>' +
       '</div></section>';
   }
   function secExperience() {
     var e = D.experience;
     return '<section id="experience" data-nav="experience"><div class="label">Experience</div><div class="body">' +
-      '<div class="job"><h3>' + esc(e.title) + (e.company ? ', ' + esc(e.company) : '') + '</h3><span class="meta">' + esc(e.period) + '</span></div>' +
-      para(e.summary) +
-      (e.bullets.length ? '<ul class="list">' + e.bullets.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul>' : '') +
+      '<div class="job"><h3 data-edit="experience.title" data-edit-tag="Job Title">' + esc(e.title) + '</h3>' + (e.company ? '<span class="company-at">, </span><span data-edit="experience.company" data-edit-tag="Company">' + esc(e.company) + '</span>' : '') + '<span class="meta" data-edit="experience.period" data-edit-tag="Period">' + esc(e.period) + '</span></div>' +
+      '<p data-edit="experience.summary" data-edit-tag="Summary">' + esc(e.summary) + '</p>' +
+      (e.bullets && e.bullets.length ? '<ul class="list">' + e.bullets.map(function (b, i) { return '<li data-edit="experience.bullets.' + i + '" data-edit-tag="Bullet ' + (i + 1) + '">' + esc(b) + '</li>'; }).join('') + '</ul>' : '') +
+      '<button class="framer-add-btn" data-canvas-add="experience.bullets" type="button">+ Add Achievement Bullet</button>' +
       '</div></section>';
   }
   function secSeo() {
@@ -1166,10 +1587,11 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     var h = '<section id="work" data-nav="work"><div class="label">Case study 01</div><div class="body">' +
       '<div class="seo-layout">' +
         '<div class="seo-content">' +
-          '<h2>' + esc(s.title) + '</h2>' + para(s.intro);
+          '<h2 data-edit="seo.title" data-edit-tag="SEO Title">' + esc(s.title) + '</h2>' +
+          '<p data-edit="seo.intro" data-edit-tag="SEO Intro">' + esc(s.intro) + '</p>';
     if (s.steps.length) h += '<ol class="steps" id="steps"></ol><p class="step-desc" id="step-desc" aria-live="polite"></p>';
     h += '</div>' +
-      (s.image ? '<div class="seo-media">' + shot(s.image, s.title + ' screenshot') + '</div>' : '') +
+      (s.image ? '<div class="seo-media shot-wrap" data-edit-img="seo.image" title="Click to replace image">' + shot(s.image, s.title + ' screenshot') + '</div>' : '') +
       '</div></div></section>';
     return h;
   }
@@ -1179,11 +1601,12 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     return '<section data-nav="work"><div class="label">' + esc(g.label || 'Case study 02') + '</div><div class="body">' +
       '<div class="seo-layout reverse">' +
         '<div class="seo-content">' +
-          '<h2>' + esc(g.title) + '</h2>' + para(g.intro) +
+          '<h2 data-edit="googleAds.title" data-edit-tag="Title">' + esc(g.title) + '</h2>' +
+          '<p data-edit="googleAds.intro" data-edit-tag="Intro">' + esc(g.intro) + '</p>' +
           (g.specs ? '<div class="specs">' + specsHtml(g.specs) + '</div>' : '') +
-          para(g.text) +
+          '<p data-edit="googleAds.text" data-edit-tag="Description">' + esc(g.text) + '</p>' +
         '</div>' +
-        (g.image ? '<div class="seo-media">' + shot(g.image, g.title + ' screenshot') + '</div>' : '') +
+        (g.image ? '<div class="seo-media shot-wrap" data-edit-img="googleAds.image" title="Click to replace image">' + shot(g.image, g.title + ' screenshot') + '</div>' : '') +
       '</div></div></section>';
   }
   function secMeta() {
@@ -1193,19 +1616,20 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     return '<section data-nav="work"><div class="label">Case study 03</div><div class="body">' +
       '<div class="seo-layout">' +
         '<div class="seo-content">' +
-          '<h2>' + esc(m.title) + '</h2>' + para(m.intro) +
+          '<h2 data-edit="meta.title" data-edit-tag="Title">' + esc(m.title) + '</h2>' +
+          '<p data-edit="meta.intro" data-edit-tag="Intro">' + esc(m.intro) + '</p>' +
           (c1 ? '<div class="campaign-sub">' +
-            '<h3>' + esc(c1.name) + '</h3>' +
+            '<h3 data-edit="meta.campaigns.0.name" data-edit-tag="Campaign 1 Name">' + esc(c1.name) + '</h3>' +
             '<div class="specs">' + specsHtml(c1.specs) + '</div>' +
-            para(c1.text) +
+            '<p data-edit="meta.campaigns.0.text" data-edit-tag="Campaign 1 Text">' + esc(c1.text) + '</p>' +
           '</div>' : '') +
           (c2 ? '<div class="campaign-sub" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line);">' +
-            '<h3>' + esc(c2.name) + '</h3>' +
+            '<h3 data-edit="meta.campaigns.1.name" data-edit-tag="Campaign 2 Name">' + esc(c2.name) + '</h3>' +
             '<div class="specs">' + specsHtml(c2.specs) + '</div>' +
-            para(c2.text) +
+            '<p data-edit="meta.campaigns.1.text" data-edit-tag="Campaign 2 Text">' + esc(c2.text) + '</p>' +
           '</div>' : '') +
         '</div>' +
-        (c1 && c1.image ? '<div class="seo-media">' + shot(c1.image, c1.name + ' screenshot') + '</div>' : '') +
+        (c1 && c1.image ? '<div class="seo-media shot-wrap" data-edit-img="meta.campaigns.0.image" title="Click to replace image">' + shot(c1.image, c1.name + ' screenshot') + '</div>' : '') +
       '</div></div></section>';
   }
   function secSocial() {
@@ -1213,30 +1637,36 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     return '<section data-nav="work"><div class="label">Case study 04</div><div class="body">' +
       '<div class="seo-layout reverse">' +
         '<div class="seo-content">' +
-          '<h2>' + esc(s.title) + '</h2>' + para(s.text) +
+          '<h2 data-edit="social.title" data-edit-tag="Title">' + esc(s.title) + '</h2>' +
+          '<p data-edit="social.text" data-edit-tag="Description">' + esc(s.text) + '</p>' +
         '</div>' +
-        (s.image ? '<div class="seo-media">' + shot(s.image, s.title + ' screenshot') + '</div>' : '') +
+        (s.image ? '<div class="seo-media shot-wrap" data-edit-img="social.image" title="Click to replace image">' + shot(s.image, s.title + ' screenshot') + '</div>' : '') +
       '</div></div></section>';
   }
   function secProjects() {
     var p = D.projects;
-    return '<section data-nav="work"><div class="label">Freelancing works</div><div class="body"><h2>' + esc(p.title) + '</h2>' + para(p.intro) +
-      entries(p.items, function (it) {
+    return '<section data-nav="work"><div class="label">Freelancing works</div><div class="body">' +
+      '<h2 data-edit="projects.title" data-edit-tag="Section Title">' + esc(p.title) + '</h2>' +
+      '<p data-edit="projects.intro" data-edit-tag="Intro">' + esc(p.intro) + '</p>' +
+      entries(p.items, function (it, idx) {
         var imgsHtml = '';
         if (it.images && it.images.length) {
-          imgsHtml = '<div class="gallery-row">' +
+          imgsHtml = '<div class="gallery-row" data-edit-gallery="projects.items.' + idx + '.images">' +
             it.images.map(function (imgSrc, i) {
-              return '<div class="shot-wrap">' +
+              return '<div class="shot-wrap" data-gallery-item="' + i + '" title="Click to replace image">' +
                 '<img class="shot" src="' + esc(imgSrc) + '" alt="' + esc(it.name + ' image ' + (i + 1)) + '" loading="lazy">' +
               '</div>';
             }).join('') +
           '</div>';
         } else if (it.image) {
-          imgsHtml = shot(it.image, it.name);
+          imgsHtml = '<div class="shot-wrap" data-edit-img="projects.items.' + idx + '.image" title="Click to replace image">' + shot(it.image, it.name) + '</div>';
         }
-        return '<h3>' + esc(it.name) + (it.tag ? '<span class="tag">' + esc(it.tag) + '</span>' : '') + '</h3>' +
-          para(it.text) + imgsHtml;
-      }) + '</div></section>';
+        return '<h3><span data-edit="projects.items.' + idx + '.name" data-edit-tag="Project Name">' + esc(it.name) + '</span>' +
+          (it.tag ? ' <span class="tag" data-edit="projects.items.' + idx + '.tag" data-edit-tag="Tag">' + esc(it.tag) + '</span>' : '') + '</h3>' +
+          '<p data-edit="projects.items.' + idx + '.text" data-edit-tag="Project Description">' + esc(it.text) + '</p>' + imgsHtml;
+      }) +
+      '<button class="framer-add-btn" data-canvas-add="projects.items" type="button">+ Add New Project</button>' +
+      '</div></section>';
   }
   function secCerts() {
     return '<section data-nav="work"><div class="label">Certifications</div><div class="body"><ul class="certs">' +
@@ -1250,12 +1680,13 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
   }
   function secContact() {
     var li = String(D.linkedin || '').replace(/^https?:\/\//, '');
-    return '<section id="contact" data-nav="contact"><div class="label">Contact</div><div class="body"><h2>' + esc(D.contact.heading) + '</h2>' +
-      '<p class="contact-line" id="email">' + esc(D.email) + '</p><div class="actions">' +
+    return '<section id="contact" data-nav="contact"><div class="label">Contact</div><div class="body">' +
+      '<h2 data-edit="contact.heading" data-edit-tag="Headline">' + esc(D.contact.heading) + '</h2>' +
+      '<p class="contact-line" id="email" data-edit="email" data-edit-tag="Email">' + esc(D.email) + '</p><div class="actions">' +
       '<button class="btn solid" id="copy" type="button">Copy email</button>' +
       '<a class="btn" href="mailto:' + esc(D.email) + '">Open mail app</a>' +
       (li ? '<a class="btn" href="' + (li.startsWith('http') ? esc(li) : 'https://' + esc(li)) + '" target="_blank" rel="noopener noreferrer">LinkedIn</a>' : '') +
-      '</div><p class="meta where">' + esc(D.location) + '</p></div></section>';
+      '</div><p class="meta where" data-edit="location" data-edit-tag="Location">' + esc(D.location) + '</p></div></section>';
   }
   function secDisclosure() { return ''; }
 
@@ -1291,8 +1722,8 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
       var img = wrap.querySelector('img');
       if (!img) return;
 
-      // Single click on each image opens the overlay modal
       wrap.addEventListener('click', function (e) {
+        if (document.body.classList.contains('cms-mode')) return;
         e.preventDefault();
         openFullscreen(img.src, img.alt);
       });
@@ -1302,9 +1733,13 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
   function renderSite() {
     norm();
     var av = $('hdr-avatar'); if (av && D.portrait) av.src = D.portrait;
-    $('r-hero').innerHTML = '<p class="role">' + esc(D.role) + '</p><h1>' + esc(D.name) + '</h1><p class="lede">' + esc(D.lede) + '</p>' +
+    $('r-hero').innerHTML = '<p class="role" data-edit="role" data-edit-tag="Role">' + esc(D.role) + '</p>' +
+      '<h1 data-edit="name" data-edit-tag="Heading 1">' + esc(D.name) + '</h1>' +
+      '<p class="lede" data-edit="lede" data-edit-tag="Intro Lede">' + esc(D.lede) + '</p>' +
       '<div class="cta"><a class="btn solid" href="#work">View work</a><a class="btn" href="#contact">Get in touch</a></div>';
-    $('r-hero2').innerHTML = '<dl class="facts">' + D.facts.map(function (f) { return '<div><dt>' + esc(f.k) + '</dt><dd>' + esc(f.v) + '</dd></div>'; }).join('') + '</dl>';
+    $('r-hero2').innerHTML = '<dl class="facts">' + D.facts.map(function (f, i) {
+      return '<div><dt data-edit="facts.' + i + '.k" data-edit-tag="Label">' + esc(f.k) + '</dt><dd data-edit="facts.' + i + '.v" data-edit-tag="Value">' + esc(f.v) + '</dd></div>';
+    }).join('') + '</dl>';
     $('r-sections').innerHTML = [secAbout(), secExperience(), secSeo(), secGoogleAds(), secMeta(), secSocial(),
       secProjects(), '<div class="contrast-band">' + secCerts() + '</div>', secSkills(), secContact()].join('');
     $('r-footer').innerHTML = '<span id="footer-copy" style="cursor:default" title="">© ' + new Date().getFullYear() + ' ' + esc(D.name) + '</span>' +
@@ -1314,6 +1749,8 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     $('ask-title').textContent = 'Ask about ' + first();
     $('askbox').placeholder = 'Ask about ' + first() + '’s work';
     wireSeo(); wireContact(); refreshChat(); onScroll(); wireFullscreenImages();
+    wireDirectCanvasEditing();
+    applyCustomTheme();
   }
 
   /* ---------- workflow steps + chart ---------- */
@@ -1664,6 +2101,9 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     { id: 'skills', title: 'Skills Grid', obj: '', fields: [],
       lists: [{ key: 'skills', title: 'Skill Categories', item: 'group', blank: { group: '', items: [] }, head: function (o) { return o.group; },
         fields: [{ k: 'group', l: 'Category Name', t: T }, { k: 'items', l: 'Skills (comma separated)', t: 'csv' }] }] },
+    { id: 'theme', title: 'Theme & Typography', obj: 'theme', fields: [
+      { k: 'palette', l: 'Color Palette', t: 'palette_select' },
+      { k: 'fontScale', l: 'Text Size Scale', t: 'scale_select' }], lists: [] },
     { id: 'contact', title: 'Contact Section', obj: 'contact', fields: [
       { k: 'heading', l: 'Contact Headline', t: T }], lists: [] }
   ];
@@ -1796,6 +2236,50 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
       var cl = mk('label', '', f.l); cl.htmlFor = id; w.appendChild(c); w.appendChild(cl); return w;
     }
     var lab = mk('label', '', f.l); lab.htmlFor = id; w.appendChild(lab);
+    if (f.t === 'palette_select') {
+      var sel = document.createElement('select'); sel.id = id;
+      var opts = [
+        { v: 'default', l: 'Monochrome Light (Default)' },
+        { v: 'dark', l: 'Midnight Dark' },
+        { v: 'warm', l: 'Warm Editorial' },
+        { v: 'blue', l: 'Electric Tech Blue' },
+        { v: 'emerald', l: 'Emerald Forest' },
+        { v: 'purple', l: 'Studio Violet' }
+      ];
+      opts.forEach(function (opt) {
+        var op = document.createElement('option'); op.value = opt.v; op.textContent = opt.l;
+        if ((o[f.k] || 'default') === opt.v) op.selected = true;
+        sel.appendChild(op);
+      });
+      sel.addEventListener('change', function () {
+        o[f.k] = sel.value;
+        applyCustomTheme();
+        touched();
+      });
+      w.appendChild(sel);
+      return w;
+    }
+    if (f.t === 'scale_select') {
+      var sel = document.createElement('select'); sel.id = id;
+      var opts = [
+        { v: 'compact', l: 'Compact (90%)' },
+        { v: 'standard', l: 'Standard (100%)' },
+        { v: 'comfortable', l: 'Comfortable (110%)' },
+        { v: 'large', l: 'Large (120%)' }
+      ];
+      opts.forEach(function (opt) {
+        var op = document.createElement('option'); op.value = opt.v; op.textContent = opt.l;
+        if ((o[f.k] || 'standard') === opt.v) op.selected = true;
+        sel.appendChild(op);
+      });
+      sel.addEventListener('change', function () {
+        o[f.k] = sel.value;
+        applyCustomTheme();
+        touched();
+      });
+      w.appendChild(sel);
+      return w;
+    }
     if (f.t === 'image') { w.removeChild(lab); w.appendChild(mk('span', 'lbl', f.l)); w.appendChild(imageControl(o, f)); return w; }
     if (f.t === 'gallery') { w.removeChild(lab); return galleryControl(o, f); }
     var inp;
@@ -1952,6 +2436,279 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
   if (dualBtnPreview) dualBtnPreview.addEventListener('click', function () { setMobileView('preview'); });
   if (dualBtnExit) dualBtnExit.addEventListener('click', closeCms);
 
+  /* ---------- Figma & Framer Direct Canvas Editing & Custom Theme ---------- */
+  function getDPath(path) {
+    if (!path) return undefined;
+    var parts = path.split('.');
+    var cur = D;
+    for (var i = 0; i < parts.length; i++) {
+      if (cur == null) return undefined;
+      cur = cur[parts[i]];
+    }
+    return cur;
+  }
+
+  function setDPath(path, val) {
+    if (!path) return;
+    var parts = path.split('.');
+    var cur = D;
+    for (var i = 0; i < parts.length - 1; i++) {
+      if (!cur[parts[i]]) cur[parts[i]] = {};
+      cur = cur[parts[i]];
+    }
+    cur[parts[parts.length - 1]] = val;
+  }
+
+  function applyCustomTheme() {
+    D.theme = D.theme || { palette: 'default', fontScale: 'standard' };
+    var palette = D.theme.palette || 'default';
+    var fontScale = D.theme.fontScale || 'standard';
+    root.setAttribute('data-palette', palette);
+    root.setAttribute('data-font-scale', fontScale);
+
+    var dot = $('ctrl-theme-dot');
+    if (dot) {
+      var colors = {
+        default: '#0a0a0a',
+        dark: '#58a6ff',
+        warm: '#a05e28',
+        blue: '#2563eb',
+        emerald: '#059669',
+        purple: '#7c3aed'
+      };
+      dot.style.background = colors[palette] || '#0a0a0a';
+    }
+
+    var palBtns = document.querySelectorAll('.theme-color-btn');
+    palBtns.forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-palette') === palette);
+    });
+
+    var scaleBtns = document.querySelectorAll('.font-scale-btn');
+    scaleBtns.forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-scale') === fontScale);
+    });
+  }
+
+  function wireCustomizerMenus() {
+    var themeBtn = $('ctrl-theme-btn'), themeMenu = $('theme-menu');
+    var fontBtn = $('ctrl-font-btn'), fontMenu = $('font-menu');
+
+    if (themeBtn && themeMenu) {
+      themeBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isHidden = themeMenu.hidden;
+        if (fontMenu) fontMenu.hidden = true;
+        themeMenu.hidden = !isHidden;
+      });
+    }
+
+    if (fontBtn && fontMenu) {
+      fontBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isHidden = fontMenu.hidden;
+        if (themeMenu) themeMenu.hidden = true;
+        fontMenu.hidden = !isHidden;
+      });
+    }
+
+    document.addEventListener('click', function (e) {
+      if (themeMenu && !themeMenu.contains(e.target) && (!themeBtn || !themeBtn.contains(e.target))) {
+        themeMenu.hidden = true;
+      }
+      if (fontMenu && !fontMenu.contains(e.target) && (!fontBtn || !fontBtn.contains(e.target))) {
+        fontMenu.hidden = true;
+      }
+    });
+
+    var palBtns = document.querySelectorAll('.theme-color-btn');
+    palBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var pal = btn.getAttribute('data-palette');
+        D.theme = D.theme || {};
+        D.theme.palette = pal;
+        applyCustomTheme();
+        touched();
+        if (themeMenu) themeMenu.hidden = true;
+      });
+    });
+
+    var scaleBtns = document.querySelectorAll('.font-scale-btn');
+    scaleBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var sc = btn.getAttribute('data-scale');
+        D.theme = D.theme || {};
+        D.theme.fontScale = sc;
+        applyCustomTheme();
+        touched();
+        if (fontMenu) fontMenu.hidden = true;
+      });
+    });
+
+    var mobileNoticeExit = $('cms-mobile-notice-exit');
+    if (mobileNoticeExit) {
+      mobileNoticeExit.addEventListener('click', function () {
+        closeCms();
+        setAdminMode(false);
+      });
+    }
+  }
+
+  function wireDirectCanvasEditing() {
+    var isCms = document.body.classList.contains('cms-mode');
+
+    // 1. Text elements inline editing (contenteditable on click)
+    var editables = document.querySelectorAll('[data-edit]');
+    editables.forEach(function (el) {
+      if (isCms) {
+        el.setAttribute('title', 'Click to edit directly');
+        el.addEventListener('click', function (e) {
+          if (!document.body.classList.contains('cms-mode')) return;
+          el.contentEditable = 'true';
+          el.focus();
+        });
+
+        el.addEventListener('input', function () {
+          var p = el.getAttribute('data-edit');
+          if (!p) return;
+          var val = el.textContent.trim();
+          setDPath(p, val);
+          touched();
+        });
+
+        el.addEventListener('blur', function () {
+          el.contentEditable = 'false';
+          var p = el.getAttribute('data-edit');
+          if (!p) return;
+          var val = el.textContent.trim();
+          setDPath(p, val);
+          touched();
+          buildTab(); // Sync to CMS form
+        });
+
+        el.addEventListener('keydown', function (e) {
+          var tag = el.tagName.toLowerCase();
+          if ((tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'dt' || el.classList.contains('role') || el.classList.contains('tag')) && e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            el.blur();
+          }
+        });
+      } else {
+        el.removeAttribute('title');
+        el.contentEditable = 'false';
+      }
+    });
+
+    // 2. Image elements inline click-to-replace
+    var imgEditables = document.querySelectorAll('[data-edit-img]');
+    imgEditables.forEach(function (wrap) {
+      if (isCms) {
+        wrap.setAttribute('title', 'Click to replace image');
+        wrap.addEventListener('click', function (e) {
+          if (!document.body.classList.contains('cms-mode')) return;
+          e.preventDefault();
+          e.stopPropagation();
+          var p = wrap.getAttribute('data-edit-img');
+          var fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = 'image/*';
+          fileInput.onchange = async function () {
+            if (fileInput.files && fileInput.files[0]) {
+              note('Uploading image…');
+              try {
+                var url = await uploadImageFile(fileInput.files[0]);
+                setDPath(p, url);
+                touched();
+                renderSite();
+                buildTab();
+                note('Image updated successfully.');
+              } catch (err) {
+                note('Image could not be uploaded.');
+              }
+            }
+          };
+          fileInput.click();
+        });
+      } else {
+        wrap.removeAttribute('title');
+      }
+    });
+
+    // 3. Gallery items inline click-to-replace & add
+    var galleryRows = document.querySelectorAll('[data-edit-gallery]');
+    galleryRows.forEach(function (row) {
+      if (isCms) {
+        var p = row.getAttribute('data-edit-gallery');
+        var items = row.querySelectorAll('[data-gallery-item]');
+        items.forEach(function (itemWrap) {
+          itemWrap.setAttribute('title', 'Click to replace gallery photo');
+          itemWrap.addEventListener('click', function (e) {
+            if (!document.body.classList.contains('cms-mode')) return;
+            e.preventDefault();
+            e.stopPropagation();
+            var idx = parseInt(itemWrap.getAttribute('data-gallery-item'), 10);
+            var fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = async function () {
+              if (fileInput.files && fileInput.files[0]) {
+                note('Uploading gallery image…');
+                try {
+                  var url = await uploadImageFile(fileInput.files[0]);
+                  var arr = getDPath(p) || [];
+                  arr[idx] = url;
+                  setDPath(p, arr);
+                  touched();
+                  renderSite();
+                  buildTab();
+                  note('Gallery photo replaced.');
+                } catch (err) {
+                  note('Upload failed.');
+                }
+              }
+            };
+            fileInput.click();
+          });
+        });
+      }
+    });
+
+    // 4. In-line "+ Add" buttons (Figma / Framer canvas action)
+    var addButtons = document.querySelectorAll('[data-canvas-add]');
+    addButtons.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var target = btn.getAttribute('data-canvas-add');
+        if (target === 'about') {
+          D.about = D.about || [];
+          D.about.push('New paragraph. Click directly here to edit this biography note.');
+          touched();
+          renderSite();
+          buildTab();
+        } else if (target === 'experience.bullets') {
+          D.experience = D.experience || {};
+          D.experience.bullets = D.experience.bullets || [];
+          D.experience.bullets.push('New achievement bullet point. Click here to edit.');
+          touched();
+          renderSite();
+          buildTab();
+        } else if (target === 'projects.items') {
+          D.projects = D.projects || {};
+          D.projects.items = D.projects.items || [];
+          D.projects.items.push({
+            name: 'New Client Project',
+            tag: 'Freelance',
+            text: 'Detailed description of the campaign and deliverables. Click to edit.',
+            images: []
+          });
+          touched();
+          renderSite();
+          buildTab();
+        }
+      });
+    });
+  }
+
   function openCms() {
     document.body.classList.add('cms-mode');
     setMobileView('edit');
@@ -1960,6 +2717,7 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     renderPills();
     buildTab();
     setPreviewMode('tab');
+    renderSite();
     if (cmsTab) cmsTab.focus();
   }
   function closeCms() {
@@ -1967,6 +2725,7 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     document.body.removeAttribute('data-cms-view');
     cms.hidden = true;
     $('cms-open').hidden = false;
+    renderSite();
     $('cms-open').focus();
   }
   $('cms-open').addEventListener('click', openCms);
@@ -2095,6 +2854,7 @@ body:not(.cms-mode) .cms-dual-bar { display: none !important; }
     });
   }
 
+  wireCustomizerMenus();
   renderSite();
 })();
 </script>
