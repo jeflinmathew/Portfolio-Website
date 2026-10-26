@@ -737,10 +737,156 @@ body.cms-mode .cms-device-frame.desktop-mode .tab-sensor {
   display: none !important;
 }
 
-@media (max-width: 920px) {
-  body.cms-mode { flex-direction: column !important; }
-  body.cms-mode .cms { width: 100% !important; max-width: 100% !important; height: 50vh !important; border-right: none !important; border-bottom: 1px solid var(--line) !important; }
-  body.cms-mode .cms-stage { width: 100% !important; height: 50vh !important; }
+/* Responsive 2-Tab Switcher Bar for Tablet & Mobile */
+.cms-dual-bar { display: none; }
+body:not(.cms-mode) .cms-dual-bar { display: none !important; }
+
+@media (max-width: 1024px) {
+  body.cms-mode {
+    flex-direction: column !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    overflow: hidden !important;
+  }
+
+  body.cms-mode .cms-dual-bar {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 14px;
+    height: 48px;
+    background: #14161b;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-sizing: border-box;
+    flex-shrink: 0;
+    z-index: 100;
+  }
+
+  .cms-dual-tabs {
+    display: inline-flex;
+    align-items: center;
+    background: #0d0f12;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 9999px;
+    padding: 3px;
+    gap: 3px;
+  }
+
+  .cms-dual-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 9999px;
+    border: none;
+    background: transparent;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .cms-dual-btn:hover {
+    color: #fff;
+  }
+
+  .cms-dual-btn.active {
+    background: #fff;
+    color: #000;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+
+  .cms-dual-exit {
+    padding: 6px 12px;
+    font-size: 12.5px;
+    background: #23262e;
+    color: #f3f4f6;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .cms-dual-exit:hover {
+    background: #323640;
+    color: #fff;
+  }
+
+  /* When on Tablet & Mobile: Tab 1 (Edit) */
+  body.cms-mode:not([data-cms-view="preview"]) .cms {
+    display: flex !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 !important;
+    height: calc(100vh - 48px) !important;
+    border-right: none !important;
+    border-left: none !important;
+  }
+  body.cms-mode:not([data-cms-view="preview"]) .cms-stage {
+    display: none !important;
+  }
+
+  /* When on Tablet & Mobile: Tab 2 (Preview) */
+  body.cms-mode[data-cms-view="preview"] .cms {
+    display: none !important;
+  }
+  body.cms-mode[data-cms-view="preview"] .cms-stage {
+    display: flex !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 !important;
+    height: calc(100vh - 48px) !important;
+  }
+  body.cms-mode[data-cms-view="preview"] .cms-stage-bar {
+    display: none !important;
+  }
+  body.cms-mode[data-cms-view="preview"] .cms-viewport {
+    padding: 0 !important;
+    background: var(--bg) !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  body.cms-mode[data-cms-view="preview"] .cms-device-frame {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: calc(100vh - 48px) !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: var(--bg) !important;
+  }
+  body.cms-mode[data-cms-view="preview"] .tab-sensor {
+    display: none !important;
+  }
+  body.cms-mode[data-cms-view="preview"] .wrap {
+    padding: 0 16px 60px 16px !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  /* On Desktop: always display side by side simultaneously */
+  body.cms-mode {
+    flex-direction: row !important;
+  }
+  body.cms-mode .cms-dual-bar {
+    display: none !important;
+  }
+  body.cms-mode .cms {
+    display: flex !important;
+    order: 1 !important;
+    width: 420px !important;
+    min-width: 380px !important;
+    max-width: 440px !important;
+    height: 100vh !important;
+    border-right: 1px solid var(--line) !important;
+  }
+  body.cms-mode .cms-stage {
+    display: flex !important;
+    order: 2 !important;
+    flex: 1 !important;
+    height: 100vh !important;
+  }
 }
 </style>
 
@@ -753,6 +899,21 @@ body.cms-mode .cms-device-frame.desktop-mode .tab-sensor {
     <a href="/" class="admin-banner-btn">Exit to Live View ➔</a>
   </div>
 </aside>
+
+<!-- Responsive 2-Tab Switcher Bar for Tablet & Mobile -->
+<div class="cms-dual-bar" id="cms-dual-bar">
+  <div class="cms-dual-tabs" role="tablist" aria-label="Editor View">
+    <button class="cms-dual-btn active" id="dual-btn-edit" type="button" role="tab" aria-selected="true">
+      <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 2l3 3-9 9H2v-3l9-9z"/></svg>
+      <span>Edit</span>
+    </button>
+    <button class="cms-dual-btn" id="dual-btn-preview" type="button" role="tab" aria-selected="false">
+      <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 8s3-5 7-5 7 5 7 5-3 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2.5"/></svg>
+      <span>Preview</span>
+    </button>
+  </div>
+  <button class="sm cms-dual-exit" id="dual-btn-exit" type="button" aria-label="Exit Editor">Exit ✕</button>
+</div>
 
 <!-- Studio Left: CMS Editor Panel -->
 <aside class="cms" id="cms" role="dialog" aria-label="CMS Site Editor" hidden>
@@ -1512,6 +1673,7 @@ body.cms-mode .cms-device-frame.desktop-mode .tab-sensor {
   var modeMobile = $('mode-mobile'), modeTab = $('mode-tab'), modeDesktop = $('mode-desktop');
   var deviceFrame = $('cms-device-frame'), modeBadge = $('stage-mode-badge');
   var stageCloseBtn = $('stage-close-btn');
+  var dualBar = $('cms-dual-bar'), dualBtnEdit = $('dual-btn-edit'), dualBtnPreview = $('dual-btn-preview'), dualBtnExit = $('dual-btn-exit');
   var dirty = false, timer = 0;
   var DEFAULT_MSG = 'Changes update live on the page. Click \'Publish changes\' to save permanently.';
   function note(t) { cmsMsg.textContent = t || DEFAULT_MSG; }
@@ -1770,8 +1932,29 @@ body.cms-mode .cms-device-frame.desktop-mode .tab-sensor {
   if (modeDesktop) modeDesktop.addEventListener('click', function () { setPreviewMode('desktop'); });
   if (stageCloseBtn) stageCloseBtn.addEventListener('click', closeCms);
 
+  function setMobileView(view) {
+    var v = (view === 'preview') ? 'preview' : 'edit';
+    document.body.setAttribute('data-cms-view', v);
+    if (dualBtnEdit) {
+      dualBtnEdit.classList.toggle('active', v === 'edit');
+      dualBtnEdit.setAttribute('aria-selected', v === 'edit' ? 'true' : 'false');
+    }
+    if (dualBtnPreview) {
+      dualBtnPreview.classList.toggle('active', v === 'preview');
+      dualBtnPreview.setAttribute('aria-selected', v === 'preview' ? 'true' : 'false');
+    }
+    if (v === 'preview') {
+      renderSite();
+    }
+  }
+
+  if (dualBtnEdit) dualBtnEdit.addEventListener('click', function () { setMobileView('edit'); });
+  if (dualBtnPreview) dualBtnPreview.addEventListener('click', function () { setMobileView('preview'); });
+  if (dualBtnExit) dualBtnExit.addEventListener('click', closeCms);
+
   function openCms() {
     document.body.classList.add('cms-mode');
+    setMobileView('edit');
     cms.hidden = false;
     $('cms-open').hidden = true;
     renderPills();
@@ -1781,6 +1964,7 @@ body.cms-mode .cms-device-frame.desktop-mode .tab-sensor {
   }
   function closeCms() {
     document.body.classList.remove('cms-mode');
+    document.body.removeAttribute('data-cms-view');
     cms.hidden = true;
     $('cms-open').hidden = false;
     $('cms-open').focus();
@@ -1844,7 +2028,7 @@ body.cms-mode .cms-device-frame.desktop-mode .tab-sensor {
 
   /* ---------- Stealth Admin Mode Controller ---------- */
   var urlParams = new URLSearchParams(window.location.search);
-  var adminActive = window.location.pathname.startsWith('/admin') || urlParams.get('admin') === 'true' || window.location.hash.toLowerCase() === '#admin';
+  var adminActive = window.location.pathname.startsWith('/admin') || urlParams.get('admin') === 'true' || window.location.hash.toLowerCase().startsWith('#admin');
 
   function setAdminMode(active) {
     adminActive = !!active;
@@ -1871,6 +2055,9 @@ body.cms-mode .cms-device-frame.desktop-mode .tab-sensor {
   setAdminMode(adminActive);
   if (adminActive) {
     openCms();
+    if (window.location.hash.toLowerCase() === '#admin-preview' || urlParams.get('view') === 'preview') {
+      setMobileView('preview');
+    }
   }
 
   // Secret Hotkey 1: Ctrl + Shift + E or Ctrl + Shift + A
