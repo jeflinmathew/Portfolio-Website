@@ -516,6 +516,9 @@ body.cms-mode {
   padding: 0 !important;
   background: #0d0f12 !important;
 }
+body.cms-mode .admin-banner {
+  display: none !important;
+}
 
 /* Left: CMS Editor Panel */
 body.cms-mode .cms {
@@ -525,9 +528,10 @@ body.cms-mode .cms {
   left: 0 !important;
   right: auto !important;
   bottom: 0 !important;
-  width: 440px !important;
+  width: 420px !important;
   min-width: 380px !important;
-  max-width: 480px !important;
+  max-width: 440px !important;
+  flex-shrink: 0 !important;
   height: 100vh !important;
   display: flex !important;
   flex-direction: column !important;
@@ -646,6 +650,7 @@ body.cms-mode .cms-device-frame.tab-mode {
   max-width: 98% !important;
   height: calc(100vh - 86px) !important;
   max-height: 960px !important;
+  flex-shrink: 0 !important;
   background: var(--bg) !important;
   border: 12px solid #23272e !important;
   border-radius: 32px !important;
@@ -1839,7 +1844,7 @@ body.cms-mode .cms-device-frame.desktop-mode .tab-sensor {
 
   /* ---------- Stealth Admin Mode Controller ---------- */
   var urlParams = new URLSearchParams(window.location.search);
-  var adminActive = window.location.pathname.startsWith('/admin') || urlParams.get('admin') === 'true';
+  var adminActive = window.location.pathname.startsWith('/admin') || urlParams.get('admin') === 'true' || window.location.hash.toLowerCase() === '#admin';
 
   function setAdminMode(active) {
     adminActive = !!active;
