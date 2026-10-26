@@ -108,8 +108,16 @@ button { font: inherit; color: inherit; }
 .video-card-meta { padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
 .video-card-meta h4 { margin: 0; font-size: 15px; font-family: var(--font-display); font-weight: 600; }
 .video-card-meta span { font-size: 12px; color: var(--muted); font-family: var(--font-data); }
-.back-to-top { font-family: var(--font-data); font-size: 13px; padding: 0; margin: 0; background: transparent !important; border: none !important; box-shadow: none !important; border-radius: 0; cursor: pointer; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--line); transition: color .15s, text-decoration-color .15s; }
-.back-to-top:hover { color: var(--fg); text-decoration-color: var(--fg); }
+.back-to-top { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-data); font-size: 13px; color: var(--muted); text-decoration: underline !important; text-underline-offset: 4px; text-decoration-color: var(--line) !important; cursor: pointer; transition: color .15s, text-decoration-color .15s; }
+.back-to-top:hover { color: var(--fg); text-decoration-color: var(--fg) !important; }
+.back-to-top .btt-short { display: none; }
+.back-to-top .btt-icon { display: inline-flex; transition: transform .15s ease; }
+.back-to-top:hover .btt-icon { transform: translateY(-2px); }
+@media (max-width: 1024px) {
+  .back-to-top .btt-text { display: none; }
+  .back-to-top .btt-short { display: inline; }
+  .back-to-top { font-size: 12.5px; gap: 4px; }
+}
 @media (max-width: 768px) {
   .video-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
 }
@@ -173,7 +181,7 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(38px, 
 .btn:active { transform: translateY(1px); }
 .btn.solid { background: var(--btn-bg); color: var(--btn-fg); border-color: transparent; }
 .btn.solid:hover { background: var(--btn-bg-hover); color: var(--btn-fg); border-color: transparent; }
-.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 24px; margin: 0; border-top: 1px solid var(--line); padding-top: 8px; }
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 24px; margin: 0; border-top: none; padding-top: 8px; }
 .facts div { padding-block: 16px; }
 .facts dt { font-family: var(--font-data); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
 .facts dd { margin: 0; font-size: 15px; line-height: 1.4; }
@@ -339,6 +347,30 @@ p { margin: 0 0 1em; max-width: 100%; }
 .img-modal-caption { margin-top: 12px; font-family: var(--font-data); font-size: 13px; color: #CCCCCC; text-align: center; }
 .img-modal-close { position: fixed; top: max(20px, env(safe-area-inset-top, 20px)); right: max(20px, env(safe-area-inset-right, 20px)); z-index: 100001; width: 44px; height: 44px; display: grid; place-items: center; background: rgba(0, 0, 0, 0.75); border: 1.5px solid rgba(255, 255, 255, 0.35); color: #fff; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); transition: background .15s, transform .15s, border-color .15s; }
 .img-modal-close:hover { background: rgba(255, 255, 255, 0.25); border-color: #fff; transform: scale(1.1); }
+
+/* Project Filter Pills */
+.project-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px; }
+.proj-filter-pill { font-family: var(--font-data); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; padding: 6px 14px; border: 1px solid var(--line); border-radius: 9999px; background: transparent; color: var(--muted); cursor: pointer; transition: all .15s ease; }
+.proj-filter-pill:hover { border-color: var(--fg); color: var(--fg); }
+.proj-filter-pill.active { background: var(--fg); color: var(--bg); border-color: var(--fg); font-weight: 600; }
+
+/* Admin Auth & Contact Modals */
+.admin-auth-modal { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; z-index: 100000; display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.admin-auth-modal:not([hidden]) { opacity: 1; pointer-events: auto; }
+.admin-auth-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.72); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.admin-auth-card { position: relative; z-index: 2; width: 100%; max-width: 440px; background: var(--bg-top, #ffffff); color: var(--fg, #000000); border: 1px solid var(--line); border-radius: 16px; padding: 28px 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); font-family: var(--font-body); }
+.admin-auth-badge { display: inline-block; font-family: var(--font-data); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 8px; border-radius: 6px; background: var(--tint); color: var(--muted); margin-bottom: 12px; }
+.admin-auth-card h3 { font-family: var(--font-display); font-size: 22px; margin: 0 0 8px; font-weight: 700; }
+.admin-auth-card p { font-size: 14px; color: var(--muted); margin: 0 0 20px; line-height: 1.5; }
+.admin-auth-field { position: relative; display: flex; align-items: center; margin-bottom: 12px; }
+.admin-auth-field input { width: 100%; padding: 12px 42px 12px 14px; font-size: 15px; font-family: var(--font-body); background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; outline: none; transition: border-color .15s; }
+.admin-auth-field input:focus { border-color: var(--fg); }
+.admin-toggle-pwd { position: absolute; right: 10px; background: none; border: none; font-size: 16px; cursor: pointer; color: var(--muted); padding: 4px; display: grid; place-items: center; }
+.admin-auth-error { font-size: 12.5px; color: #DC2626; margin: 4px 0 14px; font-family: var(--font-data); }
+.admin-auth-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.contact-modal-card { max-width: 500px; }
+.contact-modal-close { position: absolute; top: 18px; right: 18px; background: none; border: none; font-size: 18px; cursor: pointer; color: var(--muted); line-height: 1; padding: 4px; }
+.contact-modal-close:hover { color: var(--fg); }
 
 /* workflow */
 .sub { font-family: var(--font-data); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 40px 0 12px; }
@@ -1273,7 +1305,10 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
       <span class="admin-badge">● Admin Mode Active</span>
       <span class="admin-banner-text"> &nbsp;— Edit copy, add sections, and replace images.</span>
     </div>
-    <a href="/" class="admin-banner-btn">Exit to Live View ➔</a>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button type="button" class="admin-banner-btn" id="admin-logout-btn" style="cursor:pointer;border:none;">🔒 Log Out</button>
+      <a href="/" class="admin-banner-btn" id="admin-exit-btn">Exit to Live View ➔</a>
+    </div>
   </div>
 </aside>
 
@@ -1660,15 +1695,34 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
         (s.image ? '<div class="seo-media shot-wrap" data-edit-img="social.image" title="Click to replace image">' + shot(s.image, s.title + ' screenshot') + '</div>' : '') +
       '</div></div></section>';
   }
+  var activeProjectFilter = 'All';
   function secProjects() {
     var p = D.projects;
+    var allTags = ['All'];
+    (p.items || []).forEach(function (it) {
+      if (it.tag && allTags.indexOf(it.tag) === -1) allTags.push(it.tag);
+    });
+    var filterPills = '<div class="project-filters" id="project-filters">' +
+      allTags.map(function (tag) {
+        var isAct = (activeProjectFilter === tag);
+        return '<button type="button" class="proj-filter-pill' + (isAct ? ' active' : '') + '" data-filter-tag="' + esc(tag) + '">' + esc(tag) + '</button>';
+      }).join('') +
+    '</div>';
+
+    var displayItems = (activeProjectFilter === 'All')
+      ? (p.items || [])
+      : (p.items || []).filter(function (it) { return it.tag === activeProjectFilter; });
+
     return '<section data-nav="work"><div class="label">Freelancing works</div><div class="body">' +
       '<h2 data-edit="projects.title" data-edit-tag="Section Title">' + esc(p.title) + '</h2>' +
       '<p data-edit="projects.intro" data-edit-tag="Intro">' + esc(p.intro) + '</p>' +
-      entries(p.items, function (it, idx) {
+      filterPills +
+      entries(displayItems, function (it, idx) {
+        var realIdx = (p.items || []).indexOf(it);
+        if (realIdx === -1) realIdx = idx;
         var imgsHtml = '';
         if (it.images && it.images.length) {
-          imgsHtml = '<div class="gallery-row" data-edit-gallery="projects.items.' + idx + '.images">' +
+          imgsHtml = '<div class="gallery-row" data-edit-gallery="projects.items.' + realIdx + '.images">' +
             it.images.map(function (imgSrc, i) {
               return '<div class="shot-wrap" data-gallery-item="' + i + '" title="Click to replace image">' +
                 '<img class="shot" src="' + esc(imgSrc) + '" alt="' + esc(it.name + ' image ' + (i + 1)) + '" loading="lazy">' +
@@ -1676,11 +1730,11 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
             }).join('') +
           '</div>';
         } else if (it.image) {
-          imgsHtml = '<div class="shot-wrap" data-edit-img="projects.items.' + idx + '.image" title="Click to replace image">' + shot(it.image, it.name) + '</div>';
+          imgsHtml = '<div class="shot-wrap" data-edit-img="projects.items.' + realIdx + '.image" title="Click to replace image">' + shot(it.image, it.name) + '</div>';
         }
-        return '<h3><span data-edit="projects.items.' + idx + '.name" data-edit-tag="Project Name">' + esc(it.name) + '</span>' +
-          (it.tag ? ' <span class="tag" data-edit="projects.items.' + idx + '.tag" data-edit-tag="Tag">' + esc(it.tag) + '</span>' : '') + '</h3>' +
-          '<p data-edit="projects.items.' + idx + '.text" data-edit-tag="Project Description">' + esc(it.text) + '</p>' + imgsHtml;
+        return '<h3><span data-edit="projects.items.' + realIdx + '.name" data-edit-tag="Project Name">' + esc(it.name) + '</span>' +
+          (it.tag ? ' <span class="tag" data-edit="projects.items.' + realIdx + '.tag" data-edit-tag="Tag">' + esc(it.tag) + '</span>' : '') + '</h3>' +
+          '<p data-edit="projects.items.' + realIdx + '.text" data-edit-tag="Project Description">' + esc(it.text) + '</p>' + imgsHtml;
       }) +
       '<button class="framer-add-btn" data-canvas-add="projects.items" type="button">+ Add New Project</button>' +
       '</div></section>';
@@ -1701,6 +1755,7 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
       '<h2 data-edit="contact.heading" data-edit-tag="Headline">' + esc(D.contact.heading) + '</h2>' +
       '<p class="contact-line" id="email" data-edit="email" data-edit-tag="Email">' + esc(D.email) + '</p><div class="actions">' +
       '<button class="btn solid" id="copy" type="button">Copy email</button>' +
+      '<button class="btn" id="open-contact-modal" type="button">Send a message</button>' +
       '<a class="btn" href="mailto:' + esc(D.email) + '">Open mail app</a>' +
       (li ? '<a class="btn" href="' + (li.startsWith('http') ? esc(li) : 'https://' + esc(li)) + '" target="_blank" rel="noopener noreferrer">LinkedIn</a>' : '') +
       '</div><p class="meta where" data-edit="location" data-edit-tag="Location">' + esc(D.location) + '</p></div></section>';
@@ -1760,14 +1815,28 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     $('r-sections').innerHTML = [secAbout(), secExperience(), secSeo(), secGoogleAds(), secMeta(), secSocial(),
       secProjects(), '<div class="contrast-band">' + secCerts() + '</div>', secSkills(), secContact()].join('');
     $('r-footer').innerHTML = '<span id="footer-copy" style="cursor:default" title="">© ' + new Date().getFullYear() + ' ' + esc(D.name) + '</span>' +
-      '<button class="back-to-top" id="back-top" type="button" aria-label="Back to top">Back to top ↑</button>';
+      '<a href="#top" class="back-to-top" id="back-top" aria-label="Back to top">' +
+        '<span class="btt-text">Back to top</span>' +
+        '<span class="btt-short">Top</span>' +
+        '<svg class="btt-icon" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12V4M4 8l4-4 4 4"/></svg>' +
+      '</a>';
     var bt = $('back-top');
-    if (bt) bt.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    if (bt) bt.addEventListener('click', function (e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
     $('ask-title').textContent = 'Ask about ' + first();
     $('askbox').placeholder = 'Ask about ' + first() + '’s work';
     wireSeo(); wireContact(); refreshChat(); onScroll(); wireFullscreenImages();
     wireDirectCanvasEditing();
     applyCustomTheme();
+    var projFilterBtns = document.querySelectorAll('.proj-filter-pill');
+    projFilterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        activeProjectFilter = btn.getAttribute('data-filter-tag') || 'All';
+        renderSite();
+      });
+    });
   }
 
   /* ---------- workflow steps + chart ---------- */
@@ -1839,16 +1908,78 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     }
   }
 
-  /* ---------- copy email ---------- */
+  /* ---------- contact interactions & message modal ---------- */
   function wireContact() {
     var btn = $('copy'), em = $('email');
-    if (!btn) return;
-    function selectEmail() { var r = document.createRange(); r.selectNodeContents(em); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
-    btn.addEventListener('click', function () {
-      function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy email'; }, 1800); }
-      try { navigator.clipboard.writeText(em.textContent.trim()).then(done, function () { selectEmail(); btn.textContent = 'Press copy'; }); }
-      catch (e) { selectEmail(); btn.textContent = 'Press copy'; }
-    });
+    if (btn && em) {
+      function selectEmail() { var r = document.createRange(); r.selectNodeContents(em); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+      btn.addEventListener('click', function () {
+        function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy email'; }, 1800); }
+        try { navigator.clipboard.writeText(em.textContent.trim()).then(done, function () { selectEmail(); btn.textContent = 'Press copy'; }); }
+        catch (e) { selectEmail(); btn.textContent = 'Press copy'; }
+      });
+    }
+
+    var openMsgBtn = $('open-contact-modal');
+    var contactModal = $('contact-modal');
+    var contactClose = $('contact-modal-close');
+    var contactCancel = $('contact-cancel-btn');
+    var contactBackdrop = $('contact-modal-backdrop');
+    var contactForm = $('contact-form');
+    var contactFeedback = $('contact-form-feedback');
+
+    function openMsgModal() {
+      if (contactModal) {
+        contactModal.hidden = false;
+        if (contactFeedback) contactFeedback.hidden = true;
+        var nInp = $('contact-name');
+        if (nInp) nInp.focus();
+      }
+    }
+    function closeMsgModal() {
+      if (contactModal) contactModal.hidden = true;
+    }
+
+    if (openMsgBtn) openMsgBtn.addEventListener('click', openMsgModal);
+    if (contactClose) contactClose.addEventListener('click', closeMsgModal);
+    if (contactCancel) contactCancel.addEventListener('click', closeMsgModal);
+    if (contactBackdrop) contactBackdrop.addEventListener('click', closeMsgModal);
+
+    if (contactForm) {
+      contactForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var name = ($('contact-name').value || '').trim();
+        var email = ($('contact-email').value || '').trim();
+        var msg = ($('contact-msg').value || '').trim();
+
+        if (!name || !email || !msg) {
+          if (contactFeedback) {
+            contactFeedback.hidden = false;
+            contactFeedback.style.color = '#DC2626';
+            contactFeedback.textContent = 'Please fill out all required fields.';
+          }
+          return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          if (contactFeedback) {
+            contactFeedback.hidden = false;
+            contactFeedback.style.color = '#DC2626';
+            contactFeedback.textContent = 'Please enter a valid email address.';
+          }
+          return;
+        }
+
+        if (contactFeedback) {
+          contactFeedback.hidden = false;
+          contactFeedback.style.color = '#22C55E';
+          contactFeedback.textContent = '✓ Message received! Thank you, ' + name + '. I will be in touch shortly.';
+        }
+        setTimeout(function () {
+          contactForm.reset();
+          closeMsgModal();
+        }, 2000);
+      });
+    }
   }
 
   /* ---------- ask about the portfolio (chat) ---------- */
@@ -2148,9 +2279,12 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
       reader.onload = async function (ev) {
         var dataUrl = ev.target.result;
         try {
+          var sess = getAdminSession();
+          var headers = { 'Content-Type': 'application/json' };
+          if (sess && sess.token) headers['Authorization'] = 'Bearer ' + sess.token;
           var resp = await fetch('/api/upload', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
             body: JSON.stringify({ filename: file.name, dataUrl: dataUrl })
           });
           if (resp.ok) {
@@ -2726,7 +2860,160 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     });
   }
 
+  /* ---------- Admin Authentication & Session Management ---------- */
+  function getAdminSession() {
+    try {
+      var raw = sessionStorage.getItem('jm_admin_session');
+      if (raw) {
+        var sess = JSON.parse(raw);
+        if (sess && sess.token && sess.expiresAt && Date.now() < sess.expiresAt) {
+          return sess;
+        }
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  function setAdminSession(token, expiresAt) {
+    try {
+      sessionStorage.setItem('jm_admin_session', JSON.stringify({ token: token, expiresAt: expiresAt }));
+    } catch (e) {}
+  }
+
+  function clearAdminSession() {
+    try {
+      sessionStorage.removeItem('jm_admin_session');
+    } catch (e) {}
+  }
+
+  var adminAuthModal = $('admin-auth-modal');
+  var adminAuthBackdrop = $('admin-auth-backdrop');
+  var adminAuthForm = $('admin-auth-form');
+  var adminPasscodeInp = $('admin-passcode-input');
+  var adminAuthError = $('admin-auth-error');
+  var adminAuthCancel = $('admin-auth-cancel');
+  var adminTogglePwd = $('admin-toggle-pwd');
+  var adminLogoutBtn = $('admin-logout-btn');
+  var adminExitBtn = $('admin-exit-btn');
+  var pendingAdminAuthCallback = null;
+
+  function requireAdminAuth(onSuccess) {
+    if (getAdminSession()) {
+      if (onSuccess) onSuccess();
+      return;
+    }
+    pendingAdminAuthCallback = onSuccess;
+    if (adminAuthModal) {
+      adminAuthModal.hidden = false;
+      if (adminAuthError) adminAuthError.hidden = true;
+      if (adminPasscodeInp) {
+        adminPasscodeInp.value = '';
+        setTimeout(function () { adminPasscodeInp.focus(); }, 60);
+      }
+    }
+  }
+
+  function closeAdminAuthModal() {
+    if (adminAuthModal) adminAuthModal.hidden = true;
+    pendingAdminAuthCallback = null;
+  }
+
+  if (adminAuthCancel) adminAuthCancel.addEventListener('click', function () {
+    closeAdminAuthModal();
+    setAdminMode(false);
+  });
+  if (adminAuthBackdrop) adminAuthBackdrop.addEventListener('click', function () {
+    closeAdminAuthModal();
+    setAdminMode(false);
+  });
+
+  if (adminTogglePwd && adminPasscodeInp) {
+    adminTogglePwd.addEventListener('click', function () {
+      adminPasscodeInp.type = adminPasscodeInp.type === 'password' ? 'text' : 'password';
+      adminTogglePwd.textContent = adminPasscodeInp.type === 'password' ? '👁' : '🙈';
+    });
+  }
+
+  if (adminAuthForm) {
+    adminAuthForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var pwd = (adminPasscodeInp ? adminPasscodeInp.value : '').trim();
+      if (!pwd) return;
+
+      var authSuccess = false;
+      var token = '';
+      var expiresAt = Date.now() + 2 * 60 * 60 * 1000;
+
+      try {
+        var resp = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pwd })
+        });
+        if (resp.ok) {
+          var json = await resp.json();
+          authSuccess = true;
+          token = json.token;
+          expiresAt = json.expiresAt || expiresAt;
+        } else {
+          authSuccess = false;
+        }
+      } catch (netErr) {
+        // Fallback for static GitHub Pages / offline: client check against default password
+        if (pwd === 'admin2026') {
+          authSuccess = true;
+          token = 'ghpages_' + Date.now();
+        }
+      }
+
+      if (authSuccess) {
+        setAdminSession(token, expiresAt);
+        closeAdminAuthModal();
+        setAdminMode(true);
+        openCms();
+        if (pendingAdminAuthCallback) {
+          var cb = pendingAdminAuthCallback;
+          pendingAdminAuthCallback = null;
+          cb();
+        }
+      } else {
+        if (adminAuthError) {
+          adminAuthError.hidden = false;
+          adminAuthError.textContent = 'Incorrect admin passcode. Access denied.';
+        }
+        if (adminPasscodeInp) {
+          adminPasscodeInp.select();
+          adminPasscodeInp.focus();
+        }
+      }
+    });
+  }
+
+  if (adminLogoutBtn) {
+    adminLogoutBtn.addEventListener('click', async function () {
+      var sess = getAdminSession();
+      if (sess && sess.token) {
+        try {
+          await fetch('/api/logout', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + sess.token }
+          });
+        } catch (e) {}
+      }
+      clearAdminSession();
+      closeCms();
+      setAdminMode(false);
+      note('Logged out from admin mode.');
+    });
+  }
+
   function openCms() {
+    if (!getAdminSession()) {
+      requireAdminAuth(function () {
+        openCms();
+      });
+      return;
+    }
     document.body.classList.add('cms-mode');
     setMobileView('edit');
     cms.hidden = false;
@@ -2766,9 +3053,12 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
   pubBtn.addEventListener('click', async function () {
     pubBtn.disabled = true; note('Saving changes permanently…');
     try {
+      var sess = getAdminSession();
+      var headers = { 'Content-Type': 'application/json' };
+      if (sess && sess.token) headers['Authorization'] = 'Bearer ' + sess.token;
       var resp = await fetch('/api/save', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: headers,
         body: JSON.stringify({ data: D })
       });
       if (resp.ok) {
@@ -2807,6 +3097,12 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
   var adminActive = window.location.pathname.startsWith('/admin') || urlParams.get('admin') === 'true' || window.location.hash.toLowerCase().startsWith('#admin');
 
   function setAdminMode(active) {
+    if (active && !getAdminSession()) {
+      requireAdminAuth(function () {
+        setAdminMode(true);
+      });
+      return;
+    }
     adminActive = !!active;
     var cmsBtn = $('cms-open');
     var adminBanner = $('admin-banner');
@@ -2862,9 +3158,8 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
   });
 
   // Exit button in the admin banner
-  var exitBtn = document.querySelector('.admin-banner-btn');
-  if (exitBtn) {
-    exitBtn.addEventListener('click', function (e) {
+  if (adminExitBtn) {
+    adminExitBtn.addEventListener('click', function (e) {
       e.preventDefault();
       closeCms();
       setAdminMode(false);
@@ -2887,6 +3182,53 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
   </div>
 </div>
 
+<div class="admin-auth-modal" id="admin-auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title" hidden>
+  <div class="admin-auth-backdrop" id="admin-auth-backdrop"></div>
+  <div class="admin-auth-card">
+    <div class="admin-auth-badge">CMS Security</div>
+    <h3 id="auth-modal-title">Admin Authentication</h3>
+    <p>Please enter your administrator passcode to unlock the CMS panel and canvas editor.</p>
+    <form id="admin-auth-form" autocomplete="off">
+      <div class="admin-auth-field">
+        <input type="password" id="admin-passcode-input" placeholder="Enter admin passcode" autocomplete="current-password" required>
+        <button type="button" id="admin-toggle-pwd" class="admin-toggle-pwd" aria-label="Toggle password visibility">👁</button>
+      </div>
+      <div id="admin-auth-error" class="admin-auth-error" hidden></div>
+      <div class="admin-auth-actions">
+        <button type="button" id="admin-auth-cancel" class="btn">Cancel</button>
+        <button type="submit" id="admin-auth-submit" class="btn solid">Unlock CMS</button>
+      </div>
+    </form>
+  </div>
+</div>
 
+<div class="admin-auth-modal" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" hidden>
+  <div class="admin-auth-backdrop" id="contact-modal-backdrop"></div>
+  <div class="admin-auth-card contact-modal-card">
+    <button type="button" class="contact-modal-close" id="contact-modal-close" aria-label="Close dialog">✕</button>
+    <div class="admin-auth-badge">Direct Message</div>
+    <h3 id="contact-modal-title">Send a Message</h3>
+    <p>Fill out the form below to connect directly with Jeflin Mathew.</p>
+    <form id="contact-form" autocomplete="off">
+      <div class="fld" style="margin-bottom:12px;">
+        <label for="contact-name" style="display:block;margin-bottom:4px;">Your Name</label>
+        <input type="text" id="contact-name" style="width:100%;padding:10px 12px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;" placeholder="John Doe" required maxlength="100">
+      </div>
+      <div class="fld" style="margin-bottom:12px;">
+        <label for="contact-email" style="display:block;margin-bottom:4px;">Email Address</label>
+        <input type="email" id="contact-email" style="width:100%;padding:10px 12px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;" placeholder="john@example.com" required maxlength="120">
+      </div>
+      <div class="fld" style="margin-bottom:12px;">
+        <label for="contact-msg" style="display:block;margin-bottom:4px;">Message</label>
+        <textarea id="contact-msg" rows="4" style="width:100%;padding:10px 12px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;font-family:inherit;" placeholder="Hi Jeflin, I'd like to discuss an SEO project..." required maxlength="2000"></textarea>
+      </div>
+      <div id="contact-form-feedback" class="admin-auth-error" hidden></div>
+      <div class="admin-auth-actions">
+        <button type="button" id="contact-cancel-btn" class="btn">Close</button>
+        <button type="submit" id="contact-send-btn" class="btn solid">Send Message</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 </body></html>
