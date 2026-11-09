@@ -2,13 +2,13 @@
   "name": "Jeflin Mathew",
   "role": "Digital Marketing · SEO · Meta Ads · Lead Generation",
   "lede": "Digital marketer who grows organic search traffic and runs lead generation campaigns.",
-  "location": "Kerala, India",
+  "location": "Dubai, UAE",
   "email": "jeflinmathew@gmail.com",
   "linkedin": "https://www.linkedin.com/in/jeflinmathew/",
   "facts": [
     {
       "k": "Based in",
-      "v": "Kerala, India"
+      "v": "Dubai, UAE"
     },
     {
       "k": "Experience",
@@ -24,9 +24,10 @@
     }
   ],
   "about": [
-    "I am a Digital Marketing Executive with one year of professional experience in SEO, Meta Ads, lead generation, social media marketing and content optimization.",
-    "My SEO work covers keyword research, on-page and technical SEO, audits, schema markup, indexing and crawl analysis, and Google Search Console monitoring.",
-    "Before marketing I worked in media operations, social media management, audience analysis, quality control and team coordination."
+    "I’m a digital marketer with a BBA Degree, I help businesses get found on Google and get enquiries from the right people.",
+    "In my last role, organic clicks grew about 119% and average Google position improved from 17.3 to 8.8. I work on the details that make a site easier to find and understand. Before that, I did freelance social media for a local food business, creating posts and managing their page.",
+    "I came into marketing from broadcasting, analyzing audience and ratings data. I still let the data guide my decisions.",
+    "Located in Dubai, available to join your team right away. See my work below, then let’s talk about what your business needs."
   ],
   "experience": {
     "title": "Digital Marketing Executive",
@@ -44,7 +45,7 @@
     ]
   },
   "seo": {
-    "title": "SEO and organic search",
+    "title": "SEO & Organic Search",
     "intro": "At MyMathews Educare I worked on organic search across keyword research, on-page and technical SEO, audits, indexing and crawl analysis, schema markup, internal linking and Search Console monitoring.",
     "chartTitle": "Search Console · first month vs final month",
     "labelA": "First month",
@@ -117,7 +118,7 @@
     ]
   },
   "meta": {
-    "title": "Meta lead generation",
+    "title": "Meta Lead Generation",
     "intro": "Campaigns for educational programs, covering execution, monitoring and optimization.",
     "campaigns": [
       {
@@ -125,22 +126,17 @@
         "specs": "Platform: Meta Ads\nObjective: Lead generation\nIndustry: Higher education",
         "text": "Creative built around educational opportunities and study and career pathways.",
         "image": "meta-atria.png"
-      },
-      {
-        "name": "Video Host recruitment",
-        "specs": "Platform: Meta Ads\nObjective: Recruitment / sign-up\nFormat: Short-form video reels",
-        "text": "Recruitment creative promoting a Video Host opportunity with a direct sign-up call to action across Instagram Reels and Facebook Video feeds.",
-        "image": ""
       }
     ]
   },
   "social": {
-    "title": "Social media and content",
-    "text": "Managed content across several social platforms to support engagement and brand reach at MyMathews Educare.",
+    "title": "Video Host Recruitment",
+    "specs": "Platform: Meta Ads\nObjective: Recruitment / sign-up\nFormat: Short-form video reels",
+    "text": "Recruitment creative promoting a Video Host opportunity with a direct sign-up call to action across Instagram Reels and Facebook Video feeds.",
     "image": "meta-videohost.png"
   },
   "projects": {
-    "title": "Freelancing works",
+    "title": "Freelancing Works",
     "intro": "Client projects and freelance digital marketing campaigns.",
     "items": [
       {
@@ -232,14 +228,15 @@
     }
   ],
   "contact": {
-    "heading": "Let's talk about your search and lead goals."
+    "heading": "Let's Talk About Your Search & Lead Goals"
   },
   "googleAds": {
-    "label": "Case study 02",
-    "title": "Google Ads and analytics",
-    "intro": "Ran search and performance campaigns for MyMathews Educare, driving high-intent educational traffic and monitoring conversion events via Google Analytics 4 (GA4).",
-    "specs": "Platform: Google Ads & GA4\nObjective: User acquisition & lead generation\nGrowth: +25.2% Views (36k) · +19.7% New users (24k) · +16.5% Events (112k)",
+    "label": "Case Study 02",
+    "title": "Google Analytics – Performance Tracking",
+    "intro": "Monitored website performance for MyMathews Educare using Google Analytics 4, tracking views, new users, active users, and event activity.",
+    "specs": "Platform: Google Analytics 4 (GA4)\nObjective: User acquisition & lead generation\nGrowth: +25.2% Views (36k) · +19.7% New users (24k) · +16.5% Events (112k)",
     "text": "Monitored campaign performance against industry benchmarks (Colleges & Universities), achieving consistent month-over-month growth in active users and high-value event interactions.",
     "image": "google-ads.png"
-  }
+  },
+  "_v": 3
 }

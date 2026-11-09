@@ -19,6 +19,445 @@
 @keyframes shrinkTimer { from { width: 100%; } to { width: 0%; } }
 .qchips .chips-label { width: 100%; font-family: var(--font-data); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
 
+
+/* Floating Chat Button with 5s delay & auto-disappear */
+/* Floating Chat Button: Round Circle with Icon Only */
+.chat-fab {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right, 20px));
+  bottom: max(20px, env(safe-area-inset-bottom, 20px));
+  z-index: 998;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  padding: 0;
+  background: var(--fg);
+  color: var(--bg);
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  text-decoration: none !important;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  /* Initially hidden with smooth transitions */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(24px) scale(0.92);
+  transition: opacity .4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform .4s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility .4s,
+              background .2s,
+              box-shadow .2s;
+}
+
+.chat-fab.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.chat-fab.visible:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.45);
+}
+
+.chat-fab.visible:active {
+  transform: scale(0.96);
+}
+
+.chat-fab.fading-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(18px) scale(0.94);
+  transition: opacity .65s ease,
+              transform .65s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility .65s;
+}
+
+body.cms-mode .chat-fab {
+  display: none !important;
+}
+
+.chat-fab svg {
+  flex-shrink: 0;
+}
+
+.chat-fab-pulse {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 0 2px var(--bg);
+  animation: chatPulse 2s infinite;
+}
+
+@keyframes chatPulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* Mobile Chatbot Overlay Bottom Sheet (Appears after 5s in mobile mode) */
+.mobile-chat-overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  pointer-events: none;
+  padding: 0 14px max(14px, env(safe-area-inset-bottom, 14px));
+  display: flex;
+  justify-content: center;
+}
+
+.mco-card {
+  width: 100%;
+  max-width: 440px;
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+  padding: 16px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(115%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform .45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity .45s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility .45s;
+}
+
+.mobile-chat-overlay.visible {
+  pointer-events: auto;
+}
+
+.mobile-chat-overlay.visible .mco-card {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+[data-theme="light"] .mco-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.14);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+}
+
+.mco-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.mco-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mco-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #000000;
+  font-family: var(--font-data);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+}
+
+[data-theme="light"] .mco-badge {
+  background: #000000;
+  color: #ffffff;
+}
+
+.mco-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+[data-theme="light"] .mco-title {
+  color: #000000;
+}
+
+.mco-close {
+  background: transparent;
+  border: none;
+  color: #aaaaaa;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  transition: color .15s, transform .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mco-close:hover, .mco-close:active {
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+[data-theme="light"] .mco-close {
+  color: #666666;
+}
+[data-theme="light"] .mco-close:hover {
+  color: #000000;
+}
+
+.mco-body {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  padding-right: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mco-body.has-messages {
+  display: flex;
+}
+
+.mco-msg {
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn .2s ease;
+}
+
+.mco-msg.user {
+  align-items: flex-end;
+}
+
+.mco-msg.user .mco-bubble {
+  background: #ffffff;
+  color: #000000;
+  border-radius: 14px 14px 3px 14px;
+}
+
+[data-theme="light"] .mco-msg.user .mco-bubble {
+  background: #000000;
+  color: #ffffff;
+}
+
+.mco-msg.bot {
+  align-items: flex-start;
+}
+
+.mco-msg.bot .mco-bubble {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f0f0f0;
+  border-radius: 14px 14px 14px 3px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .mco-msg.bot .mco-bubble {
+  background: rgba(0, 0, 0, 0.05);
+  color: #111111;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.mco-bubble {
+  font-size: 13.5px;
+  line-height: 1.45;
+  padding: 8px 13px;
+  max-width: 90%;
+  word-break: break-word;
+}
+
+.mco-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+  transition: max-height .3s ease;
+}
+
+.mco-chip {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 16px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e5e5e5;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.35;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mco-chip:hover, .mco-chip:active {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+}
+
+[data-theme="light"] .mco-chip {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #222222;
+}
+[data-theme="light"] .mco-chip:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.25);
+  color: #000000;
+}
+
+.mco-composer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 4px 5px 4px 14px;
+  transition: border-color .15s;
+}
+
+.mco-composer:focus-within {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+[data-theme="light"] .mco-composer {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+[data-theme="light"] .mco-composer:focus-within {
+  border-color: rgba(0, 0, 0, 0.4);
+}
+
+.mco-composer input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 7px 0;
+}
+
+.mco-composer input::placeholder {
+  color: #888888;
+}
+
+[data-theme="light"] .mco-composer input {
+  color: #000000;
+}
+[data-theme="light"] .mco-composer input::placeholder {
+  color: #777777;
+}
+
+.mco-send {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: #333333;
+  color: #aaaaaa;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: background .15s, color .15s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mco-send.active, .mco-send:not(:disabled):hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+[data-theme="light"] .mco-send {
+  background: #e5e5e5;
+  color: #888888;
+}
+[data-theme="light"] .mco-send.active, [data-theme="light"] .mco-send:not(:disabled):hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+@media (min-width: 861px) {
+  .mobile-chat-overlay {
+    display: none !important;
+  }
+}
+@media (max-width: 860px) {
+  .hero-chat {
+    display: none !important;
+  }
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+  .cms-fab {
+    bottom: max(78px, env(safe-area-inset-bottom, 78px)) !important;
+    right: max(20px, env(safe-area-inset-right, 20px)) !important;
+    padding: 8px 14px !important;
+    font-size: 12.5px !important;
+  }
+}
+
+/* Distinct styling for Case Study label vs Title */
+.case-study-label {
+  font-family: var(--font-data) !important;
+  font-size: clamp(13px, 1.25vw, 15px) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--muted) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-bottom: 6px !important;
+  line-height: 1 !important;
+}
+.case-study-label::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--fg);
+  opacity: 0.85;
+}
+.contrast-band .case-study-label {
+  color: var(--muted) !important;
+}
+
+/* Image zoom cursor */
+.shot-wrap, .about-photo-wrap, .seo-media img, .gallery-row img, .gallery-2x2 img, img.shot, img.about-photo {
+  cursor: zoom-in !important;
+}
+.img-modal-backdrop, .img-modal-close {
+  cursor: zoom-out !important;
+}
+.img-modal-nav {
+  cursor: pointer !important;
+}
+
 </style></head><body>
 <title>Jeflin Mathew</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -68,9 +507,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 88px; }
 body {
-  background: var(--bg);
-  background-image: linear-gradient(180deg, var(--bg-top) 0, var(--bg) 760px);
-  background-repeat: no-repeat;
+  background: var(--bg, #0B0B0B);
   color: var(--fg);
   font-family: var(--font-body);
   font-size: 17px;
@@ -80,7 +517,10 @@ body {
   padding-right: max(4px, env(safe-area-inset-right, 0px));
   -webkit-font-smoothing: antialiased;
 }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg-top); }
+:root[data-theme="light"] body {
+  background: #FFFFFF;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
 .wrap { width: 100%; max-width: 1300px; margin: 0 auto; padding-inline: clamp(12px, 2.5vw, 28px); }
 a { color: inherit; text-decoration-color: var(--line); text-underline-offset: 4px; transition: color .15s, text-decoration-color .15s; }
 a:hover { text-decoration-color: var(--accent); color: var(--accent); }
@@ -95,11 +535,39 @@ button { font: inherit; color: inherit; }
 .mark:hover { opacity: .75; text-decoration: none; color: var(--fg); }
 .mark-badge { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 7px; background: var(--btn-bg); color: var(--btn-fg); font-size: 13px; font-weight: 700; letter-spacing: 0.02em; }
 .mark-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; object-position: center 20%; border: 1.5px solid var(--line); flex-shrink: 0; }
-.about-grid { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 32px; align-items: start; }
-.about-photo-wrap { width: 100%; }
-.about-photo { width: 100%; max-width: 240px; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 20%; border-radius: 14px; border: 1px solid var(--line); box-shadow: 0 4px 20px rgba(0,0,0,.08); }
-.about-text { min-width: 0; }
-.video-host-block { margin-top: 36px; padding-top: 32px; border-top: 1px solid var(--line); }
+.about-grid {
+  display: grid;
+  grid-template-columns: clamp(280px, 32vw, 420px) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 52px);
+  align-items: stretch;
+}
+.about-photo-wrap {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 24px rgba(0,0,0,.08);
+}
+.about-photo {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  min-height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 20% !important;
+  display: block !important;
+}
+.about-text { min-width: 0; display: flex; flex-direction: column; justify-content: space-between; }
+.about-text p { font-size: 17.5px; line-height: 1.65; margin: 0 0 1em; color: var(--fg); }
+.about-text p:last-child { margin-bottom: 0; }
+.video-host-block { margin-top: 36px; padding-top: 32px; border-top: none; }
 .video-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 24px; }
 .video-card { display: flex; flex-direction: column; background: var(--tint); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; transition: border-color .15s; }
 .video-card:hover { border-color: var(--fg); }
@@ -125,9 +593,10 @@ button { font: inherit; color: inherit; }
 .campaign-card { display: flex; flex-direction: column; gap: 10px; padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--tint); }
 .campaign-card h3 { margin: 0; }
 .campaign-card .shot { margin-top: 10px; border-radius: 10px; width: 100%; object-fit: cover; }
-@media (max-width: 680px) {
+@media (max-width: 768px) {
   .about-grid { grid-template-columns: 1fr; gap: 24px; }
-  .about-photo { width: 100%; max-width: 100%; max-height: 480px; aspect-ratio: 4 / 5; object-fit: cover; }
+  .about-photo-wrap { position: relative !important; width: 100% !important; height: auto !important; min-height: unset !important; aspect-ratio: 4 / 5; max-height: 480px; }
+  .about-photo { position: relative !important; inset: auto !important; width: 100% !important; height: 100% !important; max-height: 480px; object-fit: cover !important; }
 }
 .top nav { justify-self: center; display: flex; align-items: center; gap: 4px; font-size: 14.5px; }
 .top nav a { text-decoration: none; color: var(--muted); padding: 7px 14px; border-radius: 9999px; transition: color .15s, background .15s; }
@@ -176,26 +645,75 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(38px, 
 @supports ((-webkit-background-clip: text) or (background-clip: text)) { h1 { background: var(--h1-grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; } }
 .lede { max-width: 100%; font-size: clamp(17px, 1.8vw, 21px); line-height: 1.5; margin: 0 0 24px; }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; margin-bottom: 0; }
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--font-body); font-size: 15px; font-weight: 500; text-decoration: none; padding: 13px 24px; border: 1px solid var(--line); border-radius: 14px; background: var(--btn2-bg); color: var(--fg); cursor: pointer; box-shadow: 0 1px 0 rgba(255,255,255,.35) inset; transition: background .15s, color .15s, border-color .15s, transform .15s; }
-.btn:hover { border-color: var(--fg); color: var(--fg); }
-.btn:active { transform: translateY(1px); }
-.btn.solid { background: var(--btn-bg); color: var(--btn-fg); border-color: transparent; }
-.btn.solid:hover { background: var(--btn-bg-hover); color: var(--btn-fg); border-color: transparent; }
-.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 24px; margin: 0; border-top: none; padding-top: 8px; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 13px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(38, 42, 54, 0.75), rgba(20, 23, 30, 0.95));
+  color: var(--fg);
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  transition: all .25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn:hover {
+  border-color: rgba(99, 102, 241, 0.6);
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(50, 58, 80, 0.95), rgba(25, 28, 40, 0.98));
+  box-shadow: 0 6px 22px rgba(99, 102, 241, 0.28), 0 0 14px rgba(56, 189, 248, 0.18);
+  transform: translateY(-2px);
+}
+.btn:active {
+  transform: translateY(0);
+}
+.btn.solid {
+  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+  color: #0a0a0a;
+  border-color: transparent;
+  font-weight: 600;
+  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.16);
+}
+.btn.solid:hover {
+  background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 100%);
+  color: #050814;
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.38), 0 0 18px rgba(255, 255, 255, 0.45);
+  transform: translateY(-2px);
+  border-color: transparent;
+}
+.facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0 24px;
+  margin: 28px 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 8px 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
 .facts div { padding-block: 16px; }
 .facts dt { font-family: var(--font-data); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
 .facts dd { margin: 0; font-size: 15px; line-height: 1.4; }
 
 .chat-note { width: 100%; max-width: 100%; margin: 10px 0 0; font-family: var(--font-data); font-size: 11.5px; line-height: 1.5; color: var(--muted); }
-.seo-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.95fr); gap: clamp(28px, 4vw, 48px); align-items: start; }
-.seo-layout.reverse { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.2fr); }
+.seo-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.95fr); gap: clamp(24px, 3.5vw, 40px); align-items: start; margin-top: 4px; }
+.seo-layout.reverse { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.2fr); margin-top: 4px; }
 .seo-layout.reverse .seo-content { order: 2; }
 .seo-layout.reverse .seo-media { order: 1; }
 .seo-content { min-width: 0; }
 .seo-layout .chart { grid-template-columns: 13rem minmax(0, 1fr); }
 .seo-layout .mbtn { padding: 14px 14px; font-size: 14px; }
-.seo-media { position: sticky; top: 92px; align-self: start; }
-.seo-media .shot { margin-top: 0; width: 100%; border-radius: 14px; border: 1px solid var(--line); box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+.seo-media { position: relative; align-self: start; margin: 0; }
+.seo-media .shot { margin: 0; width: 100%; border-radius: 14px; border: 1px solid var(--line); box-shadow: 0 4px 24px rgba(0,0,0,.12); display: block; }
 
 /* ask about Jeflin */
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -250,7 +768,7 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(38px, 
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 .contrast-band section { padding-block: clamp(28px, 3.5vw, 44px); }
-.contrast-band .label { position: static; color: var(--muted); }
+.contrast-band .label { position: static; color: var(--fg); }
 .contrast-band .certs li { border-bottom-color: var(--line); }
 
 @media (prefers-color-scheme: dark) {
@@ -298,8 +816,9 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(38px, 
 }
 
 /* sections */
-section { display: flex; flex-direction: column; gap: 14px; padding-block: clamp(36px, 5vw, 64px); }
-.label { font-family: var(--font-data); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); position: static; padding-top: 0; margin-bottom: 4px; }
+section { display: flex; flex-direction: column; gap: 24px; padding-block: clamp(40px, 5vw, 64px); border-top: none; }
+.contrast-band section { border-top: none !important; padding-block: clamp(24px, 3vw, 36px); }
+.label { font-family: var(--font-display); font-weight: 700; font-size: clamp(24px, 3.2vw, 32px); line-height: 1.15; letter-spacing: -0.02em; text-transform: none; color: var(--fg); position: static; padding-top: 0; margin: 0; }
 .body { width: 100%; min-width: 0; }
 h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(26px, 3.4vw, 36px); line-height: 1.12; letter-spacing: -0.02em; margin: 0 0 16px; text-wrap: balance; }
 h3 { font-family: var(--font-display); font-weight: 600; font-size: 19px; letter-spacing: -0.01em; margin: 0 0 6px; }
@@ -308,7 +827,11 @@ p { margin: 0 0 1em; max-width: 100%; }
 .about p { font-size: 18px; }
 
 /* experience */
-.job { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 24px; margin-bottom: 14px; }
+.job { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 24px; margin-bottom: 14px; }
+.job-role-wrap { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; }
+.job-role-wrap h3 { margin: 0; display: inline; }
+.job .company-name { color: var(--muted); font-weight: 500; font-size: 18px; }
+.job .company-at { color: var(--muted); }
 .job h3 { margin: 0; }
 .list { list-style: none; padding: 0; margin: 20px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
 .list li { position: relative; display: flex; align-items: flex-start; gap: 12px; padding-block: 11px; font-size: 16px; line-height: 1.5; }
@@ -325,28 +848,56 @@ p { margin: 0 0 1em; max-width: 100%; }
 }
 
 
-/* Fullscreen image modal (double click on desktop) */
-.shot-wrap { position: relative; display: block; cursor: zoom-in; overflow: hidden; border-radius: 12px; user-select: none; -webkit-user-select: none; }
-.shot-wrap .shot { transition: transform .25s ease, filter .25s ease; width: 100%; display: block; }
-.shot-wrap:hover .shot { transform: scale(1.025); }
+/* Fullscreen image modal & shot wrap hover */
+.shot-wrap { position: relative; display: block; cursor: zoom-in; overflow: hidden; border-radius: 14px; user-select: none; -webkit-user-select: none; border: 1px solid rgba(255, 255, 255, 0.08); transition: all .25s cubic-bezier(0.16, 1, 0.3, 1); }
+.shot-wrap:hover { border-color: rgba(56, 189, 248, 0.5); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.2); transform: translateY(-3px); }
+.shot-wrap .shot { transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1), filter .25s ease; width: 100%; display: block; }
+.shot-wrap:hover .shot { transform: scale(1.035); }
 
 /* Instagram-style 3 in a row image cards */
-.gallery-row, .gallery-2x2 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; max-width: 820px; margin: 24px auto 0; justify-content: center; }
-.gallery-row .shot-wrap, .gallery-2x2 .shot-wrap { aspect-ratio: 1 / 1; background: #111; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid var(--line); overflow: hidden; }
-.gallery-row .shot-wrap img, .gallery-2x2 .shot-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s ease; }
-.gallery-row .shot-wrap:hover img, .gallery-2x2 .shot-wrap:hover img { transform: scale(1.03); }
+.gallery-row, .gallery-2x2 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; width: 100%; max-width: 100%; margin: 18px 0 0; }
+.gallery-row .shot-wrap, .gallery-2x2 .shot-wrap { aspect-ratio: 1 / 1; background: #111; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); overflow: hidden; }
+.gallery-row .shot-wrap img, .gallery-2x2 .shot-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
+.gallery-row .shot-wrap:hover img, .gallery-2x2 .shot-wrap:hover img { transform: scale(1.04); }
 @media (max-width: 768px) { .gallery-row, .gallery-2x2 { gap: 10px; max-width: 100%; } }
 @media (max-width: 480px) { .gallery-row, .gallery-2x2 { gap: 8px; } }
 
+/* Lightbox Modal & Carousel Navigation */
 .img-modal { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; z-index: 99999; display: flex; align-items: center; justify-content: center; padding: clamp(16px, 4vw, 36px); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
 .img-modal:not([hidden]) { opacity: 1; pointer-events: auto; }
-.img-modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.9); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
-.img-modal-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; max-width: 95vw; max-height: 92vh; max-height: 92dvh; }
-.img-modal-content img { max-width: 92vw; max-height: 84vh; max-height: 84dvh; width: auto; height: auto; object-fit: contain; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 16px 50px rgba(0, 0, 0, 0.7); transform: scale(0.96); transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1); }
+.img-modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.94); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); cursor: zoom-out !important; }
+.img-modal-top-bar { position: fixed; top: max(16px, env(safe-area-inset-top, 16px)); left: max(16px, env(safe-area-inset-left, 16px)); right: max(16px, env(safe-area-inset-right, 16px)); z-index: 100003; display: flex; align-items: center; justify-content: space-between; gap: 12px; pointer-events: none; }
+.img-modal-top-bar > * { pointer-events: auto; }
+.img-modal-counter-badge { display: inline-flex; align-items: center; justify-content: center; padding: 6px 14px; background: rgba(22, 25, 32, 0.88); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 9999px; font-family: var(--font-data); font-size: 12px; font-weight: 600; color: #FFFFFF; letter-spacing: 0.05em; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.img-modal-actions { display: flex; align-items: center; gap: 10px; }
+.img-modal-btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 9999px; font-family: var(--font-body); font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer !important; transition: all .18s ease; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.img-modal-play { background: rgba(22, 25, 32, 0.88); border: 1.5px solid rgba(255, 255, 255, 0.24); color: #FFFFFF; }
+.img-modal-play:hover { background: rgba(255, 255, 255, 0.18); border-color: #FFFFFF; }
+.img-modal-play.is-playing { border-color: #10B981; color: #10B981; background: rgba(16, 185, 129, 0.18); }
+.img-modal-download { background: #FFFFFF; color: #000000; border: 1px solid transparent; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); }
+.img-modal-download:hover { background: #E2E8F0; color: #000000; transform: translateY(-1px); }
+.img-modal-close { width: 38px; height: 38px; display: grid; place-items: center; background: rgba(22, 25, 32, 0.88); border: 1.5px solid rgba(255, 255, 255, 0.25); color: #fff; border-radius: 50%; cursor: pointer !important; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: all .18s ease; }
+.img-modal-close:hover { background: rgba(255, 255, 255, 0.25); border-color: #fff; transform: scale(1.08); }
+.img-modal-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; max-width: 95vw; max-height: 90vh; max-height: 90dvh; cursor: default; }
+.img-modal-content img { max-width: 86vw; max-height: 78vh; max-height: 78dvh; width: auto; height: auto; object-fit: contain; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.16); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); transform: scale(0.96); transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1), opacity .15s ease; }
 .img-modal:not([hidden]) .img-modal-content img { transform: scale(1); }
-.img-modal-caption { margin-top: 12px; font-family: var(--font-data); font-size: 13px; color: #CCCCCC; text-align: center; }
-.img-modal-close { position: fixed; top: max(20px, env(safe-area-inset-top, 20px)); right: max(20px, env(safe-area-inset-right, 20px)); z-index: 100001; width: 44px; height: 44px; display: grid; place-items: center; background: rgba(0, 0, 0, 0.75); border: 1.5px solid rgba(255, 255, 255, 0.35); color: #fff; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); transition: background .15s, transform .15s, border-color .15s; }
-.img-modal-close:hover { background: rgba(255, 255, 255, 0.25); border-color: #fff; transform: scale(1.1); }
+.img-modal-footer { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
+.img-modal-caption { margin: 0; font-family: var(--font-data); font-size: 13.5px; color: #E2E8F0; text-align: center; letter-spacing: 0.02em; }
+.img-modal-nav { position: fixed; top: 50%; transform: translateY(-50%); z-index: 100002; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; background: rgba(20, 22, 28, 0.85); border: 1.5px solid rgba(255, 255, 255, 0.28); color: #ffffff; border-radius: 50%; cursor: pointer !important; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: all .2s cubic-bezier(0.16, 1, 0.3, 1); user-select: none; -webkit-tap-highlight-color: transparent; }
+.img-modal-prev { left: max(20px, env(safe-area-inset-left, 20px)); }
+.img-modal-next { right: max(20px, env(safe-area-inset-right, 20px)); }
+.img-modal-nav:hover { background: rgba(255, 255, 255, 0.25); border-color: #ffffff; color: #ffffff; transform: translateY(-50%) scale(1.12); box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75); }
+.img-modal-nav:active { transform: translateY(-50%) scale(0.94); }
+@media (max-width: 640px) {
+  .img-modal-nav { width: 42px; height: 42px; }
+  .img-modal-prev { left: max(10px, env(safe-area-inset-left, 10px)); }
+  .img-modal-next { right: max(10px, env(safe-area-inset-right, 10px)); }
+  .img-modal-top-bar { top: max(12px, env(safe-area-inset-top, 12px)); left: 10px; right: 10px; }
+  .img-modal-counter-badge { padding: 4px 10px; font-size: 11px; }
+  .img-modal-btn span { display: none; }
+  .img-modal-btn { padding: 8px; border-radius: 50%; width: 36px; height: 36px; justify-content: center; }
+  .img-modal-close { width: 36px; height: 36px; }
+}
 
 /* Project Filter Pills */
 .project-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px; }
@@ -408,28 +959,63 @@ p { margin: 0 0 1em; max-width: 100%; }
 .src { font-size: 14px; color: var(--muted); margin: 14px 0 0; }
 
 /* entries */
-.entry { padding-block: 22px; display: grid; gap: 6px; }
+.entry { padding-block: 24px; display: grid; gap: 8px; border-top: none; }
+.entry.first-entry { border-top: none; padding-top: 12px; margin-top: 0; }
 .entry p { margin: 6px 0 0; }
 .specs { display: flex; flex-wrap: wrap; gap: 4px 22px; font-family: var(--font-data); font-size: 12.5px; color: var(--muted); }
 .specs b { font-weight: 500; color: var(--fg); }
-.tag { display: inline-block; font-family: var(--font-data); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 3px; padding: 2px 8px; color: var(--muted); margin-left: 10px; vertical-align: 2px; }
+.tag { display: inline-block; font-family: var(--font-data); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 9999px; padding: 2px 10px; color: var(--muted); margin-left: 10px; vertical-align: 2px; }
 .first-entry { margin-top: 22px; }
 
 /* skills */
 .skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
 .skill-group { padding-block: 18px 22px; }
 .skill-group h3 { font-family: var(--font-data); font-weight: 500; font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
-.chips li { font-size: 14.5px; padding: 5px 11px; border: 1px solid var(--line); border-radius: 3px; transition: border-color .15s, color .15s; }
-.chips li:hover { border-color: var(--accent); color: var(--accent); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; margin: 0; padding: 0; }
+.chips li { font-size: 14px; padding: 6px 14px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 9999px; background: rgba(255, 255, 255, 0.03); color: var(--fg); transition: all .22s cubic-bezier(0.16, 1, 0.3, 1); cursor: default; }
+.chips li:hover { border-color: rgba(56, 189, 248, 0.7); color: #FFFFFF; background: linear-gradient(135deg, rgba(56, 189, 248, 0.18) 0%, rgba(99, 102, 241, 0.24) 100%); box-shadow: 0 4px 16px rgba(56, 189, 248, 0.28); transform: translateY(-2px); }
 
 /* certifications */
 .certs { list-style: none; padding: 0; margin: 0; }
-.certs li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 24px; padding-block: 14px; font-size: 16px; }
+.certs li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 24px; padding-block: 14px; font-size: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.certs li:last-child { border-bottom: none; }
 .certs li:first-child { padding-top: 0; }
 .certs span { font-family: var(--font-data); font-size: 12.5px; color: var(--muted); text-align: right; align-self: center; }
 
 /* contact */
+.contact-email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--fg);
+  text-decoration: none;
+  transition: all .2s ease;
+}
+.contact-email-link:hover {
+  color: #38bdf8;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+  transform: translateX(2px);
+}
+.contact-email-icon {
+  flex-shrink: 0;
+  color: var(--fg);
+}
+.btn-linkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-linkedin:hover {
+  background: linear-gradient(135deg, #0A66C2 0%, #004182 100%) !important;
+  color: #FFFFFF !important;
+  border-color: #0A66C2 !important;
+  box-shadow: 0 6px 24px rgba(10, 102, 194, 0.45) !important;
+  transform: translateY(-2px);
+}
+.btn-linkedin svg {
+  flex-shrink: 0;
+}
+
 .contact-line { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 4.6vw, 44px); letter-spacing: -0.025em; line-height: 1.15; overflow-wrap: anywhere; margin: 0 0 24px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .where { margin-top: 22px; }
@@ -437,7 +1023,7 @@ p { margin: 0 0 1em; max-width: 100%; }
 .disclosure { display: flex; flex-direction: column; gap: 14px; padding-block: 36px 24px; }
 .disclosure p { font-size: 14px; color: var(--muted); max-width: 46em; margin: 0; }
 .disclosure .label { position: static; }
-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-block: 16px 40px; font-family: var(--font-data); font-size: 12px; color: var(--muted); }
+footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 24px; padding-block: 20px 40px; border-top: 1px solid var(--line); font-family: var(--font-data); font-size: 12.5px; color: var(--muted); }
 footer a { text-decoration: none; }
 .footer-copy-link { color: var(--muted); text-decoration: underline !important; text-underline-offset: 3px; text-decoration-color: var(--line) !important; cursor: pointer; transition: color .15s ease, text-decoration-color .15s ease; }
 .footer-copy-link:hover { color: var(--fg); text-decoration-color: var(--fg) !important; }
@@ -534,7 +1120,7 @@ footer a { text-decoration: none; }
 [hidden] { display: none !important; }
 
 /* screenshots */
-.shot { display: block; width: 100%; max-width: 100%; height: auto; margin-top: 20px; border: 1px solid var(--line); border-radius: 12px; }
+.shot { display: block; width: 100%; max-width: 100%; height: auto; margin-top: 0; border: 1px solid var(--line); border-radius: 12px; }
 
 /* CMS */
 .cms-fab { position: fixed; z-index: 999; right: max(20px, env(safe-area-inset-right, 0px)); bottom: max(20px, env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 9999px; background: var(--btn-bg); color: var(--btn-fg); font-weight: 600; font-size: 14px; box-shadow: 0 8px 28px rgba(0,0,0,.35); cursor: pointer; transition: transform .15s, box-shadow .15s; }
@@ -1453,8 +2039,8 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
       <nav aria-label="Sections" id="nav">
         <a href="#about" data-s="about">About</a>
         <a href="#experience" data-s="experience">Experience</a>
-        <a href="#work" data-s="work">Work</a>
         <a href="#skills" data-s="skills">Skills</a>
+        <a href="#work" data-s="work">Work</a>
         <a href="#contact" data-s="contact">Contact</a>
       </nav>
       <div class="top-actions">
@@ -1524,7 +2110,98 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
   <span>Edit site</span>
 </button>
 
-<script type="application/json" id="site-data">{"name":"Jeflin Mathew","role":"Digital Marketing · SEO · Meta Ads · Lead Generation","lede":"Digital marketer who grows organic search traffic and runs lead generation campaigns.","location":"Kerala, India","email":"jeflinmathew@gmail.com","linkedin":"https://www.linkedin.com/in/jeflinmathew/","facts":[{"k":"Based in","v":"Kerala, India"},{"k":"Experience","v":"1 year in digital marketing"},{"k":"Latest role","v":"MyMathews Educare, Mar 2025 – Feb 2026"},{"k":"Focus","v":"SEO, Meta Ads, lead generation"}],"about":["I’m a digital marketer based in Dubai with a BBA degree. I work mainly with SEO, Meta Ads and lead generation and I like turning data into real growth for a business. In my previous role, I contributed to a 119% increase in organic clicks and improved a website’s average Google Search position from 17.3 to 8.8. Before transitioning into digital marketing, I gained professional experience in broadcasting, developing strong skills in problem-solving, quality control, and working under pressure. I’m available to join immediately and open to opportunities in digital marketing where I can contribute my skills and keep growing professionally."],"experience":{"title":"Digital Marketing Executive","company":"MyMathews Educare Pvt. Ltd.","period":"March 2025 – February 2026","summary":"SEO, technical SEO, Meta lead generation campaigns, social media and content for an education business.","bullets":["Keyword research and on-page SEO optimization","Indexing and crawl issue investigation, with fixes","Schema markup implementation","SEO audits and corrective actions","Google Search Console performance monitoring","Meta lead generation campaign execution and optimization","Multi-platform social media content management"]},"seo":{"title":"SEO and Organic Growth","intro":"At MyMathews Educare I worked on organic search across keyword research, on-page and technical SEO, audits, indexing and crawl analysis, schema markup, internal linking and Search Console monitoring.","chartTitle":"Search Console · first month vs final month","labelA":"First month","labelB":"Final month","source":"Compared using the first and last month of my employment.","image":"gsc-performance.png","steps":[{"name":"Keyword research","desc":"Find the terms the audience searches for and group them by intent."},{"name":"On-page optimization","desc":"Align titles, headings and copy on each page with its target term."},{"name":"Technical audit","desc":"Check indexing, crawlability and site health for issues that hold pages back."},{"name":"Fixes","desc":"Resolve what the audit found and confirm the affected pages are indexed."},{"name":"Schema and internal linking","desc":"Add structured data and link related pages so search engines can read the site."},{"name":"Search Console monitoring","desc":"Track clicks, impressions, position and CTR to see what changed."}],"metrics":[{"name":"Total clicks","a":"3.46K","b":"7.59K","delta":"+119%","lowerBetter":false,"hint":"","note":"Monthly clicks from search more than doubled, from 3.46K to 7.59K."},{"name":"Total impressions","a":"386K","b":"1.13M","delta":"+193%","lowerBetter":false,"hint":"","note":"Impressions nearly tripled, so the pages appeared in search far more often."},{"name":"Average position","a":"17.3","b":"8.8","delta":"−8.5 places","lowerBetter":true,"hint":"Lower is better. A shorter bar is a higher ranking.","note":"Average position moved from page two to page one of results."},{"name":"Average CTR","a":"0.9%","b":"0.7%","delta":"−0.2 pts","lowerBetter":false,"hint":"","note":"CTR fell by 0.2 points while impressions nearly tripled."}]},"meta":{"title":"Meta lead generation","intro":"Campaigns for educational programs, covering execution, monitoring and optimization.","campaigns":[{"name":"Atria University","specs":"Platform: Meta Ads\nObjective: Lead generation\nIndustry: Higher education","text":"Creative built around educational opportunities and study and career pathways.","image":"meta-atria.png"},{"name":"Video Host recruitment","specs":"Platform: Meta Ads\nObjective: Recruitment / sign-up\nFormat: Short-form video reels","text":"Recruitment creative promoting a Video Host opportunity with a direct sign-up call to action across Instagram Reels and Facebook Video feeds.","image":""}]},"social":{"title":"Social media and content","text":"Managed content across several social platforms to support engagement and brand reach at MyMathews Educare.","image":"meta-videohost.png"},"projects":{"title":"Freelancing works","intro":"Client projects and freelance digital marketing campaigns.","items":[{"name":"Meat Products of India Ltd. (MPI)","tag":"Freelance","text":"Social media creatives, promotional campaign graphics, and product advertising designs for Meat Products of India Ltd. (A Govt. of Kerala Undertaking) retail outlets.","images":["mpi-beef-liver.png","mpi-chicken-pops.png","mpi-chicken-finger.jpg"]},{"name":"SEO audit and optimization","tag":"Freelance","text":"Keyword research, technical audit, on-page optimization, internal linking, schema and performance monitoring.","image":""},{"name":"Meta lead generation strategy","tag":"Practice","text":"A practice campaign covering audience research, campaign structure, creative strategy, lead generation messaging and an optimization method.","image":""}]},"certs":[{"name":"Google Ads Search Certification","issuer":"Google Digital Academy (Skillshop)"},{"name":"Fundamentals of Digital Marketing","issuer":"Google Digital Academy (Skillshop)"},{"name":"Digital Skills: Digital Marketing","issuer":"Accenture"},{"name":"Digital Marketing Guide","issuer":"Udemy"},{"name":"Internship Completion Certificate, Digital Marketing","issuer":"MyMathews Educare Pvt. Ltd."},{"name":"One Million Prompters, Certificate of Completion","issuer":"Dubai Future Foundation"}],"skills":[{"group":"Search","items":["SEO","Technical SEO","On-page SEO","Keyword research","SEO audits","Schema markup","Indexing and crawl analysis"]},{"group":"Paid advertising","items":["Google Ads","Meta Ads","Lead generation","Campaign optimization"]},{"group":"Content","items":["Content optimization","Social media marketing","AI-assisted content creation"]},{"group":"Measurement","items":["Google Search Console","Google Analytics"]}],"contact":{"heading":"Let's talk about your search and lead goals."},"googleAds":{"label":"Case study 02","title":"Google Search Console and Analytics","intro":"Ran search and performance campaigns for MyMathews Educare, driving high-intent educational traffic and monitoring conversion events via Google Analytics 4 (GA4).","specs":"Platform: Google search console & GA4\nObjective: User acquisition & lead generation\nGrowth: +25.2% Views (36k) · +19.7% New users (24k) · +16.5% Events (112k)","text":"Monitored campaign performance against industry benchmarks (Colleges & Universities), achieving consistent month-over-month growth in active users and high-value event interactions.","image":"google-ads.png"}}</script>
+
+<!-- Mobile Floating Chat FAB (Available when overlay is closed) -->
+<button type="button" class="chat-fab" id="chat-fab" aria-label="Open portfolio AI chat" title="Ask AI">
+  <div class="chat-fab-pulse"></div>
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+  </svg>
+</button>
+
+<!-- Mobile Chatbot Bottom Overlay Card (appears after 5s on mobile mode, disappears on close) -->
+<div id="mobile-chat-overlay" class="mobile-chat-overlay" role="dialog" aria-modal="false" aria-label="Ask about Jeflin">
+  <div class="mco-card">
+    <div class="mco-header">
+      <div class="mco-title-wrap">
+        <span class="mco-badge" aria-hidden="true">J</span>
+        <span class="mco-title" id="mco-title">Ask about Jeflin</span>
+      </div>
+      <button type="button" class="mco-close" id="mco-close" aria-label="Close chatbot overlay">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="mco-body" id="mco-log" role="log" aria-live="polite"></div>
+
+    <div class="mco-chips" id="mco-chips">
+      <button type="button" class="mco-chip" data-q="Tell me about Jeflin's experience">Tell me about Jeflin's experience</button>
+      <button type="button" class="mco-chip" data-q="What results did Jeflin get in SEO?">What results did Jeflin get in SEO?</button>
+      <button type="button" class="mco-chip" data-q="What campaigns has Jeflin run in Meta Ads?">What campaigns has Jeflin run in Meta Ads?</button>
+      <button type="button" class="mco-chip" data-q="What are Jeflin's core skills?">What are Jeflin's core skills?</button>
+    </div>
+
+    <form class="mco-composer" id="mco-form" autocomplete="off">
+      <label class="sr" for="mco-input">Ask about Jeflin's work</label>
+      <input type="text" id="mco-input" maxlength="400" placeholder="Ask about Jeflin's work" autocomplete="off">
+      <button type="submit" class="mco-send" id="mco-send" aria-label="Send question">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"></line>
+          <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="img-modal" id="img-modal" role="dialog" aria-modal="true" aria-label="Fullscreen image viewer" hidden>
+  <div class="img-modal-backdrop" id="img-modal-backdrop"></div>
+  
+  <div class="img-modal-top-bar">
+    <div class="img-modal-counter-badge" id="img-modal-counter">1 / 1</div>
+    <div class="img-modal-actions">
+      <button class="img-modal-btn img-modal-play" id="img-modal-play" type="button" aria-label="Auto scroll images" title="Auto scroll images">
+        <svg class="icon-play" viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+        <svg class="icon-pause" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+        <span id="img-modal-play-text">Auto</span>
+      </button>
+      <a class="img-modal-btn img-modal-download" id="img-modal-download" href="" download target="_blank" aria-label="Download image" title="Download image">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Download</span>
+      </a>
+      <button class="img-modal-close" id="img-modal-close" type="button" aria-label="Close fullscreen view">
+        <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <button class="img-modal-nav img-modal-prev" id="img-modal-prev" type="button" aria-label="Previous image">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+  </button>
+  <button class="img-modal-nav img-modal-next" id="img-modal-next" type="button" aria-label="Next image">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </button>
+
+  <div class="img-modal-content" id="img-modal-content">
+    <img id="img-modal-img" src="" alt="">
+    <div class="img-modal-footer">
+      <p class="img-modal-caption" id="img-modal-caption"></p>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" id="site-data">{"name":"Jeflin Mathew","role":"Digital Marketing · SEO · Meta Ads · Lead Generation","lede":"Digital marketer who grows organic search traffic and runs lead generation campaigns.","location":"Dubai, UAE","email":"jeflinmathew@gmail.com","linkedin":"https://www.linkedin.com/in/jeflinmathew/","facts":[{"k":"Based in","v":"Dubai, UAE"},{"k":"Experience","v":"1 year in digital marketing"},{"k":"Latest role","v":"MyMathews Educare, Mar 2025 – Feb 2026"},{"k":"Focus","v":"SEO, Meta Ads, lead generation"}],"about":["I’m a digital marketer with a BBA Degree, I help businesses get found on Google and get enquiries from the right people.","In my last role, organic clicks grew about 119% and average Google position improved from 17.3 to 8.8. I work on the details that make a site easier to find and understand. Before that, I did freelance social media for a local food business, creating posts and managing their page.","I came into marketing from broadcasting, analyzing audience and ratings data. I still let the data guide my decisions.","Located in Dubai, available to join your team right away. See my work below, then let’s talk about what your business needs."],"experience":{"title":"Digital Marketing Executive","company":"MyMathews Educare Pvt. Ltd.","period":"March 2025 – February 2026","summary":"SEO, technical SEO, Meta lead generation campaigns, social media and content for an education business.","bullets":["Keyword research and on-page SEO optimization","Indexing and crawl issue investigation, with fixes","Schema markup implementation","SEO audits and corrective actions","Google Search Console performance monitoring","Meta lead generation campaign execution and optimization","Multi-platform social media content management"]},"seo":{"title":"SEO & Organic Search","intro":"At MyMathews Educare I worked on organic search across keyword research, on-page and technical SEO, audits, indexing and crawl analysis, schema markup, internal linking and Search Console monitoring.","chartTitle":"Search Console · first month vs final month","labelA":"First month","labelB":"Final month","source":"Compared using the first and last month of my employment.","image":"gsc-performance.png","steps":[{"name":"Keyword research","desc":"Find the terms the audience searches for and group them by intent."},{"name":"On-page optimization","desc":"Align titles, headings and copy on each page with its target term."},{"name":"Technical audit","desc":"Check indexing, crawlability and site health for issues that hold pages back."},{"name":"Fixes","desc":"Resolve what the audit found and confirm the affected pages are indexed."},{"name":"Schema and internal linking","desc":"Add structured data and link related pages so search engines can read the site."},{"name":"Search Console monitoring","desc":"Track clicks, impressions, position and CTR to see what changed."}],"metrics":[{"name":"Total clicks","a":"3.46K","b":"7.59K","delta":"+119%","lowerBetter":false,"hint":"","note":"Monthly clicks from search more than doubled, from 3.46K to 7.59K."},{"name":"Total impressions","a":"386K","b":"1.13M","delta":"+193%","lowerBetter":false,"hint":"","note":"Impressions nearly tripled, so the pages appeared in search far more often."},{"name":"Average position","a":"17.3","b":"8.8","delta":"−8.5 places","lowerBetter":true,"hint":"Lower is better. A shorter bar is a higher ranking.","note":"Average position moved from page two to page one of results."},{"name":"Average CTR","a":"0.9%","b":"0.7%","delta":"−0.2 pts","lowerBetter":false,"hint":"","note":"CTR fell by 0.2 points while impressions nearly tripled."}]},"meta":{"title":"Meta lead generation","intro":"Campaigns for educational programs, covering execution, monitoring and optimization.","campaigns":[{"name":"Atria University","specs":"Platform: Meta Ads\nObjective: Lead generation\nIndustry: Higher education","text":"Creative built around educational opportunities and study and career pathways.","image":"meta-atria.png"}]},"social":{"title":"Video Host Recruitment","specs":"Platform: Meta Ads\nObjective: Recruitment / sign-up\nFormat: Short-form video reels","text":"Recruitment creative promoting a Video Host opportunity with a direct sign-up call to action across Instagram Reels and Facebook Video feeds.","image":"meta-videohost.png"},"projects":{"title":"Freelancing Works","intro":"Client projects and freelance digital marketing campaigns.","items":[{"name":"Meat Products of India Ltd. (MPI)","tag":"Freelance","text":"Social media creatives, promotional campaign graphics, and product advertising designs for Meat Products of India Ltd. (A Govt. of Kerala Undertaking) retail outlets.","images":["mpi-beef-liver.png","mpi-chicken-pops.png","mpi-chicken-finger.jpg"]},{"name":"SEO audit and optimization","tag":"Freelance","text":"Keyword research, technical audit, on-page optimization, internal linking, schema and performance monitoring.","image":""},{"name":"Meta lead generation strategy","tag":"Practice","text":"A practice campaign covering audience research, campaign structure, creative strategy, lead generation messaging and an optimization method.","image":""}]},"certs":[{"name":"Google Ads Search Certification","issuer":"Google Digital Academy (Skillshop)"},{"name":"Fundamentals of Digital Marketing","issuer":"Google Digital Academy (Skillshop)"},{"name":"Digital Skills: Digital Marketing","issuer":"Accenture"},{"name":"Digital Marketing Guide","issuer":"Udemy"},{"name":"Internship Completion Certificate, Digital Marketing","issuer":"MyMathews Educare Pvt. Ltd."},{"name":"One Million Prompters, Certificate of Completion","issuer":"Dubai Future Foundation"}],"skills":[{"group":"Search","items":["SEO","Technical SEO","On-page SEO","Keyword research","SEO audits","Schema markup","Indexing and crawl analysis"]},{"group":"Paid advertising","items":["Google Ads","Meta Ads","Lead generation","Campaign optimization"]},{"group":"Content","items":["Content optimization","Social media marketing","AI-assisted content creation"]},{"group":"Measurement","items":["Google Search Console","Google Analytics"]}],"contact":{"heading":"Let's Talk About Your Search & Lead Goals"},"googleAds":{"label":"Case Study 02","title":"Google Analytics – Performance Tracking","intro":"Monitored website performance for MyMathews Educare using Google Analytics 4, tracking views, new users, active users, and event activity.","specs":"Platform: Google Analytics 4 (GA4)\nObjective: User acquisition & lead generation\nGrowth: +25.2% Views (36k) · +19.7% New users (24k) · +16.5% Events (112k)","text":"Monitored campaign performance against industry benchmarks (Colleges & Universities), achieving consistent month-over-month growth in active users and high-value event interactions.","image":"google-ads.png"},"_v":3}</script>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
@@ -1630,7 +2307,7 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
   function secExperience() {
     var e = D.experience;
     return '<section id="experience" data-nav="experience"><div class="label">Experience</div><div class="body">' +
-      '<div class="job"><h3 data-edit="experience.title" data-edit-tag="Job Title">' + esc(e.title) + '</h3>' + (e.company ? '<span class="company-at">, </span><span data-edit="experience.company" data-edit-tag="Company">' + esc(e.company) + '</span>' : '') + '<span class="meta" data-edit="experience.period" data-edit-tag="Period">' + esc(e.period) + '</span></div>' +
+      '<div class="job"><div class="job-role-wrap"><h3 data-edit="experience.title" data-edit-tag="Job Title">' + esc(e.title) + '</h3>' + (e.company ? '<span class="company-at">, </span><span class="company-name" data-edit="experience.company" data-edit-tag="Company">' + esc(e.company) + '</span>' : '') + '</div><span class="meta" data-edit="experience.period" data-edit-tag="Period">' + esc(e.period) + '</span></div>' +
       '<p data-edit="experience.summary" data-edit-tag="Summary">' + esc(e.summary) + '</p>' +
       (e.bullets && e.bullets.length ? '<ul class="list">' + e.bullets.map(function (b, i) { return '<li data-edit="experience.bullets.' + i + '" data-edit-tag="Bullet ' + (i + 1) + '">' + esc(b) + '</li>'; }).join('') + '</ul>' : '') +
       '<button class="framer-add-btn" data-canvas-add="experience.bullets" type="button">+ Add Achievement Bullet</button>' +
@@ -1638,21 +2315,21 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
   }
   function secSeo() {
     var s = D.seo;
-    var h = '<section id="work" data-nav="work"><div class="label">Case study 01</div><div class="body">' +
+    var h = '<section id="work" data-nav="work"><div class="label case-study-label">Case Study 01</div><div class="body">' +
       '<div class="seo-layout">' +
         '<div class="seo-content">' +
           '<h2 data-edit="seo.title" data-edit-tag="SEO Title">' + esc(s.title) + '</h2>' +
           '<p data-edit="seo.intro" data-edit-tag="SEO Intro">' + esc(s.intro) + '</p>';
     if (s.steps.length) h += '<ol class="steps" id="steps"></ol><p class="step-desc" id="step-desc" aria-live="polite"></p>';
     h += '</div>' +
-      (s.image ? '<div class="seo-media shot-wrap" data-edit-img="seo.image" title="Click to replace image">' + shot(s.image, s.title + ' screenshot') + '</div>' : '') +
+      (s.image ? '<div class="seo-media" data-edit-img="seo.image" title="Click to replace image">' + shot(s.image, s.title) + '</div>' : '') +
       '</div></div></section>';
     return h;
   }
   function secGoogleAds() {
     var g = D.googleAds;
     if (!g) return '';
-    return '<section data-nav="work"><div class="label">' + esc(g.label || 'Case study 02') + '</div><div class="body">' +
+    return '<section data-nav="work"><div class="label case-study-label">' + esc(g.label || 'Case Study 02') + '</div><div class="body">' +
       '<div class="seo-layout reverse">' +
         '<div class="seo-content">' +
           '<h2 data-edit="googleAds.title" data-edit-tag="Title">' + esc(g.title) + '</h2>' +
@@ -1660,14 +2337,14 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
           (g.specs ? '<div class="specs">' + specsHtml(g.specs) + '</div>' : '') +
           '<p data-edit="googleAds.text" data-edit-tag="Description">' + esc(g.text) + '</p>' +
         '</div>' +
-        (g.image ? '<div class="seo-media shot-wrap" data-edit-img="googleAds.image" title="Click to replace image">' + shot(g.image, g.title + ' screenshot') + '</div>' : '') +
+        (g.image ? '<div class="seo-media" data-edit-img="googleAds.image" title="Click to replace image">' + shot(g.image, g.title) + '</div>' : '') +
       '</div></div></section>';
   }
   function secMeta() {
     var m = D.meta;
     var c1 = m.campaigns && m.campaigns[0];
     var c2 = m.campaigns && m.campaigns[1];
-    return '<section data-nav="work"><div class="label">Case study 03</div><div class="body">' +
+    return '<section data-nav="work"><div class="label case-study-label">Case Study 03</div><div class="body">' +
       '<div class="seo-layout">' +
         '<div class="seo-content">' +
           '<h2 data-edit="meta.title" data-edit-tag="Title">' + esc(m.title) + '</h2>' +
@@ -1677,49 +2354,32 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
             '<div class="specs">' + specsHtml(c1.specs) + '</div>' +
             '<p data-edit="meta.campaigns.0.text" data-edit-tag="Campaign 1 Text">' + esc(c1.text) + '</p>' +
           '</div>' : '') +
-          (c2 ? '<div class="campaign-sub" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line);">' +
+          (c2 ? '<div class="campaign-sub" style="margin-top: 24px; padding-top: 16px;">' +
             '<h3 data-edit="meta.campaigns.1.name" data-edit-tag="Campaign 2 Name">' + esc(c2.name) + '</h3>' +
             '<div class="specs">' + specsHtml(c2.specs) + '</div>' +
             '<p data-edit="meta.campaigns.1.text" data-edit-tag="Campaign 2 Text">' + esc(c2.text) + '</p>' +
           '</div>' : '') +
         '</div>' +
-        (c1 && c1.image ? '<div class="seo-media shot-wrap" data-edit-img="meta.campaigns.0.image" title="Click to replace image">' + shot(c1.image, c1.name + ' screenshot') + '</div>' : '') +
+        (c1 && c1.image ? '<div class="seo-media" data-edit-img="meta.campaigns.0.image" title="Click to replace image">' + shot(c1.image, c1.name) + '</div>' : '') +
       '</div></div></section>';
   }
   function secSocial() {
-    var s = D.social;
-    return '<section data-nav="work"><div class="label">Case study 04</div><div class="body">' +
+    var s = D.social || {};
+    return '<section data-nav="work"><div class="label case-study-label">Case Study 04</div><div class="body">' +
       '<div class="seo-layout reverse">' +
         '<div class="seo-content">' +
-          '<h2 data-edit="social.title" data-edit-tag="Title">' + esc(s.title) + '</h2>' +
-          '<p data-edit="social.text" data-edit-tag="Description">' + esc(s.text) + '</p>' +
+          '<h2 data-edit="social.title" data-edit-tag="Title">' + esc(s.title || 'Video Host Recruitment') + '</h2>' +
+          (s.specs ? '<div class="specs" data-edit="social.specs" data-edit-tag="Specifications">' + specsHtml(s.specs) + '</div>' : '') +
+          '<p data-edit="social.text" data-edit-tag="Description">' + esc(s.text || '') + '</p>' +
         '</div>' +
-        (s.image ? '<div class="seo-media shot-wrap" data-edit-img="social.image" title="Click to replace image">' + shot(s.image, s.title + ' screenshot') + '</div>' : '') +
+        (s.image ? '<div class="seo-media" data-edit-img="social.image" title="Click to replace image">' + shot(s.image, s.title || 'Video Host Recruitment') + '</div>' : '') +
       '</div></div></section>';
   }
-  var activeProjectFilter = 'All';
   function secProjects() {
     var p = D.projects;
-    var allTags = ['All'];
-    (p.items || []).forEach(function (it) {
-      if (it.tag && allTags.indexOf(it.tag) === -1) allTags.push(it.tag);
-    });
-    var filterPills = '<div class="project-filters" id="project-filters">' +
-      allTags.map(function (tag) {
-        var isAct = (activeProjectFilter === tag);
-        return '<button type="button" class="proj-filter-pill' + (isAct ? ' active' : '') + '" data-filter-tag="' + esc(tag) + '">' + esc(tag) + '</button>';
-      }).join('') +
-    '</div>';
-
-    var displayItems = (activeProjectFilter === 'All')
-      ? (p.items || [])
-      : (p.items || []).filter(function (it) { return it.tag === activeProjectFilter; });
-
-    return '<section data-nav="work"><div class="label">Freelancing works</div><div class="body">' +
-      '<h2 data-edit="projects.title" data-edit-tag="Section Title">' + esc(p.title) + '</h2>' +
+    return '<section data-nav="work"><div class="label" data-edit="projects.title" data-edit-tag="Section Title">' + esc(p.title) + '</div><div class="body">' +
       '<p data-edit="projects.intro" data-edit-tag="Intro">' + esc(p.intro) + '</p>' +
-      filterPills +
-      entries(displayItems, function (it, idx) {
+      entries(p.items || [], function (it, idx) {
         var realIdx = (p.items || []).indexOf(it);
         if (realIdx === -1) realIdx = idx;
         var imgsHtml = '';
@@ -1751,56 +2411,318 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
         return '<div class="skill-group"><h3>' + esc(g.group) + '</h3><ul class="chips">' + (g.items || []).map(function (i) { return '<li>' + esc(i) + '</li>'; }).join('') + '</ul></div>';
       }).join('') + '</div></section>';
   }
-  function secContact() {
+    function secContact() {
     var li = String(D.linkedin || '').replace(/^https?:\/\//, '');
+    var emailSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>';
+    var copySvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+    var liSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>';
     return '<section id="contact" data-nav="contact"><div class="label">Contact</div><div class="body">' +
       '<h2 data-edit="contact.heading" data-edit-tag="Headline">' + esc(D.contact.heading) + '</h2>' +
-      '<p class="contact-line" id="email" data-edit="email" data-edit-tag="Email">' + esc(D.email) + '</p><div class="actions">' +
-      '<button class="btn solid" id="copy" type="button">Copy email</button>' +
-      '<a class="btn" href="mailto:' + esc(D.email) + '">Open mail app</a>' +
-      (li ? '<a class="btn" href="' + (li.startsWith('http') ? esc(li) : 'https://' + esc(li)) + '" target="_blank" rel="noopener noreferrer">LinkedIn</a>' : '') +
+      '<div class="actions">' +
+      '<button class="btn solid" id="copy" type="button">' + copySvg + '<span>Copy email</span></button>' +
+      '<a class="btn" href="mailto:' + esc(D.email) + '">' + emailSvg + '<span>Send email</span></a>' +
+      (li ? '<a class="btn btn-linkedin" href="' + (li.startsWith('http') ? esc(li) : 'https://' + esc(li)) + '" target="_blank" rel="noopener noreferrer">' + liSvg + '<span>LinkedIn</span></a>' : '') +
       '</div><p class="meta where" data-edit="location" data-edit-tag="Location">' + esc(D.location) + '</p></div></section>';
   }
   function secDisclosure() { return ''; }
 
   var stepI = 0, metI = 0;
   
-  /* ---------- fullscreen image modal (double click on desktop) ---------- */
-  var imgModal = $('img-modal'), modalImg = $('img-modal-img'), modalCap = $('img-modal-caption'), modalClose = $('img-modal-close'), modalBackdrop = $('img-modal-backdrop');
+  /* ---------- fullscreen image modal & website-wide gallery carousel ---------- */
+  var currentGallery = [];
+  var currentGalleryIdx = 0;
+  var autoScrollTimer = null;
+
+  function getAllSiteImages() {
+    // Select all showcase images across work, case studies, and freelancing
+    var selectors = [
+      '#r-sections .seo-media img',
+      '#r-sections .gallery-row img',
+      '#r-sections .gallery-2x2 img',
+      '#r-sections .shot-wrap img',
+      '#r-sections img.shot'
+    ];
+    var imgs = Array.from(document.querySelectorAll(selectors.join(', ')));
+    var seen = {};
+    var list = [];
+    imgs.forEach(function (img) {
+      var src = img.getAttribute('src');
+      if (!src || seen[src]) return;
+      seen[src] = true;
+      var alt = img.getAttribute('alt') || img.getAttribute('title') || 'Portfolio image';
+      list.push({
+        src: src,
+        alt: alt,
+        title: alt
+      });
+    });
+    return list;
+  }
+
+  function getModal() {
+    return {
+      modal: $('img-modal'),
+      img: $('img-modal-img'),
+      cap: $('img-modal-caption'),
+      counter: $('img-modal-counter'),
+      close: $('img-modal-close'),
+      prev: $('img-modal-prev'),
+      next: $('img-modal-next'),
+      play: $('img-modal-play'),
+      download: $('img-modal-download'),
+      backdrop: $('img-modal-backdrop')
+    };
+  }
+
+  function cleanCaptionText(text) {
+    return String(text || '')
+      .replace(/\s*[-_]?\s*screenshot\b/gi, '')
+      .replace(/\.(png|jpg|jpeg|webp|svg)$/i, '')
+      .trim();
+  }
+
+  function updateAutoPlayUI(isPlaying) {
+    var btn = $('img-modal-play');
+    if (!btn) return;
+    var playIcon = btn.querySelector('.icon-play');
+    var pauseIcon = btn.querySelector('.icon-pause');
+    var textSpan = $('img-modal-play-text');
+    if (isPlaying) {
+      btn.classList.add('is-playing');
+      if (playIcon) playIcon.style.display = 'none';
+      if (pauseIcon) pauseIcon.style.display = 'inline-block';
+      if (textSpan) textSpan.textContent = 'Pause';
+    } else {
+      btn.classList.remove('is-playing');
+      if (playIcon) playIcon.style.display = 'inline-block';
+      if (pauseIcon) pauseIcon.style.display = 'none';
+      if (textSpan) textSpan.textContent = 'Auto';
+    }
+  }
+
+  function startAutoPlay() {
+    stopAutoPlay();
+    autoScrollTimer = setInterval(function () {
+      nextModalImage();
+    }, 3000);
+    updateAutoPlayUI(true);
+  }
+
+  function stopAutoPlay() {
+    if (autoScrollTimer) {
+      clearInterval(autoScrollTimer);
+      autoScrollTimer = null;
+    }
+    updateAutoPlayUI(false);
+  }
+
+  function toggleAutoPlay() {
+    if (autoScrollTimer) {
+      stopAutoPlay();
+    } else {
+      startAutoPlay();
+    }
+  }
+
+  function renderModalImage() {
+    var m = getModal();
+    if (!m.img || !currentGallery.length) return;
+    if (currentGalleryIdx < 0) currentGalleryIdx = 0;
+    if (currentGalleryIdx >= currentGallery.length) currentGalleryIdx = currentGallery.length - 1;
+
+    var item = currentGallery[currentGalleryIdx];
+    var cap = cleanCaptionText(item.alt || item.title || '');
+
+    // Smooth subtle transition
+    m.img.style.opacity = '0.5';
+    m.img.src = item.src;
+    m.img.alt = cap;
+    setTimeout(function () { if (m.img) m.img.style.opacity = '1'; }, 50);
+
+    if (m.cap) m.cap.textContent = cap;
+
+    // Update download link
+    if (m.download) {
+      m.download.href = item.src;
+      var cleanFileName = (item.src.split('/').pop().split('?')[0] || 'portfolio-image.png');
+      m.download.setAttribute('download', cleanFileName);
+    }
+
+    if (currentGallery.length > 1) {
+      if (m.prev) { m.prev.style.display = 'flex'; m.prev.removeAttribute('disabled'); }
+      if (m.next) { m.next.style.display = 'flex'; m.next.removeAttribute('disabled'); }
+      if (m.counter) {
+        m.counter.textContent = (currentGalleryIdx + 1) + ' / ' + currentGallery.length;
+        m.counter.style.display = 'inline-flex';
+      }
+    } else {
+      if (m.prev) m.prev.style.display = 'none';
+      if (m.next) m.next.style.display = 'none';
+      if (m.counter) m.counter.style.display = 'none';
+    }
+  }
 
   function openFullscreen(src, alt) {
     if (!src) return;
-    modalImg.src = src;
-    modalImg.alt = alt || '';
-    modalCap.textContent = alt || '';
-    imgModal.hidden = false;
+    var m = getModal();
+    if (!m.modal || !m.img) return;
+
+    // Pull ALL showcase images from across the website so the user can scroll to everything!
+    var allImgs = getAllSiteImages();
+    if (!allImgs.length) {
+      allImgs = [{ src: src, alt: alt || '' }];
+    }
+
+    currentGallery = allImgs;
+
+    // Locate clicked image index
+    var foundIdx = currentGallery.findIndex(function (it) {
+      return it.src === src || src.endsWith(it.src) || it.src.endsWith(src);
+    });
+    currentGalleryIdx = foundIdx >= 0 ? foundIdx : 0;
+
+    renderModalImage();
+    m.modal.hidden = false;
     document.body.style.overflow = 'hidden';
   }
 
   function closeFullscreen() {
-    imgModal.hidden = true;
-    modalImg.src = '';
+    stopAutoPlay();
+    var m = getModal();
+    if (!m.modal) return;
+    m.modal.hidden = true;
+    if (m.img) m.img.src = '';
+    currentGallery = [];
+    currentGalleryIdx = 0;
     document.body.style.overflow = '';
   }
 
-  if (modalClose) modalClose.addEventListener('click', closeFullscreen);
-  if (modalBackdrop) modalBackdrop.addEventListener('click', closeFullscreen);
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && !imgModal.hidden) closeFullscreen();
+  function prevModalImage() {
+    if (currentGallery.length <= 1) return;
+    currentGalleryIdx = (currentGalleryIdx - 1 + currentGallery.length) % currentGallery.length;
+    renderModalImage();
+  }
+
+  function nextModalImage() {
+    if (currentGallery.length <= 1) return;
+    currentGalleryIdx = (currentGalleryIdx + 1) % currentGallery.length;
+    renderModalImage();
+  }
+
+  // Global document click listener for modal controls, images and dismiss
+  document.addEventListener('click', function (e) {
+    var modal = $('img-modal');
+
+    // If modal is active
+    if (modal && !modal.hidden) {
+      // 1. Navigation controls (Prev / Next)
+      if (e.target.closest('#img-modal-prev')) {
+        e.preventDefault();
+        e.stopPropagation();
+        prevModalImage();
+        return;
+      }
+      if (e.target.closest('#img-modal-next')) {
+        e.preventDefault();
+        e.stopPropagation();
+        nextModalImage();
+        return;
+      }
+      // 2. Auto-scroll slideshow button
+      if (e.target.closest('#img-modal-play')) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleAutoPlay();
+        return;
+      }
+      // 3. Download button
+      if (e.target.closest('#img-modal-download')) {
+        e.stopPropagation();
+        return;
+      }
+      // 4. Explicit close button or clicking background backdrop dismisses
+      if (e.target.closest('#img-modal-close') || e.target === $('img-modal-backdrop') || e.target === modal) {
+        e.preventDefault();
+        closeFullscreen();
+        return;
+      }
+      // 5. Inside content box (image or caption footer) or top bar -> do not dismiss
+      if (e.target.closest('#img-modal-content, .img-modal-top-bar')) {
+        return;
+      }
+      // 6. Any other click outside content dismisses
+      if (e.target.closest('#img-modal')) {
+        e.preventDefault();
+        closeFullscreen();
+        return;
+      }
+    }
+
+    if (document.body.classList.contains('cms-mode')) return;
+
+    // Check if clicked target is an image or inside an image container
+    var targetImg = e.target.closest('img');
+    if (!targetImg) {
+      var wrap = e.target.closest('.shot-wrap, .about-photo-wrap, .seo-media, .gallery-row > div, .gallery-2x2 > div');
+      if (wrap) targetImg = wrap.querySelector('img');
+    }
+    if (!targetImg) return;
+
+    // Ignore navigational elements, avatars, theme toggle, mobile chat, admin bar
+    if (targetImg.closest('.mark, .mobile-chat-view, .admin-banner, .cms-fab, .theme, .burger, .admin-auth-card')) return;
+
+    if (
+      targetImg.classList.contains('shot') ||
+      targetImg.classList.contains('about-photo') ||
+      targetImg.closest('.shot-wrap, .seo-media, .about-photo-wrap, .gallery-row, .gallery-2x2')
+    ) {
+      e.preventDefault();
+      e.stopPropagation();
+      openFullscreen(targetImg.src, targetImg.alt || targetImg.getAttribute('title') || 'Image preview');
+    }
   });
 
-  function wireFullscreenImages() {
-    var targets = document.querySelectorAll('.shot-wrap');
-    targets.forEach(function (wrap) {
-      var img = wrap.querySelector('img');
-      if (!img) return;
-
-      wrap.addEventListener('click', function (e) {
-        if (document.body.classList.contains('cms-mode')) return;
+  // Keyboard navigation
+  document.addEventListener('keydown', function (e) {
+    var modal = $('img-modal');
+    if (modal && !modal.hidden) {
+      if (e.key === 'Escape') {
+        closeFullscreen();
+      } else if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        openFullscreen(img.src, img.alt);
-      });
-    });
+        prevModalImage();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        nextModalImage();
+      }
+    }
+  });
+
+  // Touch swipe gestures for mobile lightbox
+  var touchStartX = 0;
+  var touchStartY = 0;
+  var modalEl = $('img-modal');
+  if (modalEl) {
+    modalEl.addEventListener('touchstart', function (e) {
+      if (e.touches && e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    modalEl.addEventListener('touchend', function (e) {
+      if (e.changedTouches && e.changedTouches.length === 1) {
+        var dx = e.changedTouches[0].clientX - touchStartX;
+        var dy = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+          if (dx < 0) {
+            nextModalImage(); // swipe left -> next
+          } else {
+            prevModalImage(); // swipe right -> prev
+          }
+        }
+      }
+    }, { passive: true });
   }
 
   function renderSite() {
@@ -1813,8 +2735,8 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     $('r-hero2').innerHTML = '<dl class="facts">' + D.facts.map(function (f, i) {
       return '<div><dt data-edit="facts.' + i + '.k" data-edit-tag="Label">' + esc(f.k) + '</dt><dd data-edit="facts.' + i + '.v" data-edit-tag="Value">' + esc(f.v) + '</dd></div>';
     }).join('') + '</dl>';
-    $('r-sections').innerHTML = [secAbout(), secExperience(), secSeo(), secGoogleAds(), secMeta(), secSocial(),
-      secProjects(), '<div class="contrast-band">' + secCerts() + '</div>', secSkills(), secContact()].join('');
+    $('r-sections').innerHTML = [secAbout(), secExperience(), secSkills(), secSeo(), secGoogleAds(), secMeta(), secSocial(),
+      secProjects(), '<div class="contrast-band">' + secCerts() + '</div>', secContact()].join('');
     $('r-footer').innerHTML = '<a href="#admin" id="footer-copy" class="footer-copy-link" title="Open Admin Panel">© ' + new Date().getFullYear() + ' ' + esc(D.name) + '</a>' +
       '<a href="#top" class="back-to-top" id="back-top" aria-label="Back to top">' +
         '<span class="btt-text">Back to top</span>' +
@@ -1828,7 +2750,10 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     });
     $('ask-title').textContent = 'Ask about ' + first();
     $('askbox').placeholder = 'Ask about ' + first() + '’s work';
-    wireSeo(); wireContact(); refreshChat(); onScroll(); wireFullscreenImages();
+    wireSeo(); wireContact(); refreshChat();
+
+
+ onScroll(); wireFullscreenImages();
     wireDirectCanvasEditing();
     applyCustomTheme();
     var projFilterBtns = document.querySelectorAll('.proj-filter-pill');
@@ -1911,13 +2836,14 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
 
   /* ---------- copy email ---------- */
   function wireContact() {
-    var btn = $('copy'), em = $('email');
-    if (!btn || !em) return;
-    function selectEmail() { var r = document.createRange(); r.selectNodeContents(em); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+    var btn = $('copy');
+    if (!btn) return;
+    var copySvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
     btn.addEventListener('click', function () {
-      function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy email'; }, 1800); }
-      try { navigator.clipboard.writeText(em.textContent.trim()).then(done, function () { selectEmail(); btn.textContent = 'Press copy'; }); }
-      catch (e) { selectEmail(); btn.textContent = 'Press copy'; }
+      var rawEmail = (D.email || 'jeflinmathew@gmail.com').trim();
+      function done() { btn.innerHTML = copySvg + '<span>Copied!</span>'; setTimeout(function () { btn.innerHTML = copySvg + '<span>Copy email</span>'; }, 1800); }
+      try { navigator.clipboard.writeText(rawEmail).then(done, function () { btn.innerHTML = copySvg + '<span>Copied!</span>'; }); }
+      catch (e) { btn.innerHTML = copySvg + '<span>Copied!</span>'; }
     });
   }
 
@@ -1941,7 +2867,7 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     L.push('Case study 1, ' + D.seo.title + ': ' + (D.seo.intro || '') + ' Workflow: ' + D.seo.steps.map(function (s) { return s.name; }).join(', ') + '. ' + (D.seo.chartTitle || '') + ': ' + metricsText() + '. ' + D.seo.metrics.map(function (m) { return m.note; }).filter(Boolean).join(' '));
     if (D.googleAds) L.push('Case study 2, ' + D.googleAds.title + ': ' + (D.googleAds.intro || '') + ' ' + (D.googleAds.text || '') + ' Results: ' + (D.googleAds.specs || '').replace(/\n/g, ', '));
     L.push('Case study 3, ' + D.meta.title + ': ' + (D.meta.intro || '') + ' ' + campaignsText());
-    L.push('Case study 4, ' + D.social.title + ': ' + (D.social.text || ''));
+    L.push('Case study 4, ' + D.social.title + ': ' + (D.social.text || '') + (D.social.specs ? ' Details: ' + D.social.specs.replace(/\n/g, ', ') : ''));
     L.push(D.projects.title + ': ' + (D.projects.intro || '') + ' ' + projectsText());
     L.push('Skills: ' + skillsText() + '.');
     L.push('Certifications: ' + certsText() + '.');
@@ -1959,7 +2885,7 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
       [/\b(certif|course|courses|certificate|training|credential)/, function () { return n + ' holds ' + D.certs.length + ' certificates: ' + certsText() + '.'; }],
       [/\b(seo|search console|ranking|rank|traffic|click|clicks|impression|impressions|position|ctr|result|results|organic|growth|performance|metric|metrics)\b/, function () { return (D.seo.chartTitle || 'Results') + ': ' + metricsText() + '. ' + (D.seo.intro || ''); }],
       [/\b(meta|facebook|instagram|ads|ad|campaign|campaigns|lead|leads|recruit|recruitment)\b/, function () { return (D.meta.intro ? D.meta.intro + ' ' : '') + campaignsText(); }],
-      [/\b(social|content|posts|captions|brand)\b/, function () { return D.social.text || ''; }],
+      [/\b(video\s*host|recruitment|reels|social|content|posts|captions|brand)\b/, function () { return (D.social.title ? D.social.title + ': ' : '') + (D.social.text || ''); }],
       [/\b(project|projects|freelance|freelancing|independent|practice|personal|side|mpi|meat)\b/, function () { return (D.projects.intro ? D.projects.intro + ' ' : '') + projectsText(); }],
       [/\b(skill|skills|tool|tools|good at|expertise|strength|strengths|analytics|stack|know)\b/, function () { return n + '’s skills: ' + skillsText() + '.'; }],
       [/\b(experience|worked|work|works|working|history|employer|company|job|role|years|career)\b/, function () { return e.title + ' at ' + e.company + ' (' + e.period + '). ' + (e.summary || '') + (e.bullets.length ? ' Work included: ' + e.bullets.join('; ') + '.' : ''); }],
@@ -1977,10 +2903,10 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
   var disappearTimer = null, countdownInterval = null;
 
   var ALL_QUESTIONS = [
-    'Where has {name} worked?',
+    'Tell me about {name}’s work experience',
     'What results did {name} get in SEO?',
     'What campaigns has {name} run in Meta Ads?',
-    'What are {name}’s core skills?',
+    'What are {name}’s core technical skills?',
     'What certifications does {name} hold?',
     'Tell me about his freelancing projects',
     'How can I get in touch with {name}?'
@@ -2146,6 +3072,145 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
   });
   box.addEventListener('input', function () { grow(); if (!busy) sendBtn.disabled = !box.value.trim(); });
 
+  /* ---------- Mobile Chat Overlay (Appears after 5s on mobile mode, disappears on close) ---------- */
+  var mco = $('mobile-chat-overlay');
+  var mcoClose = $('mco-close');
+  var mcoLog = $('mco-log');
+  var mcoChips = $('mco-chips');
+  var mcoForm = $('mco-form');
+  var mcoInput = $('mco-input');
+  var mcoSend = $('mco-send');
+  var chatFab = $('chat-fab');
+  var mcoTimer = null;
+  var userClosedOverlay = false;
+
+  function openMobileOverlay() {
+    if (!mco) return;
+    mco.classList.add('visible');
+    if (chatFab) chatFab.classList.remove('visible');
+    if (mcoInput) {
+      setTimeout(function () { mcoInput.focus(); }, 300);
+    }
+  }
+
+  function closeMobileOverlay() {
+    if (!mco) return;
+    mco.classList.remove('visible');
+    userClosedOverlay = true;
+    if (chatFab && window.innerWidth <= 860) {
+      chatFab.classList.add('visible');
+    }
+  }
+
+  // 1. Appear after exactly 5 seconds in mobile mode (<= 860px)
+  if (window.innerWidth <= 860) {
+    mcoTimer = setTimeout(function () {
+      if (!userClosedOverlay) {
+        openMobileOverlay();
+      }
+    }, 5000);
+  }
+
+  // 2. Disappear when click close
+  if (mcoClose) {
+    mcoClose.addEventListener('click', function (e) {
+      e.preventDefault();
+      closeMobileOverlay();
+    });
+  }
+
+  // 3. Floating FAB to reopen anytime
+  if (chatFab) {
+    chatFab.addEventListener('click', function (e) {
+      e.preventDefault();
+      openMobileOverlay();
+    });
+  }
+
+  // 4. Send question in overlay
+  function askOverlay(q) {
+    if (!q || !q.trim()) return;
+    q = q.trim();
+
+    if (mcoLog) {
+      mcoLog.classList.add('has-messages');
+
+      // User question bubble
+      var uMsg = document.createElement('div');
+      uMsg.className = 'mco-msg user';
+      var uBubble = document.createElement('div');
+      uBubble.className = 'mco-bubble';
+      uBubble.textContent = q;
+      uMsg.appendChild(uBubble);
+      mcoLog.appendChild(uMsg);
+
+      // Bot answer placeholder
+      var bMsg = document.createElement('div');
+      bMsg.className = 'mco-msg bot';
+      var bBubble = document.createElement('div');
+      bBubble.className = 'mco-bubble';
+      bBubble.textContent = '...';
+      bMsg.appendChild(bBubble);
+      mcoLog.appendChild(bMsg);
+      mcoLog.scrollTop = mcoLog.scrollHeight;
+
+      if (mcoInput) { mcoInput.value = ''; }
+      if (mcoSend) { mcoSend.classList.remove('active'); }
+
+      // Generate answer
+      setTimeout(function () {
+        var reply = local(q);
+        bBubble.textContent = reply;
+        mcoLog.scrollTop = mcoLog.scrollHeight;
+      }, 350);
+    }
+  }
+
+  // 5. Chips click
+  if (mcoChips) {
+    mcoChips.querySelectorAll('.mco-chip').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var q = this.getAttribute('data-q') || this.textContent;
+        askOverlay(q);
+      });
+    });
+  }
+
+  // 6. Form submit & input handling
+  if (mcoForm) {
+    mcoForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (mcoInput && mcoInput.value.trim()) {
+        askOverlay(mcoInput.value);
+      }
+    });
+  }
+
+  if (mcoInput) {
+    mcoInput.addEventListener('input', function () {
+      if (mcoSend) {
+        if (this.value.trim()) {
+          mcoSend.classList.add('active');
+        } else {
+          mcoSend.classList.remove('active');
+        }
+      }
+    });
+  }
+
+  window.addEventListener('popstate', function () {
+    if (location.pathname === '/chat' || location.hash === '#chat') {
+      openMobileChat(false);
+    } else {
+      closeMobileChat(false);
+    }
+  });
+
+  // Check URL on initial load
+  if (location.pathname === '/chat' || location.hash === '#chat') {
+    openMobileChat(false);
+  }
+
   /* ---------- CMS: edit site ---------- */
   var T = 'text', A = 'area';
   var SCHEMA = [
@@ -2157,12 +3222,12 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     { id: 'about', title: 'About Section', obj: '', fields: [
       { k: 'portrait', l: 'Profile & About Photo', t: 'image' }],
       lists: [{ key: 'about', title: 'Biography Paragraphs', item: 'paragraph', strings: true }] },
-    { id: 'experience', title: 'Work Experience', obj: 'experience', fields: [
+    { id: 'experience', title: 'Experience', obj: 'experience', fields: [
       { k: 'title', l: 'Job Title', t: T }, { k: 'company', l: 'Company Name', t: T }, { k: 'period', l: 'Employment Period', t: T }, { k: 'summary', l: 'Summary', t: A }],
       lists: [{ key: 'bullets', title: 'Responsibilities & Achievements', item: 'bullet', strings: true }] },
     { id: 'seo', title: 'Case Study 01 (SEO)', obj: 'seo', fields: [
       { k: 'title', l: 'Title', t: T }, { k: 'intro', l: 'Introduction', t: A }, { k: 'chartTitle', l: 'Chart Heading', t: T },
-      { k: 'labelA', l: 'Left Bar Label', t: T }, { k: 'labelB', l: 'Right Bar Label', t: T }, { k: 'source', l: 'Source / Note', t: A }, { k: 'image', l: 'GSC Screenshot', t: 'image' }],
+      { k: 'labelA', l: 'Left Bar Label', t: T }, { k: 'labelB', l: 'Right Bar Label', t: T }, { k: 'source', l: 'Source / Note', t: A }, { k: 'image', l: 'GSC Report', t: 'image' }],
       lists: [
         { key: 'steps', title: 'Workflow Steps', item: 'step', blank: { name: '', desc: '' }, head: function (o) { return o.name; },
           fields: [{ k: 'name', l: 'Step Name', t: T }, { k: 'desc', l: 'Description', t: A }] },
@@ -2171,13 +3236,13 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
             { k: 'delta', l: 'Delta (e.g. +119%)', t: T }, { k: 'lowerBetter', l: 'Lower is better', t: 'bool' },
             { k: 'hint', l: 'Hint under bars', t: T }, { k: 'note', l: 'Outcome Note', t: A }] }] },
     { id: 'googleAds', title: 'Case Study 02 (Google Ads)', obj: 'googleAds', fields: [
-      { k: 'title', l: 'Title', t: T }, { k: 'intro', l: 'Introduction', t: A }, { k: 'specs', l: 'Specs / Growth Highlights', t: A }, { k: 'text', l: 'Campaign Overview', t: A }, { k: 'image', l: 'Dashboard Screenshot', t: 'image' }], lists: [] },
+      { k: 'title', l: 'Title', t: T }, { k: 'intro', l: 'Introduction', t: A }, { k: 'specs', l: 'Specs / Growth Highlights', t: A }, { k: 'text', l: 'Campaign Overview', t: A }, { k: 'image', l: 'Dashboard Report', t: 'image' }], lists: [] },
     { id: 'meta', title: 'Case Study 03 (Meta Ads)', obj: 'meta', fields: [
       { k: 'title', l: 'Title', t: T }, { k: 'intro', l: 'Introduction', t: A }],
       lists: [{ key: 'campaigns', title: 'Campaigns', item: 'campaign', blank: { name: '', specs: '', text: '', image: '' }, head: function (o) { return o.name; },
         fields: [{ k: 'name', l: 'Campaign Name', t: T }, { k: 'specs', l: 'Specs (one per line)', t: A }, { k: 'text', l: 'Description', t: A }, { k: 'image', l: 'Creative Mockup', t: 'image' }] }] },
-    { id: 'social', title: 'Case Study 04 (Social Media)', obj: 'social', fields: [
-      { k: 'title', l: 'Title', t: T }, { k: 'text', l: 'Description', t: A }, { k: 'image', l: 'Creative Mockup', t: 'image' }], lists: [] },
+    { id: 'social', title: 'Case Study 04 (Video Host Recruitment)', obj: 'social', fields: [
+      { k: 'title', l: 'Title', t: T }, { k: 'specs', l: 'Specs (one per line)', t: A }, { k: 'text', l: 'Description', t: A }, { k: 'image', l: 'Creative Mockup', t: 'image' }], lists: [] },
     { id: 'projects', title: 'Freelancing Works', obj: 'projects', fields: [
       { k: 'title', l: 'Section Title', t: T }, { k: 'intro', l: 'Introduction', t: A }],
       lists: [{ key: 'items', title: 'Client Projects', item: 'project', blank: { name: '', tag: 'Freelance', text: '', image: '', images: [] }, head: function (o) { return o.name; },
@@ -3027,7 +4092,11 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     var localSaved = localStorage.getItem('jm-site-data');
     if (localSaved) {
       var parsed = JSON.parse(localSaved);
-      if (parsed && parsed.name) { D = parsed; norm(); ORIG = JSON.stringify(D); }
+      if (parsed && parsed._v && parsed._v >= (D._v || 0) && parsed.name) {
+        D = parsed; norm(); ORIG = JSON.stringify(D);
+      } else {
+        try { localStorage.removeItem('jm-site-data'); } catch (err) {}
+      }
     }
   } catch (e) {}
 
@@ -3104,16 +4173,7 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
 })();
 </script>
 
-<div class="img-modal" id="img-modal" role="dialog" aria-modal="true" aria-label="Fullscreen image viewer" hidden>
-  <div class="img-modal-backdrop" id="img-modal-backdrop"></div>
-  <button class="img-modal-close" id="img-modal-close" type="button" aria-label="Close fullscreen view">
-    <svg viewBox="0 0 16 16" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
-  </button>
-  <div class="img-modal-content">
-    <img id="img-modal-img" src="" alt="">
-    <p class="img-modal-caption" id="img-modal-caption"></p>
-  </div>
-</div>
+
 
 <div class="admin-auth-modal" id="admin-auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title" hidden>
   <div class="admin-auth-backdrop" id="admin-auth-backdrop"></div>

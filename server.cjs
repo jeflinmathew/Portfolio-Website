@@ -307,7 +307,7 @@ const server = http.createServer((req, res) => {
 
   // Static File Serving with Path Traversal Protection
   let reqPath = pathname;
-  if (reqPath === '/' || reqPath === '' || reqPath === '/admin') reqPath = '/index.html';
+  if (reqPath === '/' || reqPath === '' || reqPath === '/admin' || reqPath === '/chat') reqPath = '/index.html';
 
   // Prevent directory traversal attacks
   const safePath = path.normalize(reqPath).replace(/^(\.\.[\/\\])+/, '');
