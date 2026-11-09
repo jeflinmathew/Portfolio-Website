@@ -710,6 +710,15 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(38px, 
 .seo-layout.reverse .seo-content { order: 2; }
 .seo-layout.reverse .seo-media { order: 1; }
 .seo-content { min-width: 0; }
+.seo-content p,
+.seo p,
+.entry p,
+.body > p,
+.job .summary,
+.campaign-card p {
+  text-align: justify;
+  text-justify: inter-word;
+}
 .seo-layout .chart { grid-template-columns: 13rem minmax(0, 1fr); }
 .seo-layout .mbtn { padding: 14px 14px; font-size: 14px; }
 .seo-media { position: relative; align-self: start; margin: 0; }
