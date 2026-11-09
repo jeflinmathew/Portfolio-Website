@@ -986,7 +986,7 @@ p { margin: 0 0 1em; max-width: 100%; }
 .tag { display: inline-block; font-family: var(--font-data); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 9999px; padding: 2px 10px; color: var(--muted); margin-left: 10px; vertical-align: 2px; }
 .first-entry { margin-top: 22px; }
 
-/* skills - Modern Bento Concept */
+/* skills - Modern Bento Concept with Dark Hover */
 .skills-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 .skill-card {
   background: var(--tint);
@@ -996,16 +996,47 @@ p { margin: 0 0 1em; max-width: 100%; }
   display: flex;
   flex-direction: column;
   gap: 16px;
-  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  transition: all .25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
 }
 .skill-card:hover {
-  border-color: rgba(255, 255, 255, 0.25);
+  background: #0B0B0B !important;
+  border-color: #0B0B0B !important;
+  color: #FFFFFF !important;
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
 }
-:root[data-theme="light"] .skill-card:hover {
-  border-color: rgba(0, 0, 0, 0.3);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+.skill-card:hover .skill-card-title {
+  color: #FFFFFF !important;
+}
+.skill-card:hover .skill-card-subtitle {
+  color: #A3A3A3 !important;
+}
+.skill-card:hover .skill-card-icon {
+  background: #1C1C1C !important;
+  border-color: #2E2E2E !important;
+  color: #FFFFFF !important;
+}
+.skill-card:hover .chips li {
+  background: #1C1C1C !important;
+  border-color: #2E2E2E !important;
+  color: #F0F0F0 !important;
+}
+.skill-card:hover .chips li:hover {
+  background: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+  color: #000000 !important;
+  transform: translateY(-1px);
+}
+:root[data-theme="dark"] .skill-card:hover {
+  background: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65);
+}
+:root[data-theme="dark"] .skill-card:hover .chips li:hover {
+  background: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+  color: #000000 !important;
 }
 .skill-card-head { display: flex; align-items: center; gap: 14px; }
 .skill-card-icon {
