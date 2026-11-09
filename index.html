@@ -476,10 +476,10 @@ body.cms-mode .chat-fab {
   --accent: #000000;
   --bar-base: #BDBDBD;
   --bar-final: linear-gradient(90deg, #6E6E6E, #0A0A0A);
-  --btn-bg: linear-gradient(180deg, #3C3C3C, #0A0A0A);
-  --btn-bg-hover: linear-gradient(180deg, #5A5A5A, #1E1E1E);
+  --btn-bg: #0A0A0A;
+  --btn-bg-hover: #262626;
   --btn-fg: #FFFFFF;
-  --btn2-bg: linear-gradient(180deg, #FFFFFF, #EAEAEA);
+  --btn2-bg: #FFFFFF;
   --h1-grad: linear-gradient(180deg, #000000 20%, #6A6A6A 100%);
   --font-display: "SF Pro Display", "SF Pro", -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Arial, sans-serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
@@ -489,8 +489,8 @@ body.cms-mode .chat-fab {
   :root:not([data-theme="light"]) {
     --bg: #0B0B0B; --bg-top: #1C1C1C; --tint: #181818; --fg: #F4F4F4; --muted: #9B9B9B; --line: #2B2B2B; --accent: #FFFFFF; --bar-base: #3C3C3C;
     --bar-final: linear-gradient(90deg, #8A8A8A, #FFFFFF);
-    --btn-bg: linear-gradient(180deg, #FFFFFF, #CDCDCD); --btn-bg-hover: linear-gradient(180deg, #FFFFFF, #E6E6E6); --btn-fg: #0A0A0A;
-    --btn2-bg: linear-gradient(180deg, #232323, #141414);
+    --btn-bg: #FFFFFF; --btn-bg-hover: #E5E5E5; --btn-fg: #0A0A0A;
+    --btn2-bg: #141414;
     --h1-grad: linear-gradient(180deg, #FFFFFF 20%, #8A8A8A 100%);
     color-scheme: dark;
   }
@@ -498,8 +498,8 @@ body.cms-mode .chat-fab {
 :root[data-theme="dark"] {
   --bg: #0B0B0B; --bg-top: #1C1C1C; --tint: #181818; --fg: #F4F4F4; --muted: #9B9B9B; --line: #2B2B2B; --accent: #FFFFFF; --bar-base: #3C3C3C;
   --bar-final: linear-gradient(90deg, #8A8A8A, #FFFFFF);
-  --btn-bg: linear-gradient(180deg, #FFFFFF, #CDCDCD); --btn-bg-hover: linear-gradient(180deg, #FFFFFF, #E6E6E6); --btn-fg: #0A0A0A;
-  --btn2-bg: linear-gradient(180deg, #232323, #141414);
+  --btn-bg: #FFFFFF; --btn-bg-hover: #E5E5E5; --btn-fg: #0A0A0A;
+  --btn2-bg: #141414;
   --h1-grad: linear-gradient(180deg, #FFFFFF 20%, #8A8A8A 100%);
   color-scheme: dark;
 }
@@ -655,37 +655,47 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(38px, 
   font-weight: 500;
   text-decoration: none;
   padding: 13px 24px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--line);
   border-radius: 14px;
-  background: linear-gradient(180deg, rgba(38, 42, 54, 0.75), rgba(20, 23, 30, 0.95));
+  background: transparent;
   color: var(--fg);
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-  transition: all .25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: none;
+  transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .btn:hover {
-  border-color: rgba(99, 102, 241, 0.6);
-  color: #ffffff;
-  background: linear-gradient(135deg, rgba(50, 58, 80, 0.95), rgba(25, 28, 40, 0.98));
-  box-shadow: 0 6px 22px rgba(99, 102, 241, 0.28), 0 0 14px rgba(56, 189, 248, 0.18);
-  transform: translateY(-2px);
+  border-color: var(--fg);
+  color: var(--fg);
+  background: var(--tint);
+  box-shadow: none;
+  transform: translateY(-1px);
 }
 .btn:active {
   transform: translateY(0);
 }
 .btn.solid {
-  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
-  color: #0a0a0a;
-  border-color: transparent;
+  background: #FFFFFF;
+  color: #0B0B0B;
+  border: 1px solid #FFFFFF;
   font-weight: 600;
-  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.16);
+  box-shadow: none;
 }
 .btn.solid:hover {
-  background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 100%);
-  color: #050814;
-  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.38), 0 0 18px rgba(255, 255, 255, 0.45);
-  transform: translateY(-2px);
-  border-color: transparent;
+  background: #E5E5E5;
+  color: #0B0B0B;
+  border-color: #E5E5E5;
+  box-shadow: none;
+  transform: translateY(-1px);
+}
+:root[data-theme="light"] .btn.solid {
+  background: #0B0B0B;
+  color: #FFFFFF;
+  border: 1px solid #0B0B0B;
+}
+:root[data-theme="light"] .btn.solid:hover {
+  background: #2A2A2A;
+  color: #FFFFFF;
+  border-color: #2A2A2A;
 }
 .facts {
   display: grid;
@@ -1081,11 +1091,11 @@ p { margin: 0 0 1em; max-width: 100%; }
   gap: 8px;
 }
 .btn-linkedin:hover {
-  background: linear-gradient(135deg, #0A66C2 0%, #004182 100%) !important;
+  background: #0A66C2 !important;
   color: #FFFFFF !important;
   border-color: #0A66C2 !important;
-  box-shadow: 0 6px 24px rgba(10, 102, 194, 0.45) !important;
-  transform: translateY(-2px);
+  box-shadow: none !important;
+  transform: translateY(-1px);
 }
 .btn-linkedin svg {
   flex-shrink: 0;
@@ -2440,12 +2450,12 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
   }
   function secSocial() {
     var s = D.social || {};
-    return '<section data-nav="work"><div class="label case-study-label">Case Study 04</div><div class="body">' +
+    return '<section id="video-host" data-nav="work"><div class="label case-study-label">Case Study 04</div><div class="body">' +
       '<div class="seo-layout reverse">' +
         '<div class="seo-content">' +
           '<h2 data-edit="social.title" data-edit-tag="Title">' + esc(s.title || 'Video Host Recruitment') + '</h2>' +
           (s.specs ? '<div class="specs" data-edit="social.specs" data-edit-tag="Specifications">' + specsHtml(s.specs) + '</div>' : '') +
-          '<p data-edit="social.text" data-edit-tag="Description">' + esc(s.text || '') + '</p>' +
+          '<p data-edit="social.text" data-edit-tag="Description" style="text-align: justify; text-justify: inter-word;">' + esc(s.text || '') + '</p>' +
         '</div>' +
         (s.image ? '<div class="seo-media" data-edit-img="social.image" title="Click to replace image">' + shot(s.image, s.title || 'Video Host Recruitment') + '</div>' : '') +
       '</div></div></section>';
