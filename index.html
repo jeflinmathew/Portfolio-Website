@@ -2435,13 +2435,12 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
 
   function getAllSiteImages() {
     // Select all showcase images across work, case studies, and freelancing
-    // Excludes the profile/portrait photo (.about-photo) — that opens standalone
     var selectors = [
-      '#r-sections .seo-media img:not(.about-photo)',
-      '#r-sections .gallery-row img:not(.about-photo)',
-      '#r-sections .gallery-2x2 img:not(.about-photo)',
-      '#r-sections .shot-wrap:not(.about-photo-wrap) img',
-      '#r-sections img.shot:not(.about-photo)'
+      '#r-sections .seo-media img',
+      '#r-sections .gallery-row img',
+      '#r-sections .gallery-2x2 img',
+      '#r-sections .shot-wrap img',
+      '#r-sections img.shot'
     ];
     var imgs = Array.from(document.querySelectorAll(selectors.join(', ')));
     var seen = {};
@@ -2563,37 +2562,26 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     }
   }
 
-  function openFullscreen(src, alt, standalone) {
+  function openFullscreen(src, alt) {
     if (!src) return;
     var m = getModal();
     if (!m.modal || !m.img) return;
 
-    if (standalone) {
-      // Show single image only — no arrows, no counter, no auto-play
-      currentGallery = [{ src: src, alt: alt || '' }];
-      currentGalleryIdx = 0;
-      renderModalImage();
-      // Hide nav controls for standalone mode
-      if (m.prev) m.prev.style.display = 'none';
-      if (m.next) m.next.style.display = 'none';
-      if (m.counter) m.counter.style.display = 'none';
-      if (m.play) m.play.style.display = 'none';
-    } else {
-      // Pull ALL showcase images from across the website so the user can scroll to everything!
-      var allImgs = getAllSiteImages();
-      if (!allImgs.length) {
-        allImgs = [{ src: src, alt: alt || '' }];
-      }
-      currentGallery = allImgs;
-
-      // Locate clicked image index
-      var foundIdx = currentGallery.findIndex(function (it) {
-        return it.src === src || src.endsWith(it.src) || it.src.endsWith(src);
-      });
-      currentGalleryIdx = foundIdx >= 0 ? foundIdx : 0;
-      renderModalImage();
+    // Pull ALL showcase images from across the website so the user can scroll to everything!
+    var allImgs = getAllSiteImages();
+    if (!allImgs.length) {
+      allImgs = [{ src: src, alt: alt || '' }];
     }
 
+    currentGallery = allImgs;
+
+    // Locate clicked image index
+    var foundIdx = currentGallery.findIndex(function (it) {
+      return it.src === src || src.endsWith(it.src) || it.src.endsWith(src);
+    });
+    currentGalleryIdx = foundIdx >= 0 ? foundIdx : 0;
+
+    renderModalImage();
     m.modal.hidden = false;
     document.body.style.overflow = 'hidden';
   }
@@ -2684,17 +2672,13 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     if (targetImg.closest('.mark, .mobile-chat-view, .admin-banner, .cms-fab, .theme, .burger, .admin-auth-card')) return;
 
     if (
-      targetImg.classList.contains('shot') ||\n      targetImg.classList.contains('about-photo') ||
+      targetImg.classList.contains('shot') ||
+      targetImg.classList.contains('about-photo') ||
       targetImg.closest('.shot-wrap, .seo-media, .about-photo-wrap, .gallery-row, .gallery-2x2')
     ) {
       e.preventDefault();
       e.stopPropagation();
-      // Profile photo opens standalone (no arrow navigation)
-      if (targetImg.classList.contains('about-photo') || targetImg.closest('.about-photo-wrap')) {
-        openFullscreen(targetImg.src, targetImg.alt || 'Jeflin Mathew', true);
-      } else {
-        openFullscreen(targetImg.src, targetImg.alt || targetImg.getAttribute('title') || 'Image preview');
-      }
+      openFullscreen(targetImg.src, targetImg.alt || targetImg.getAttribute('title') || 'Image preview');
     }
   });
 
