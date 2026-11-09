@@ -29,7 +29,7 @@
 - **Platform:** Meta Ads (Instagram Reels + Facebook Video)
 - **Objective:** Recruitment / Sign-up
 - **Format:** Short-form video reels
-- **Description:** Recruitment creative promoting a Video Host opportunity with a direct sign-up call to action across Instagram Reels and Facebook Video feeds.
+- **Description:** Recruitment ad creative promoting a Video Host job opening, with a direct sign-up call to action across Facebook and Instagram.
 
 ### 🖼️ Full-Site Lightbox Gallery
 - Click any image across the portfolio to open a full-screen lightbox viewer.
