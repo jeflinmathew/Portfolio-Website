@@ -737,7 +737,7 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(38px, 
 .seo-layout .chart { grid-template-columns: 13rem minmax(0, 1fr); }
 .seo-layout .mbtn { padding: 14px 14px; font-size: 14px; }
 .seo-media { position: relative; align-self: start; margin: 0; }
-.seo-media .shot { margin: 0; width: 100%; border-radius: 14px; border: 1px solid var(--line); box-shadow: 0 4px 24px rgba(0,0,0,.12); display: block; }
+.seo-media .shot { margin: 0; width: 100%; border-radius: 14px; border: 1px solid var(--line); box-shadow: 0 4px 24px rgba(0,0,0,.12); display: block; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
 
 /* ask about Jeflin */
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -875,8 +875,8 @@ p { margin: 0 0 1em; max-width: 100%; }
 /* Fullscreen image modal & shot wrap hover */
 .shot-wrap { position: relative; display: block; cursor: zoom-in; overflow: hidden; border-radius: 14px; user-select: none; -webkit-user-select: none; border: 1px solid rgba(255, 255, 255, 0.08); transition: all .25s cubic-bezier(0.16, 1, 0.3, 1); }
 .shot-wrap:hover { border-color: rgba(56, 189, 248, 0.5); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.2); transform: translateY(-3px); }
-.shot-wrap .shot { transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1), filter .25s ease; width: 100%; display: block; }
-.shot-wrap:hover .shot { transform: scale(1.035); }
+.shot-wrap .shot { transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1), filter .25s ease; width: 100%; display: block; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
+.shot-wrap:hover .shot { transform: scale(1.015); }
 
 /* Instagram-style 3 in a row image cards */
 .gallery-row, .gallery-2x2 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; width: 100%; max-width: 100%; margin: 18px 0 0; }
