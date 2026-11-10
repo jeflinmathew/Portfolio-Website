@@ -565,7 +565,7 @@ button { font: inherit; color: inherit; }
   display: block !important;
 }
 .about-text { min-width: 0; display: flex; flex-direction: column; justify-content: space-between; }
-.about-text p { font-size: 17.5px; line-height: 1.65; margin: 0 0 1em; color: var(--fg); text-align: justify; text-justify: inter-word; }
+.about-text p { font-size: 17.5px; line-height: 1.65; margin: 0 0 1em; color: var(--fg); text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; }
 .about-text p:last-child { margin-bottom: 0; }
 .video-host-block { margin-top: 36px; padding-top: 32px; border-top: none; }
 .video-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 24px; }
@@ -725,9 +725,14 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(38px, 
 .entry p,
 .body > p,
 .job .summary,
-.campaign-card p {
+.campaign-card p,
+.projects-list p {
   text-align: justify;
   text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 .seo-layout .chart { grid-template-columns: 13rem minmax(0, 1fr); }
 .seo-layout .mbtn { padding: 14px 14px; font-size: 14px; }
@@ -2512,7 +2517,7 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
         }
         return '<h3><span data-edit="projects.items.' + realIdx + '.name" data-edit-tag="Project Name">' + esc(it.name) + '</span>' +
           (it.tag ? ' <span class="tag" data-edit="projects.items.' + realIdx + '.tag" data-edit-tag="Tag">' + esc(it.tag) + '</span>' : '') + '</h3>' +
-          '<p data-edit="projects.items.' + realIdx + '.text" data-edit-tag="Project Description">' + esc(it.text) + '</p>' + imgsHtml;
+          '<p class="projects-list" data-edit="projects.items.' + realIdx + '.text" data-edit-tag="Project Description">' + esc(it.text) + '</p>' + imgsHtml;
       }) +
       '<button class="framer-add-btn" data-canvas-add="projects.items" type="button">+ Add New Project</button>' +
       '</div></section>';
