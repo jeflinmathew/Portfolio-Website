@@ -2284,8 +2284,6 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     <div class="mco-chips" id="mco-chips">
       <button type="button" class="mco-chip" data-q="Tell me about Jeflin's experience">Tell me about Jeflin's experience</button>
       <button type="button" class="mco-chip" data-q="What results did Jeflin get in SEO?">What results did Jeflin get in SEO?</button>
-      <button type="button" class="mco-chip" data-q="What campaigns has Jeflin run in Meta Ads?">What campaigns has Jeflin run in Meta Ads?</button>
-      <button type="button" class="mco-chip" data-q="What are Jeflin's core skills?">What are Jeflin's core skills?</button>
     </div>
 
     <form class="mco-composer" id="mco-form" autocomplete="off">
@@ -3105,7 +3103,7 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
       qchips.appendChild(lbl);
     }
 
-    filtered.slice(0, 4).forEach(function (t) {
+    filtered.slice(0, 2).forEach(function (t) {
       var b = document.createElement('button');
       b.type = 'button';
       b.textContent = t;
@@ -3303,6 +3301,7 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
 
     if (mcoLog) {
       mcoLog.classList.add('has-messages');
+      renderMcoChips(q);
 
       // User question bubble
       var uMsg = document.createElement('div');
@@ -3340,14 +3339,36 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
     }
   }
 
-  // 5. Chips click
-  if (mcoChips) {
-    mcoChips.querySelectorAll('.mco-chip').forEach(function (btn) {
+  // 5. Chips management - 2 suggestions only at a time
+  var MCO_QUESTIONS = [
+    "Tell me about Jeflin's experience",
+    "What results did Jeflin get in SEO?",
+    "What campaigns has Jeflin run in Meta Ads?",
+    "What are Jeflin's core skills?"
+  ];
+
+  function renderMcoChips(currentQ) {
+    if (!mcoChips) return;
+    mcoChips.innerHTML = '';
+    var remaining = MCO_QUESTIONS.filter(function (item) {
+      return !currentQ || item.toLowerCase() !== currentQ.toLowerCase();
+    }).slice(0, 2);
+
+    remaining.forEach(function (q) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mco-chip';
+      btn.setAttribute('data-q', q);
+      btn.textContent = q;
       btn.addEventListener('click', function () {
-        var q = this.getAttribute('data-q') || this.textContent;
         askOverlay(q);
       });
+      mcoChips.appendChild(btn);
     });
+  }
+
+  if (mcoChips) {
+    renderMcoChips();
   }
 
   // 6. Form submit & input handling
