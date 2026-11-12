@@ -122,12 +122,13 @@ body.cms-mode .chat-fab {
 .mco-card {
   width: 100%;
   max-width: 440px;
-  max-height: min(85vh, 580px);
+  min-height: 320px;
+  max-height: min(85vh, 600px);
   background: #141414;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 18px;
+  border-radius: 20px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
-  padding: 14px 14px 12px;
+  padding: 16px 16px 14px;
   display: flex;
   flex-direction: column;
   transform: translateY(115%);
@@ -224,14 +225,14 @@ body.cms-mode .chat-fab {
 }
 
 .mco-body {
-  display: none;
+  display: flex;
   flex-direction: column;
   gap: 10px;
   flex: 1 1 auto;
-  min-height: 70px;
-  max-height: min(48vh, 340px);
+  min-height: 120px;
+  max-height: min(52vh, 380px);
   overflow-y: auto;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   padding: 4px 6px 4px 2px;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
@@ -2279,7 +2280,11 @@ body:not(.cms-mode) .cms-mobile-notice { display: none !important; }
       </button>
     </div>
 
-    <div class="mco-body" id="mco-log" role="log" aria-live="polite"></div>
+    <div class="mco-body" id="mco-log" role="log" aria-live="polite">
+      <div class="mco-msg bot">
+        <div class="mco-bubble">Hi! Ask me anything about Jeflin’s experience, SEO results, Meta campaigns, or skills.</div>
+      </div>
+    </div>
 
     <div class="mco-chips" id="mco-chips">
       <button type="button" class="mco-chip" data-q="Tell me about Jeflin's experience">Tell me about Jeflin's experience</button>
